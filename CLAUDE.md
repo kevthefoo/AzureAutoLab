@@ -21,6 +21,7 @@ AZ-104 exam preparation through hands-on Azure labs. The user completes tasks in
 ## Lab File Format
 
 Each lab file must include:
+
 - **Scenario** — realistic business context
 - **Tasks** — checkbox list of what to do
 - **Skills Tested** — AZ-104 skills covered
