@@ -2,10 +2,10 @@
 
 ## Completed / In Progress
 
-| #   | Topic                  | Lab Title                                                                              | Domain                | Status      |
-| --- | ---------------------- | -------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| 1   | Resource Groups & RBAC | [Create RG-Dev-Lab, add tags, assign Reader role](labs/lab-01-resource-groups-rbac.md) | Identity & Governance | PASSED |
-| 2   | Storage Account & Blobs | [Create storage account, blob container, upload blob](labs/lab-02-storage-account.md) | Storage | NOT STARTED |
+| #   | Topic                   | Lab Title                                                                              | Domain                | Status |
+| --- | ----------------------- | -------------------------------------------------------------------------------------- | --------------------- | ------ |
+| 1   | Resource Groups & RBAC  | [Create RG-Dev-Lab, add tags, assign Reader role](labs/lab-01-resource-groups-rbac.md) | Identity & Governance | PASSED |
+| 2   | Storage Account & Blobs | [Create storage account, blob container, upload blob](labs/lab-02-storage-account.md)  | Storage               | PASSED |
 
 ## AZ-104 Domains Covered
 
