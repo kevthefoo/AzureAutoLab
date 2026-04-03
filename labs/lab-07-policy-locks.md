@@ -25,11 +25,11 @@ Your compliance team requires that all resources in the development environment 
 
 ## Verification Criteria
 
-| #   | What to Check                                      | CLI Command                                                                                                                                                                                    |
-| --- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Policy assignment exists on `RG-Dev-Lab`           | `az policy assignment list --resource-group RG-Dev-Lab --query "[?contains(displayName,'tag')].{name:name, displayName:displayName, enforcement:enforcementMode}" -o json`                     |
-| 2   | Read-Only lock on `LAW-Dev-Lab`                    | `az lock list --resource-group RG-Dev-Lab --resource-name LAW-Dev-Lab --resource-type Microsoft.OperationalInsights/workspaces --query "[].{name:name, level:level}" -o json`                  |
-| 3   | Delete lock on resource group `RG-Dev-Lab`         | `az lock list --resource-group RG-Dev-Lab --query "[?level=='CanNotDelete'].{name:name, level:level}" -o json`                                                                                |
+| #   | What to Check                              | CLI Command                                                                                                                                                                   |
+| --- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Policy assignment exists on `RG-Dev-Lab`   | `az policy assignment list --resource-group RG-Dev-Lab --query "[?contains(displayName,'tag')].{name:name, displayName:displayName, enforcement:enforcementMode}" -o json`    |
+| 2   | Read-Only lock on `LAW-Dev-Lab`            | `az lock list --resource-group RG-Dev-Lab --resource-name LAW-Dev-Lab --resource-type Microsoft.OperationalInsights/workspaces --query "[].{name:name, level:level}" -o json` |
+| 3   | Delete lock on resource group `RG-Dev-Lab` | `az lock list --resource-group RG-Dev-Lab --query "[?level=='CanNotDelete'].{name:name, level:level}" -o json`                                                                |
 
 ## Result
 
