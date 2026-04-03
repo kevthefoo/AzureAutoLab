@@ -34,4 +34,10 @@ Your company is deploying a new application that requires network isolation. You
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-03
+- **Notes:**
+  - VNet-Lab exists in East US with address space 10.0.0.0/16
+  - web-subnet exists with 10.0.1.0/24
+  - db-subnet exists with 10.0.2.0/24
+  - NSG-Web associated with web-subnet

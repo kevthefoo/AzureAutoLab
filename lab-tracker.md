@@ -6,7 +6,7 @@
 | --- | ----------------------- | -------------------------------------------------------------------------------------- | --------------------- | ------ |
 | 1   | Resource Groups & RBAC  | [Create RG-Dev-Lab, add tags, assign Reader role](labs/lab-01-resource-groups-rbac.md) | Identity & Governance | PASSED |
 | 2   | Storage Account & Blobs | [Create storage account, blob container, upload blob](labs/lab-02-storage-account.md)  | Storage               | PASSED |
-| 3   | Virtual Network & Subnets | [Create VNet, subnets, associate NSG](labs/lab-03-virtual-network.md) | Networking | NOT STARTED |
+| 3   | Virtual Network & Subnets | [Create VNet, subnets, associate NSG](labs/lab-03-virtual-network.md) | Networking | PASSED |
 
 ## AZ-104 Domains Covered
 
