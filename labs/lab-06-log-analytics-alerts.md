@@ -32,4 +32,6 @@ Your operations team needs centralized logging and alerting for the Azure enviro
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED
+- **Date:** 2026-04-03
+- **Notes:** All 3 tasks verified via CLI. Workspace in East US, action group with email notification, activity log alert rule enabled.

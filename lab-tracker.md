@@ -11,7 +11,7 @@
 
 | 5   | DNS Zones & Records | [Create DNS zone, A/CNAME/TXT records](labs/lab-05-dns-zones.md) | Networking | PASSED |
 
-| 6   | Log Analytics & Alerts | [Create workspace, action group, alert rule](labs/lab-06-log-analytics-alerts.md) | Monitoring & Backup | NOT STARTED |
+| 6   | Log Analytics & Alerts | [Create workspace, action group, alert rule](labs/lab-06-log-analytics-alerts.md) | Monitoring & Backup | PASSED |
 
 ## AZ-104 Domains Covered
 
