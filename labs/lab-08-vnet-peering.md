@@ -24,11 +24,11 @@ Your company is expanding and has a second team that needs its own virtual netwo
 
 ## Verification Criteria
 
-| #   | What to Check                          | CLI Command                                                                                                                                          |
-| --- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | VNet `VNet-Staging` exists             | `az network vnet show --name VNet-Staging --resource-group RG-Dev-Lab --query "{name:name, addressSpace:addressSpace.addressPrefixes}" -o json`      |
-| 2   | Peering `Peer-Staging-to-Dev` exists   | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json` |
-| 3   | Peering `Peer-Staging-to-Dev` exists   | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Staging --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json` |
+| #   | What to Check                        | CLI Command                                                                                                                                                             |
+| --- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | VNet `VNet-Staging` exists           | `az network vnet show --name VNet-Staging --resource-group RG-Dev-Lab --query "{name:name, addressSpace:addressSpace.addressPrefixes}" -o json`                         |
+| 2   | Peering `Peer-Staging-to-Dev` exists | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json`     |
+| 3   | Peering `Peer-Staging-to-Dev` exists | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Staging --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json` |
 
 ## Result
 
