@@ -10,7 +10,9 @@
 | 4   | Virtual Machine Deployment | [Create VM in VNet, public IP, tags](labs/lab-04-virtual-machine.md)                   | Compute               | PASSED      |
 | 5   | DNS Zones & Records        | [Create DNS zone, A/CNAME/TXT records](labs/lab-05-dns-zones.md)                       | Networking            | PASSED      |
 | 6   | Log Analytics & Alerts     | [Create workspace, action group, alert rule](labs/lab-06-log-analytics-alerts.md)      | Monitoring & Backup   | PASSED      |
-| 7   | Azure Policy & Locks       | [Enforce tagging policy, resource locks](labs/lab-07-policy-locks.md)                  | Identity & Governance | NOT STARTED |
+| 7   | Azure Policy & Locks       | [Enforce tagging policy, resource locks](labs/lab-07-policy-locks.md)                  | Identity & Governance | PASSED      |
+| 8   | VNet Peering               | [Create VNet, bidirectional peering](labs/lab-08-vnet-peering.md)                       | Networking            | PASSED      |
+| 9   | Load Balancer              | [Create LB, backend pool, health probe, rule](labs/lab-09-load-balancer.md)             | Networking            | NOT STARTED |
 
 ## AZ-104 Domains Covered
 
