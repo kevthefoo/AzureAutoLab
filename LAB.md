@@ -12,7 +12,9 @@
 | 6   | Log Analytics & Alerts     | [Create workspace, action group, alert rule](labs/lab-06-log-analytics-alerts.md)      | Monitoring & Backup   | PASSED      |
 | 7   | Azure Policy & Locks       | [Enforce tagging policy, resource locks](labs/lab-07-policy-locks.md)                  | Identity & Governance | PASSED      |
 | 8   | VNet Peering               | [Create VNet, bidirectional peering](labs/lab-08-vnet-peering.md)                      | Networking            | PASSED      |
-| 9   | Load Balancer              | [Create LB, backend pool, health probe, rule](labs/lab-09-load-balancer.md)            | Networking            | NOT STARTED |
+| 9   | Load Balancer              | [Create LB, backend pool, health probe, rule](labs/lab-09-load-balancer.md)            | Networking            | PASSED      |
+| 10  | App Service & Web App      | [Create App Service Plan, Web App, enable logging](labs/lab-10-app-service.md)          | Compute               | SKIPPED     |
+| 11  | Storage SAS & Access Tiers | [Create container, set tier, generate SAS](labs/lab-11-storage-sas-tiers.md)            | Storage               | NOT STARTED |
 
 ## AZ-104 Domains Covered
 

@@ -26,13 +26,15 @@ Your web application needs high availability. You must deploy an Azure Load Bala
 
 ## Verification Criteria
 
-| #   | What to Check                    | CLI Command                                                                                                                                    |
-| --- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Load Balancer `LB-Web` exists    | `az network lb show --name LB-Web --resource-group RG-Dev-Lab --query "{name:name, sku:sku.name, location:location}" -o json`                  |
-| 2   | Backend pool `BP-Web` exists     | `az network lb address-pool show --lb-name LB-Web --name BP-Web --resource-group RG-Dev-Lab --query "{name:name}" -o json`                     |
-| 3   | Health probe `HP-Web` exists     | `az network lb probe show --lb-name LB-Web --name HP-Web --resource-group RG-Dev-Lab --query "{name:name, protocol:protocol, port:port}" -o json` |
-| 4   | Load balancing rule `Rule-HTTP`  | `az network lb rule show --lb-name LB-Web --name Rule-HTTP --resource-group RG-Dev-Lab --query "{name:name, frontendPort:frontendPort, backendPort:backendPort}" -o json` |
+| #   | What to Check                   | CLI Command                                                                                                                                                               |
+| --- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Load Balancer `LB-Web` exists   | `az network lb show --name LB-Web --resource-group RG-Dev-Lab --query "{name:name, sku:sku.name, location:location}" -o json`                                             |
+| 2   | Backend pool `BP-Web` exists    | `az network lb address-pool show --lb-name LB-Web --name BP-Web --resource-group RG-Dev-Lab --query "{name:name}" -o json`                                                |
+| 3   | Health probe `HP-Web` exists    | `az network lb probe show --lb-name LB-Web --name HP-Web --resource-group RG-Dev-Lab --query "{name:name, protocol:protocol, port:port}" -o json`                         |
+| 4   | Load balancing rule `Rule-HTTP` | `az network lb rule show --lb-name LB-Web --name Rule-HTTP --resource-group RG-Dev-Lab --query "{name:name, frontendPort:frontendPort, backendPort:backendPort}" -o json` |
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED
+- **Date:** 2026-04-06
+- **Notes:** All 4 tasks verified via CLI. Standard SKU LB with backend pool, TCP health probe on port 80, and HTTP load balancing rule.
