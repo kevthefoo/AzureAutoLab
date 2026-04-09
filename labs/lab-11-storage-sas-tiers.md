@@ -32,4 +32,6 @@ Your finance team needs temporary, secure access to specific blobs without givin
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED
+- **Date:** 2026-04-09
+- **Notes:** All 3 tasks verified via CLI. Container with private access, blob set to Cool tier, SAS token generated (shared key access enabled).

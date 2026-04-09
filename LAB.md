@@ -14,8 +14,8 @@
 | 8   | VNet Peering               | [Create VNet, bidirectional peering](labs/lab-08-vnet-peering.md)                      | Networking            | PASSED      |
 | 9   | Load Balancer              | [Create LB, backend pool, health probe, rule](labs/lab-09-load-balancer.md)            | Networking            | PASSED      |
 | 10  | App Service & Web App      | [Create App Service Plan, Web App, enable logging](labs/lab-10-app-service.md)          | Compute               | SKIPPED     |
-| 11  | Storage SAS & Access Tiers | [Create container, set tier, generate SAS](labs/lab-11-storage-sas-tiers.md)            | Storage               | NOT STARTED |
-| 12  | Backup & Recovery Vault    | [Create vault, backup policy, protect VM](labs/lab-12-backup-recovery.md)               | Monitoring & Backup   | NOT STARTED |
+| 11  | Storage SAS & Access Tiers | [Create container, set tier, generate SAS](labs/lab-11-storage-sas-tiers.md)            | Storage               | PASSED      |
+| 12  | Backup & Recovery Vault    | [Create vault, backup policy, protect VM](labs/lab-12-backup-recovery.md)               | Monitoring & Backup   | PASSED      |
 | 13  | NSG Rules & ASGs           | [Create ASG, custom NSG rules](labs/lab-13-nsg-rules.md)                                | Networking            | NOT STARTED |
 | 14  | Entra ID Users & Groups    | [Create group, user, manage membership](labs/lab-14-entra-users-groups.md)              | Identity & Governance | NOT STARTED |
 | 15  | VM Scale Sets              | [Create VMSS, autoscale rules](labs/lab-15-vm-scale-sets.md)                            | Compute               | NOT STARTED |
