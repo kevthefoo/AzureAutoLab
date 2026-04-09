@@ -1,0 +1,35 @@
+# Lab 15 — VM Scale Sets
+
+**Domain:** Compute  
+**Difficulty:** Intermediate  
+**Date Assigned:** 2026-04-07
+
+---
+
+## Scenario
+
+Your web application is experiencing variable traffic. You need to deploy a VM Scale Set that can automatically scale the number of instances based on demand.
+
+## Tasks
+
+- [ ] **Task 1:** Create a **VM Scale Set** named `VMSS-Web` in **East US** inside resource group `RG-Dev-Lab` with **2** initial instances, using **Standard_B1s** size and **Ubuntu** image
+- [ ] **Task 2:** Configure **autoscale** on `VMSS-Web` — scale out to **4** instances when CPU > **75%**, scale in to **2** instances when CPU < **25%**
+- [ ] **Task 3:** Add a **tag** `Role=WebTier` to the scale set
+
+## Skills Tested
+
+- VM Scale Set creation and sizing
+- Autoscale rules based on metrics
+- Scale set tagging
+
+## Verification Criteria
+
+| #   | What to Check                     | CLI Command                                                                                                                                                  |
+| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | VMSS `VMSS-Web` exists            | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{name:name, sku:sku, location:location}" -o json`                                         |
+| 2   | Autoscale setting exists          | `az monitor autoscale list --resource-group RG-Dev-Lab --query "[].{name:name, enabled:enabled, profiles:profiles[0].capacity}" -o json`                     |
+| 3   | Tag `Role=WebTier` present        | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                                     |
+
+## Result
+
+- **Status:** NOT STARTED
