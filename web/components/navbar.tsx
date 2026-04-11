@@ -28,6 +28,9 @@ export default function Navbar() {
         <Link href="/labs" className={linkClass("/labs")}>
           Labs
         </Link>
+        <Link href="/quiz" className={linkClass("/quiz")}>
+          Quiz
+        </Link>
       </div>
     </nav>
   );
