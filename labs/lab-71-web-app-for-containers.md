@@ -27,13 +27,13 @@ The development team has containerized their Node.js API and wants to host it on
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-WebContainer-Lab            | Resource group is listed and located in East US                      |
-| 2   | Linux App Service Plan exists         | RG-WebContainer-Lab > asp-container-lab > Overview      | Shows Linux OS, Basic B1 tier                                       |
-| 3   | Web App deployed with container        | webapp-container-lab2026 > Deployment Center             | Docker Hub source, image `nginx:latest`                             |
-| 4   | Continuous deployment enabled          | webapp-container-lab2026 > Deployment Center             | Continuous deployment toggle is On, webhook URL visible             |
-| 5   | App is accessible                      | Browser                                                 | Navigate to `webapp-container-lab2026.azurewebsites.net`, nginx page shown |
+| #   | What to Check                   | Where in Portal                                    | How to Verify                                                              |
+| --- | ------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1   | Resource group exists           | Home > Resource groups > RG-WebContainer-Lab       | Resource group is listed and located in East US                            |
+| 2   | Linux App Service Plan exists   | RG-WebContainer-Lab > asp-container-lab > Overview | Shows Linux OS, Basic B1 tier                                              |
+| 3   | Web App deployed with container | webapp-container-lab2026 > Deployment Center       | Docker Hub source, image `nginx:latest`                                    |
+| 4   | Continuous deployment enabled   | webapp-container-lab2026 > Deployment Center       | Continuous deployment toggle is On, webhook URL visible                    |
+| 5   | App is accessible               | Browser                                            | Navigate to `webapp-container-lab2026.azurewebsites.net`, nginx page shown |
 
 ## Result
 

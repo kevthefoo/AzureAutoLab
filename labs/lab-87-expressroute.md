@@ -26,12 +26,12 @@ Contoso is planning a hybrid connectivity strategy and needs to understand Expre
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | VNet with GatewaySubnet                | Virtual networks > `vnet-er-01` > Subnets                    | `GatewaySubnet` exists with `10.120.255.0/27`                      |
-| 2   | ExpressRoute circuit created           | ExpressRoute circuits > `er-circuit-contoso-01`              | Provider is Equinix, location Washington DC, bandwidth 50 Mbps      |
-| 3   | ExpressRoute gateway deployed          | Virtual network gateways > `ergw-contoso-01`                 | Gateway type is ExpressRoute, SKU is ErGw1AZ                        |
-| 4   | Private peering configured             | ExpressRoute circuits > `er-circuit-contoso-01` > Peerings   | Azure private peering shows subnets and VLAN ID 100                 |
+| #   | What to Check                 | Where in Portal                                            | How to Verify                                                  |
+| --- | ----------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
+| 1   | VNet with GatewaySubnet       | Virtual networks > `vnet-er-01` > Subnets                  | `GatewaySubnet` exists with `10.120.255.0/27`                  |
+| 2   | ExpressRoute circuit created  | ExpressRoute circuits > `er-circuit-contoso-01`            | Provider is Equinix, location Washington DC, bandwidth 50 Mbps |
+| 3   | ExpressRoute gateway deployed | Virtual network gateways > `ergw-contoso-01`               | Gateway type is ExpressRoute, SKU is ErGw1AZ                   |
+| 4   | Private peering configured    | ExpressRoute circuits > `er-circuit-contoso-01` > Peerings | Azure private peering shows subnets and VLAN ID 100            |
 
 ## Result
 

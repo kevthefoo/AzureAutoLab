@@ -27,13 +27,13 @@ Contoso's IT security policy prohibits exposing virtual machines with public IP 
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                             | How to Verify                                                        |
-| --- | -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | VNet with both subnets                 | Virtual networks > `vnet-bastion-01` > Subnets              | `AzureBastionSubnet` and `snet-vms` both exist                      |
-| 2   | AzureBastionSubnet correctly sized     | Virtual networks > `vnet-bastion-01` > Subnets              | `AzureBastionSubnet` has prefix `10.90.1.0/26`                     |
-| 3   | Bastion host deployed                  | Bastions > `bastion-contoso-01`                             | SKU is Basic, status is Succeeded, public IP assigned                |
-| 4   | VM has no public IP                    | Virtual machines > `vm-internal-01` > Networking            | No public IP address assigned to the NIC                             |
-| 5   | Bastion connection works               | Virtual machines > `vm-internal-01` > Connect > Bastion     | RDP session opens in the browser via Bastion                         |
+| #   | What to Check                      | Where in Portal                                         | How to Verify                                         |
+| --- | ---------------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| 1   | VNet with both subnets             | Virtual networks > `vnet-bastion-01` > Subnets          | `AzureBastionSubnet` and `snet-vms` both exist        |
+| 2   | AzureBastionSubnet correctly sized | Virtual networks > `vnet-bastion-01` > Subnets          | `AzureBastionSubnet` has prefix `10.90.1.0/26`        |
+| 3   | Bastion host deployed              | Bastions > `bastion-contoso-01`                         | SKU is Basic, status is Succeeded, public IP assigned |
+| 4   | VM has no public IP                | Virtual machines > `vm-internal-01` > Networking        | No public IP address assigned to the NIC              |
+| 5   | Bastion connection works           | Virtual machines > `vm-internal-01` > Connect > Bastion | RDP session opens in the browser via Bastion          |
 
 ## Result
 

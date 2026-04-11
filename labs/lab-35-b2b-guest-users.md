@@ -26,12 +26,12 @@ Your company is collaborating with an external consulting firm and needs to gran
 
 ## Verification Criteria
 
-| #   | What to Check                                   | Where in Portal                                              | How to Verify                                                       |
-| --- | ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------- |
-| 1   | Resource group `RG-ExternalCollab-Lab` exists   | Portal > Resource Groups                                     | Find the RG with tag `Partner = Contoso`                            |
-| 2   | Guest user exists in directory                  | Entra ID > Users                                             | Find the user, confirm User type = Guest                            |
-| 3   | Reader role assigned to guest at RG scope       | RG-ExternalCollab-Lab > Access Control (IAM) > Role assignments | Find the guest user with Role = Reader                           |
-| 4   | Guest user type is correct                      | Entra ID > Users > [guest user] > Profile                    | Confirm User type field shows Guest                                 |
+| #   | What to Check                                 | Where in Portal                                                 | How to Verify                            |
+| --- | --------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------- |
+| 1   | Resource group `RG-ExternalCollab-Lab` exists | Portal > Resource Groups                                        | Find the RG with tag `Partner = Contoso` |
+| 2   | Guest user exists in directory                | Entra ID > Users                                                | Find the user, confirm User type = Guest |
+| 3   | Reader role assigned to guest at RG scope     | RG-ExternalCollab-Lab > Access Control (IAM) > Role assignments | Find the guest user with Role = Reader   |
+| 4   | Guest user type is correct                    | Entra ID > Users > [guest user] > Profile                       | Confirm User type field shows Guest      |
 
 ## Result
 

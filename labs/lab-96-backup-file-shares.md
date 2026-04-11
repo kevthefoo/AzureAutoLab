@@ -27,13 +27,13 @@ Your company stores shared departmental documents in Azure File Shares. The comp
 
 ## Verification Criteria
 
-| #   | What to Check                        | Where in Portal                                                    | How to Verify                                                          |
-| --- | ------------------------------------ | ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Storage account and file share exist | Storage accounts > `stfilesharebackup2026` > File shares           | `share-dept-docs` is listed with `report-q1.txt` inside               |
-| 2   | Recovery vault exists                | Recovery Services vaults > `rsv-fileshare-01`                      | Vault is in `RG-FileBackup-Lab`                                       |
-| 3   | Backup is configured                 | `rsv-fileshare-01` > Backup items > Azure File Share               | `share-dept-docs` appears as a protected item                          |
-| 4   | Backup policy is correct             | `rsv-fileshare-01` > Backup policies > `policy-daily-30d`          | Policy shows daily schedule with 30-day retention                      |
-| 5   | Restore completed                    | Storage accounts > `stfilesharebackup2026` > `share-restore-target`| `report-q1.txt` exists in the restored file share                      |
+| #   | What to Check                        | Where in Portal                                                     | How to Verify                                           |
+| --- | ------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1   | Storage account and file share exist | Storage accounts > `stfilesharebackup2026` > File shares            | `share-dept-docs` is listed with `report-q1.txt` inside |
+| 2   | Recovery vault exists                | Recovery Services vaults > `rsv-fileshare-01`                       | Vault is in `RG-FileBackup-Lab`                         |
+| 3   | Backup is configured                 | `rsv-fileshare-01` > Backup items > Azure File Share                | `share-dept-docs` appears as a protected item           |
+| 4   | Backup policy is correct             | `rsv-fileshare-01` > Backup policies > `policy-daily-30d`           | Policy shows daily schedule with 30-day retention       |
+| 5   | Restore completed                    | Storage accounts > `stfilesharebackup2026` > `share-restore-target` | `report-q1.txt` exists in the restored file share       |
 
 ## Result
 

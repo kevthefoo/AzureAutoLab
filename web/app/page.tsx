@@ -16,14 +16,20 @@ export default function DashboardPage() {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <StatCard label="Total Labs" value={stats.total} />
-        <StatCard label="Passed" value={stats.passed} color="text-status-passed" />
+        <StatCard
+          label="Passed"
+          value={stats.passed}
+          color="text-status-passed"
+        />
       </div>
 
       {/* Overall Progress */}
       <div className="bg-bg-surface border border-border rounded-lg p-5 mb-8">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-text-secondary">Overall Progress</span>
-          <span className="text-sm font-bold text-accent">{stats.percentage}%</span>
+          <span className="text-sm font-bold text-accent">
+            {stats.percentage}%
+          </span>
         </div>
         <div className="bg-border rounded-full h-3">
           <div

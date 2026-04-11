@@ -26,12 +26,12 @@ Tailwind Traders needs to enable remote employees to securely connect to Azure r
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                             | How to Verify                                                        |
-| --- | -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | VNet with GatewaySubnet                | Virtual networks > `vnet-vpn-01` > Subnets                  | `GatewaySubnet` exists with prefix `10.60.255.0/27`                 |
-| 2   | VPN Gateway deployed                   | Virtual network gateways > `vpngw-p2s-01`                   | SKU is VpnGw1, type is Route-based, public IP assigned              |
-| 3   | P2S configuration set                  | Virtual network gateways > `vpngw-p2s-01` > Point-to-site   | Address pool is `172.16.0.0/24`, tunnel type is OpenVPN             |
-| 4   | Root certificate uploaded              | Virtual network gateways > `vpngw-p2s-01` > Point-to-site   | `P2SRootCert` listed under root certificates                        |
+| #   | What to Check             | Where in Portal                                           | How to Verify                                           |
+| --- | ------------------------- | --------------------------------------------------------- | ------------------------------------------------------- |
+| 1   | VNet with GatewaySubnet   | Virtual networks > `vnet-vpn-01` > Subnets                | `GatewaySubnet` exists with prefix `10.60.255.0/27`     |
+| 2   | VPN Gateway deployed      | Virtual network gateways > `vpngw-p2s-01`                 | SKU is VpnGw1, type is Route-based, public IP assigned  |
+| 3   | P2S configuration set     | Virtual network gateways > `vpngw-p2s-01` > Point-to-site | Address pool is `172.16.0.0/24`, tunnel type is OpenVPN |
+| 4   | Root certificate uploaded | Virtual network gateways > `vpngw-p2s-01` > Point-to-site | `P2SRootCert` listed under root certificates            |
 
 ## Result
 

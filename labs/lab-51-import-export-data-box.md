@@ -26,12 +26,12 @@ Your organization needs to migrate 40 TB of archival data from an on-premises da
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account and container exist    | Storage accounts > `stlabimport51` > Containers                        | `import-target` container is listed                                 |
-| 2   | Import/Export workflow reviewed        | Azure Import/Export jobs > + Create                                    | User can describe the required fields for an import job             |
-| 3   | Data Box options reviewed              | Azure Data Box > Overview                                              | User can list device types and their capacity limits                |
-| 4   | Data Box order workflow understood     | Azure Data Box > + Create                                              | User navigated through order creation steps (no order placed)       |
+| #   | What to Check                       | Where in Portal                                 | How to Verify                                                 |
+| --- | ----------------------------------- | ----------------------------------------------- | ------------------------------------------------------------- |
+| 1   | Storage account and container exist | Storage accounts > `stlabimport51` > Containers | `import-target` container is listed                           |
+| 2   | Import/Export workflow reviewed     | Azure Import/Export jobs > + Create             | User can describe the required fields for an import job       |
+| 3   | Data Box options reviewed           | Azure Data Box > Overview                       | User can list device types and their capacity limits          |
+| 4   | Data Box order workflow understood  | Azure Data Box > + Create                       | User navigated through order creation steps (no order placed) |
 
 ## Result
 

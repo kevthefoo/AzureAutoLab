@@ -27,13 +27,13 @@ The data analytics team needs to run a large-scale parallel processing workload 
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-Batch-Lab                   | Resource group is listed and located in East US                      |
-| 2   | Batch account exists                   | RG-Batch-Lab > batchlab2026 > Overview                  | Batch account shows linked storage account                          |
-| 3   | Storage account linked                 | batchlab2026 > Storage account                          | `stbatchlab2026` is linked                                          |
-| 4   | Pool exists with nodes                 | batchlab2026 > Pools > pool-compute-01                  | Pool shows 2 dedicated nodes, Standard_A1_v2, steady state          |
-| 5   | Job and task completed                 | batchlab2026 > Jobs > job-transform-01 > Tasks          | `task-hello` shows Completed status                                 |
+| #   | What to Check          | Where in Portal                                | How to Verify                                              |
+| --- | ---------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| 1   | Resource group exists  | Home > Resource groups > RG-Batch-Lab          | Resource group is listed and located in East US            |
+| 2   | Batch account exists   | RG-Batch-Lab > batchlab2026 > Overview         | Batch account shows linked storage account                 |
+| 3   | Storage account linked | batchlab2026 > Storage account                 | `stbatchlab2026` is linked                                 |
+| 4   | Pool exists with nodes | batchlab2026 > Pools > pool-compute-01         | Pool shows 2 dedicated nodes, Standard_A1_v2, steady state |
+| 5   | Job and task completed | batchlab2026 > Jobs > job-transform-01 > Tasks | `task-hello` shows Completed status                        |
 
 ## Result
 

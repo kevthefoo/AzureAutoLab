@@ -13,9 +13,11 @@ export default async function LabsPage({
   const allLabs = getLabSummaries();
 
   const domains = [...new Set(allLabs.map((l) => l.domain))];
-  const statuses = [...new Set(allLabs.map((l) =>
-    l.status.startsWith("PASSED") ? "PASSED" : l.status
-  ))];
+  const statuses = [
+    ...new Set(
+      allLabs.map((l) => (l.status.startsWith("PASSED") ? "PASSED" : l.status)),
+    ),
+  ];
 
   let filtered = allLabs;
   if (params.domain) {

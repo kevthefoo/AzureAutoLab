@@ -27,13 +27,13 @@ The security team requires that all audit logs and platform metrics from key Azu
 
 ## Verification Criteria
 
-| #   | What to Check                        | Where in Portal                                              | How to Verify                                                          |
-| --- | ------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Resource group and resources exist   | Resource Groups > `RG-Diagnostics-Lab`                       | All four resources (LAW, storage, VNet, KV) are listed                 |
-| 2   | VNet diagnostic setting exists       | Virtual Networks > `vnet-prod-01` > Diagnostic settings      | `diag-vnet-prod` is listed with LAW and storage destinations           |
-| 3   | VNet sends all log categories        | Diagnostic settings > `diag-vnet-prod` > Details             | All available log categories are checked                               |
-| 4   | Key Vault diagnostic setting exists  | Key Vaults > `kv-diag-lab-01` > Diagnostic settings          | `diag-kv-prod` is listed with LAW destination                          |
-| 5   | Key Vault sends AuditEvent logs      | Diagnostic settings > `diag-kv-prod` > Details               | AuditEvent category and AllMetrics are enabled                         |
+| #   | What to Check                       | Where in Portal                                         | How to Verify                                                |
+| --- | ----------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Resource group and resources exist  | Resource Groups > `RG-Diagnostics-Lab`                  | All four resources (LAW, storage, VNet, KV) are listed       |
+| 2   | VNet diagnostic setting exists      | Virtual Networks > `vnet-prod-01` > Diagnostic settings | `diag-vnet-prod` is listed with LAW and storage destinations |
+| 3   | VNet sends all log categories       | Diagnostic settings > `diag-vnet-prod` > Details        | All available log categories are checked                     |
+| 4   | Key Vault diagnostic setting exists | Key Vaults > `kv-diag-lab-01` > Diagnostic settings     | `diag-kv-prod` is listed with LAW destination                |
+| 5   | Key Vault sends AuditEvent logs     | Diagnostic settings > `diag-kv-prod` > Details          | AuditEvent category and AllMetrics are enabled               |
 
 ## Result
 

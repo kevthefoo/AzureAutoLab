@@ -27,13 +27,13 @@ The e-commerce platform experiences traffic spikes during promotional events. Yo
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-AutoScale-Lab               | Resource group is listed and located in East US                      |
-| 2   | App Service Plan is Standard S1       | RG-AutoScale-Lab > asp-autoscale-lab > Overview         | Pricing tier shows Standard S1                                      |
-| 3   | Web App exists                         | RG-AutoScale-Lab > webapp-shop-lab2026 > Overview       | Web app is running                                                   |
-| 4   | Scale-out rule configured              | asp-autoscale-lab > Scale out (App Service Plan)        | Custom autoscale enabled; scale-out at CPU > 70%, max 4 instances   |
-| 5   | Scale-in rule configured               | asp-autoscale-lab > Scale out (App Service Plan)        | Scale-in at CPU < 30%, min 1 instance                               |
+| #   | What to Check                   | Where in Portal                                   | How to Verify                                                     |
+| --- | ------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | Resource group exists           | Home > Resource groups > RG-AutoScale-Lab         | Resource group is listed and located in East US                   |
+| 2   | App Service Plan is Standard S1 | RG-AutoScale-Lab > asp-autoscale-lab > Overview   | Pricing tier shows Standard S1                                    |
+| 3   | Web App exists                  | RG-AutoScale-Lab > webapp-shop-lab2026 > Overview | Web app is running                                                |
+| 4   | Scale-out rule configured       | asp-autoscale-lab > Scale out (App Service Plan)  | Custom autoscale enabled; scale-out at CPU > 70%, max 4 instances |
+| 5   | Scale-in rule configured        | asp-autoscale-lab > Scale out (App Service Plan)  | Scale-in at CPU < 30%, min 1 instance                             |
 
 ## Result
 

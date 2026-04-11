@@ -26,12 +26,12 @@ The operations team needs to automate post-deployment configuration on newly pro
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-Extensions-Lab              | Resource group is listed and located in East US                      |
-| 2   | VM is running                          | RG-Extensions-Lab > vm-config-01 > Overview             | VM status shows Running                                              |
-| 3   | Custom Script Extension installed      | vm-config-01 > Extensions + applications                | CustomScriptExtension shows Provisioning succeeded                  |
-| 4   | Diagnostics extension enabled          | vm-config-01 > Extensions + applications                | IaaSDiagnostics extension shows Provisioning succeeded              |
+| #   | What to Check                     | Where in Portal                             | How to Verify                                          |
+| --- | --------------------------------- | ------------------------------------------- | ------------------------------------------------------ |
+| 1   | Resource group exists             | Home > Resource groups > RG-Extensions-Lab  | Resource group is listed and located in East US        |
+| 2   | VM is running                     | RG-Extensions-Lab > vm-config-01 > Overview | VM status shows Running                                |
+| 3   | Custom Script Extension installed | vm-config-01 > Extensions + applications    | CustomScriptExtension shows Provisioning succeeded     |
+| 4   | Diagnostics extension enabled     | vm-config-01 > Extensions + applications    | IaaSDiagnostics extension shows Provisioning succeeded |
 
 ## Result
 

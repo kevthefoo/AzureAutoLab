@@ -24,11 +24,11 @@ Before performing a risky OS update on a production VM, your team needs a point-
 
 ## Verification Criteria
 
-| #   | What to Check                        | CLI Command                                                                                                                                               |
-| --- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Snapshot `Snap-OSDisk-01` exists     | `az snapshot show --name Snap-OSDisk-01 --resource-group RG-Dev-Lab --query "{name:name, diskSizeGb:diskSizeGb, timeCreated:timeCreated}" -o json`        |
-| 2   | Tags on snapshot                     | `az snapshot show --name Snap-OSDisk-01 --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                        |
-| 3   | Managed disk `Disk-From-Snap` exists | `az disk show --name Disk-From-Snap --resource-group RG-Dev-Lab --query "{name:name, creationSource:creationData.createOption}" -o json`                  |
+| #   | What to Check                        | CLI Command                                                                                                                                        |
+| --- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Snapshot `Snap-OSDisk-01` exists     | `az snapshot show --name Snap-OSDisk-01 --resource-group RG-Dev-Lab --query "{name:name, diskSizeGb:diskSizeGb, timeCreated:timeCreated}" -o json` |
+| 2   | Tags on snapshot                     | `az snapshot show --name Snap-OSDisk-01 --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                 |
+| 3   | Managed disk `Disk-From-Snap` exists | `az disk show --name Disk-From-Snap --resource-group RG-Dev-Lab --query "{name:name, creationSource:creationData.createOption}" -o json`           |
 
 ## Result
 

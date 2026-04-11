@@ -27,13 +27,13 @@ Fabrikam's compliance team needs visibility into network traffic flowing through
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | NSG associated with subnet             | Network security groups > `nsg-web-tier` > Subnets           | `snet-web` is listed as associated subnet                            |
-| 2   | Storage account for flow logs          | Storage accounts > `stnsgflowlogs2026`                       | Account exists and is Standard LRS                                   |
-| 3   | Log Analytics workspace created        | Log Analytics workspaces > `law-nsgadv-01`                   | Workspace is listed and in East US                                   |
-| 4   | NSG flow logs enabled                  | Network Watcher > NSG flow logs                              | `nsg-web-tier` flow logs enabled (v2), traffic analytics on, 7-day retention |
-| 5   | Diagnostic settings configured         | Network security groups > `nsg-web-tier` > Diagnostic settings | Logs sent to `law-nsgadv-01`                                       |
+| #   | What to Check                   | Where in Portal                                                | How to Verify                                                                |
+| --- | ------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1   | NSG associated with subnet      | Network security groups > `nsg-web-tier` > Subnets             | `snet-web` is listed as associated subnet                                    |
+| 2   | Storage account for flow logs   | Storage accounts > `stnsgflowlogs2026`                         | Account exists and is Standard LRS                                           |
+| 3   | Log Analytics workspace created | Log Analytics workspaces > `law-nsgadv-01`                     | Workspace is listed and in East US                                           |
+| 4   | NSG flow logs enabled           | Network Watcher > NSG flow logs                                | `nsg-web-tier` flow logs enabled (v2), traffic analytics on, 7-day retention |
+| 5   | Diagnostic settings configured  | Network security groups > `nsg-web-tier` > Diagnostic settings | Logs sent to `law-nsgadv-01`                                                 |
 
 ## Result
 

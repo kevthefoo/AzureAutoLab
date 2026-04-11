@@ -27,13 +27,13 @@ Your organization has branch offices that need to access shared files with low l
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | File share exists                      | Storage accounts > `stlabfilesync57` > File shares                     | `shared-documents` is listed with 100 GB quota                      |
-| 2   | Storage Sync Service exists            | Storage Sync Services > `sync-service-lab57`                           | Sync service is listed in `RG-FileSync-Lab`                         |
-| 3   | Sync group with cloud endpoint         | Storage Sync Services > `sync-service-lab57` > Sync groups             | `branch-office-sync` shows `shared-documents` as cloud endpoint     |
-| 4   | Agent requirements reviewed            | Storage Sync Services > `sync-service-lab57` > Registered servers      | User can describe supported OS versions and agent requirements      |
-| 5   | Server endpoint options reviewed       | Sync groups > `branch-office-sync` > Add server endpoint               | User can describe cloud tiering and volume free space settings      |
+| #   | What to Check                    | Where in Portal                                                   | How to Verify                                                   |
+| --- | -------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | File share exists                | Storage accounts > `stlabfilesync57` > File shares                | `shared-documents` is listed with 100 GB quota                  |
+| 2   | Storage Sync Service exists      | Storage Sync Services > `sync-service-lab57`                      | Sync service is listed in `RG-FileSync-Lab`                     |
+| 3   | Sync group with cloud endpoint   | Storage Sync Services > `sync-service-lab57` > Sync groups        | `branch-office-sync` shows `shared-documents` as cloud endpoint |
+| 4   | Agent requirements reviewed      | Storage Sync Services > `sync-service-lab57` > Registered servers | User can describe supported OS versions and agent requirements  |
+| 5   | Server endpoint options reviewed | Sync groups > `branch-office-sync` > Add server endpoint          | User can describe cloud tiering and volume free space settings  |
 
 ## Result
 

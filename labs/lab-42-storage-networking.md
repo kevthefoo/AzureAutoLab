@@ -27,13 +27,13 @@ Your company's security team has flagged that several storage accounts are publi
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                        |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Storage account exists                 | Storage accounts > `stlabnetwork42`                                    | Account is listed and accessible                                     |
-| 2   | Firewall denies public access          | Storage accounts > `stlabnetwork42` > Networking > Firewalls           | Default action is "Deny", your IP is in the allowed list             |
-| 3   | Service endpoint enabled on subnet     | Virtual networks > `VNet-Storage-Lab` > Subnets > `subnet-storage`    | Microsoft.Storage appears under Service endpoints                    |
-| 4   | VNet rule added to storage account     | Storage accounts > `stlabnetwork42` > Networking > Virtual networks    | `subnet-storage` is listed as an allowed network                     |
-| 5   | Private endpoint exists                | Storage accounts > `stlabnetwork42` > Networking > Private endpoints   | `pe-stlabnetwork42` is listed with status "Approved"                 |
+| #   | What to Check                      | Where in Portal                                                      | How to Verify                                            |
+| --- | ---------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1   | Storage account exists             | Storage accounts > `stlabnetwork42`                                  | Account is listed and accessible                         |
+| 2   | Firewall denies public access      | Storage accounts > `stlabnetwork42` > Networking > Firewalls         | Default action is "Deny", your IP is in the allowed list |
+| 3   | Service endpoint enabled on subnet | Virtual networks > `VNet-Storage-Lab` > Subnets > `subnet-storage`   | Microsoft.Storage appears under Service endpoints        |
+| 4   | VNet rule added to storage account | Storage accounts > `stlabnetwork42` > Networking > Virtual networks  | `subnet-storage` is listed as an allowed network         |
+| 5   | Private endpoint exists            | Storage accounts > `stlabnetwork42` > Networking > Private endpoints | `pe-stlabnetwork42` is listed with status "Approved"     |
 
 ## Result
 

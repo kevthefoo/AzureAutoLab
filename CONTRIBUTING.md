@@ -23,22 +23,27 @@ Every lab file must include these sections:
 ---
 
 ## Scenario
+
 A realistic business context explaining why this task is needed.
 
 ## Tasks
+
 - [ ] **Task 1:** ...
 - [ ] **Task 2:** ...
 
 ## Skills Tested
+
 - Skill 1
 - Skill 2
 
 ## Verification Criteria
-| # | What to Check | CLI Command |
-|---|---------------|-------------|
-| 1 | ...           | `az ...`    |
+
+| #   | What to Check | CLI Command |
+| --- | ------------- | ----------- |
+| 1   | ...           | `az ...`    |
 
 ## Result
+
 - **Status:** NOT STARTED
 - **Date:**
 - **Notes:**

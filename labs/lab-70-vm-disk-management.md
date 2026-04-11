@@ -26,12 +26,12 @@ A file server VM needs additional storage capacity for application data. You mus
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-DiskMgmt-Lab                | Resource group is listed and located in East US                      |
-| 2   | VM is running                          | RG-DiskMgmt-Lab > vm-filesvr-01 > Overview              | VM status shows Running                                              |
-| 3   | Data disks attached                    | vm-filesvr-01 > Disks                                   | `disk-data-01` and `disk-data-02` listed as data disks (32 GB each) |
-| 4   | OS disk resized to 256 GB             | vm-filesvr-01 > Disks                                   | OS disk shows 256 GB size                                           |
+| #   | What to Check             | Where in Portal                            | How to Verify                                                       |
+| --- | ------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
+| 1   | Resource group exists     | Home > Resource groups > RG-DiskMgmt-Lab   | Resource group is listed and located in East US                     |
+| 2   | VM is running             | RG-DiskMgmt-Lab > vm-filesvr-01 > Overview | VM status shows Running                                             |
+| 3   | Data disks attached       | vm-filesvr-01 > Disks                      | `disk-data-01` and `disk-data-02` listed as data disks (32 GB each) |
+| 4   | OS disk resized to 256 GB | vm-filesvr-01 > Disks                      | OS disk shows 256 GB size                                           |
 
 ## Result
 

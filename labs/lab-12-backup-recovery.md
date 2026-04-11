@@ -24,11 +24,11 @@ Your company requires disaster recovery for critical virtual machines. You must 
 
 ## Verification Criteria
 
-| #   | What to Check                        | CLI Command                                                                                                                                                     |
-| --- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Recovery vault `RSV-Dev-Lab` exists  | `az backup vault show --name RSV-Dev-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location}" -o json`                                          |
-| 2   | Backup policy `Policy-Daily` exists  | `az backup policy show --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --name Policy-Daily --query "{name:name}" -o json`                                  |
-| 3   | VM backup is enabled                 | `az backup item list --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --query "[].{name:name, protectionState:properties.protectionState}" -o json`         |
+| #   | What to Check                       | CLI Command                                                                                                                                             |
+| --- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Recovery vault `RSV-Dev-Lab` exists | `az backup vault show --name RSV-Dev-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location}" -o json`                                  |
+| 2   | Backup policy `Policy-Daily` exists | `az backup policy show --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --name Policy-Daily --query "{name:name}" -o json`                          |
+| 3   | VM backup is enabled                | `az backup item list --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --query "[].{name:name, protectionState:properties.protectionState}" -o json` |
 
 ## Result
 

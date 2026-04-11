@@ -26,12 +26,12 @@ Your helpdesk is overwhelmed with password reset requests. Management wants to e
 
 ## Verification Criteria
 
-| #   | What to Check                                  | Where in Portal                                         | How to Verify                                                       |
-| --- | ---------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Security group `SG-SSPR-Pilot` exists          | Entra ID > Groups                                       | Find the group and confirm it has at least one member               |
-| 2   | SSPR is enabled for Selected group             | Entra ID > Password reset > Properties                  | Confirm SSPR is set to Selected and `SG-SSPR-Pilot` is the target  |
-| 3   | Authentication methods are configured          | Entra ID > Password reset > Authentication methods      | Confirm 1 method required, Email and Mobile phone enabled           |
-| 4   | Notification setting is enabled                | Entra ID > Password reset > Notifications               | Confirm "Notify users on password resets" is set to Yes             |
+| #   | What to Check                         | Where in Portal                                    | How to Verify                                                     |
+| --- | ------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | Security group `SG-SSPR-Pilot` exists | Entra ID > Groups                                  | Find the group and confirm it has at least one member             |
+| 2   | SSPR is enabled for Selected group    | Entra ID > Password reset > Properties             | Confirm SSPR is set to Selected and `SG-SSPR-Pilot` is the target |
+| 3   | Authentication methods are configured | Entra ID > Password reset > Authentication methods | Confirm 1 method required, Email and Mobile phone enabled         |
+| 4   | Notification setting is enabled       | Entra ID > Password reset > Notifications          | Confirm "Notify users on password resets" is set to Yes           |
 
 ## Result
 

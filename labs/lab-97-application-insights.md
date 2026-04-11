@@ -27,13 +27,13 @@ The development team has deployed a web application to Azure App Service and nee
 
 ## Verification Criteria
 
-| #   | What to Check                         | Where in Portal                                                    | How to Verify                                                          |
-| --- | ------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Application Insights resource exists  | Application Insights > `appi-webapp-prod`                          | Resource is workspace-based, connected to `law-appinsights-01`         |
-| 2   | Web App exists and is running         | App Services > `app-insights-lab-2026`                             | Web app shows "Running" status                                         |
-| 3   | App Insights linked to Web App        | App Services > `app-insights-lab-2026` > Application Insights      | Application Insights shows as enabled with `appi-webapp-prod`          |
-| 4   | Connection string is configured       | App Services > `app-insights-lab-2026` > Environment variables     | `APPLICATIONINSIGHTS_CONNECTION_STRING` is present                     |
-| 5   | Telemetry is flowing                  | Application Insights > `appi-webapp-prod` > Live Metrics           | Live metrics show incoming requests after browsing the app URL          |
+| #   | What to Check                        | Where in Portal                                                | How to Verify                                                  |
+| --- | ------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
+| 1   | Application Insights resource exists | Application Insights > `appi-webapp-prod`                      | Resource is workspace-based, connected to `law-appinsights-01` |
+| 2   | Web App exists and is running        | App Services > `app-insights-lab-2026`                         | Web app shows "Running" status                                 |
+| 3   | App Insights linked to Web App       | App Services > `app-insights-lab-2026` > Application Insights  | Application Insights shows as enabled with `appi-webapp-prod`  |
+| 4   | Connection string is configured      | App Services > `app-insights-lab-2026` > Environment variables | `APPLICATIONINSIGHTS_CONNECTION_STRING` is present             |
+| 5   | Telemetry is flowing                 | Application Insights > `appi-webapp-prod` > Live Metrics       | Live metrics show incoming requests after browsing the app URL |
 
 ## Result
 

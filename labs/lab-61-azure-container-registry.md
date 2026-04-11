@@ -26,12 +26,12 @@ Your organization is adopting a container-based workflow and needs a private reg
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-ACR-Lab                     | Resource group is listed and located in East US                      |
-| 2   | ACR exists with Basic SKU             | RG-ACR-Lab > acrcomputelab2026 > Overview               | Shows Basic SKU and login server URL                                |
-| 3   | Admin user is enabled                  | acrcomputelab2026 > Access keys                         | Admin user toggle is enabled, username and passwords visible        |
-| 4   | Image is in the registry               | acrcomputelab2026 > Repositories                        | `hello-world` repository exists with tag `v1`                       |
+| #   | What to Check             | Where in Portal                           | How to Verify                                                |
+| --- | ------------------------- | ----------------------------------------- | ------------------------------------------------------------ |
+| 1   | Resource group exists     | Home > Resource groups > RG-ACR-Lab       | Resource group is listed and located in East US              |
+| 2   | ACR exists with Basic SKU | RG-ACR-Lab > acrcomputelab2026 > Overview | Shows Basic SKU and login server URL                         |
+| 3   | Admin user is enabled     | acrcomputelab2026 > Access keys           | Admin user toggle is enabled, username and passwords visible |
+| 4   | Image is in the registry  | acrcomputelab2026 > Repositories          | `hello-world` repository exists with tag `v1`                |
 
 ## Result
 

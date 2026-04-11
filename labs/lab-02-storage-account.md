@@ -25,11 +25,11 @@ Your development team needs a storage account to store application logs as blobs
 
 ## Verification Criteria
 
-| #   | What to Check                                          | CLI Command                                                                                         |
-| --- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| 1   | Storage account `stdevlab104` exists in East US w/ LRS | `az storage account show --name stdevlab104 --query "{name:name, location:primaryLocation, sku:sku.name}" -o json` |
+| #   | What to Check                                          | CLI Command                                                                                                                                |
+| --- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Storage account `stdevlab104` exists in East US w/ LRS | `az storage account show --name stdevlab104 --query "{name:name, location:primaryLocation, sku:sku.name}" -o json`                         |
 | 2   | Blob container `app-logs` exists with Private access   | `az storage container show --name app-logs --account-name stdevlab104 --query "{name:name, publicAccess:properties.publicAccess}" -o json` |
-| 3   | At least one blob exists in `app-logs`                 | `az storage blob list --container-name app-logs --account-name stdevlab104 --query "[].name" -o json` |
+| 3   | At least one blob exists in `app-logs`                 | `az storage blob list --container-name app-logs --account-name stdevlab104 --query "[].name" -o json`                                      |
 
 ## Result
 

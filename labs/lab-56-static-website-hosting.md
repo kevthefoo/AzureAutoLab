@@ -27,13 +27,13 @@ Your marketing department needs a simple, cost-effective way to host a landing p
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account exists                 | Storage accounts > `stlabstaticsite56`                                 | Account is listed with StorageV2 kind                               |
-| 2   | Static website enabled                 | Storage accounts > `stlabstaticsite56` > Static website                | Status shows "Enabled", index and error docs are configured         |
-| 3   | Index page uploaded                    | Storage accounts > `stlabstaticsite56` > Containers > `$web`          | `index.html` is listed in the `$web` container                      |
-| 4   | Error page uploaded                    | Storage accounts > `stlabstaticsite56` > Containers > `$web`          | `404.html` is listed in the `$web` container                        |
-| 5   | Website accessible via endpoint        | Browser > primary endpoint URL                                         | Page displays "Welcome to the Product Launch" content               |
+| #   | What to Check                   | Where in Portal                                              | How to Verify                                               |
+| --- | ------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- |
+| 1   | Storage account exists          | Storage accounts > `stlabstaticsite56`                       | Account is listed with StorageV2 kind                       |
+| 2   | Static website enabled          | Storage accounts > `stlabstaticsite56` > Static website      | Status shows "Enabled", index and error docs are configured |
+| 3   | Index page uploaded             | Storage accounts > `stlabstaticsite56` > Containers > `$web` | `index.html` is listed in the `$web` container              |
+| 4   | Error page uploaded             | Storage accounts > `stlabstaticsite56` > Containers > `$web` | `404.html` is listed in the `$web` container                |
+| 5   | Website accessible via endpoint | Browser > primary endpoint URL                               | Page displays "Welcome to the Product Launch" content       |
 
 ## Result
 

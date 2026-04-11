@@ -26,12 +26,12 @@ Finance needs to track cloud spending by department. You must apply a tag inheri
 
 ## Verification Criteria
 
-| #   | What to Check                                       | Where in Portal                                     | How to Verify                                                       |
-| --- | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | RG has tags `Department=Marketing`, `Project=Campaign2026` | RG-CostTags-Lab > Tags                        | Confirm both tags are present with correct values                   |
-| 2   | Tag inheritance policy is assigned                  | Portal > Policy > Assignments                       | Find "Inherit a tag from the resource group" scoped to the RG       |
-| 3   | Storage account has inherited `Department` tag      | stcosttagslab > Tags                                | Confirm `Department = Marketing` tag is present                     |
-| 4   | Budget `Budget-Marketing` exists with 80% alert     | Cost Management > Budgets                           | Find budget with $50 amount and 80% alert threshold                 |
+| #   | What to Check                                              | Where in Portal               | How to Verify                                                 |
+| --- | ---------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------- |
+| 1   | RG has tags `Department=Marketing`, `Project=Campaign2026` | RG-CostTags-Lab > Tags        | Confirm both tags are present with correct values             |
+| 2   | Tag inheritance policy is assigned                         | Portal > Policy > Assignments | Find "Inherit a tag from the resource group" scoped to the RG |
+| 3   | Storage account has inherited `Department` tag             | stcosttagslab > Tags          | Confirm `Department = Marketing` tag is present               |
+| 4   | Budget `Budget-Marketing` exists with 80% alert            | Cost Management > Budgets     | Find budget with $50 amount and 80% alert threshold           |
 
 ## Result
 

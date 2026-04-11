@@ -26,13 +26,13 @@ Your company recently deployed a production VM (`vm-web-prod-01`) and management
 
 ## Verification Criteria
 
-| #   | What to Check                  | Where in Portal                                        | How to Verify                                                        |
-| --- | ------------------------------ | ------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | Resource group exists          | Resource Groups > `RG-Monitor-Metrics-Lab`             | Resource group is listed and located in East US                       |
-| 2   | VM is running                  | Virtual Machines > `vm-web-prod-01`                    | VM status shows "Running"                                            |
-| 3   | Metric alert rule exists       | Monitor > Alerts > Alert rules                         | `alert-high-cpu` rule is listed targeting `vm-web-prod-01`           |
-| 4   | Alert threshold is correct     | Monitor > Alerts > Alert rules > `alert-high-cpu`      | Condition shows "Percentage CPU > 80" with 5-min aggregation         |
-| 5   | Dashboard with pinned chart    | Dashboards > `Dashboard-Ops-Prod`                      | Dashboard contains a CPU metrics chart for `vm-web-prod-01`          |
+| #   | What to Check               | Where in Portal                                   | How to Verify                                                |
+| --- | --------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Resource group exists       | Resource Groups > `RG-Monitor-Metrics-Lab`        | Resource group is listed and located in East US              |
+| 2   | VM is running               | Virtual Machines > `vm-web-prod-01`               | VM status shows "Running"                                    |
+| 3   | Metric alert rule exists    | Monitor > Alerts > Alert rules                    | `alert-high-cpu` rule is listed targeting `vm-web-prod-01`   |
+| 4   | Alert threshold is correct  | Monitor > Alerts > Alert rules > `alert-high-cpu` | Condition shows "Percentage CPU > 80" with 5-min aggregation |
+| 5   | Dashboard with pinned chart | Dashboards > `Dashboard-Ops-Prod`                 | Dashboard contains a CPU metrics chart for `vm-web-prod-01`  |
 
 ## Result
 

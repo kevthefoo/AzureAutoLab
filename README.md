@@ -20,29 +20,29 @@ See [LAB.md](LAB.md) for the full tracker with links to each lab.
 
 ## Labs
 
-| #  | Topic                      | Domain                | Status      |
-| -- | -------------------------- | --------------------- | ----------- |
-| 1  | Resource Groups & RBAC     | Identity & Governance | PASSED      |
-| 2  | Storage Account & Blobs    | Storage               | PASSED      |
-| 3  | Virtual Network & Subnets  | Networking            | PASSED      |
-| 4  | Virtual Machine Deployment | Compute               | PASSED      |
-| 5  | DNS Zones & Records        | Networking            | PASSED      |
-| 6  | Log Analytics & Alerts     | Monitoring & Backup   | PASSED      |
-| 7  | Azure Policy & Locks       | Identity & Governance | PASSED      |
-| 8  | VNet Peering               | Networking            | PASSED      |
-| 9  | Load Balancer              | Networking            | PASSED      |
-| 10 | App Service & Web App      | Compute               | SKIPPED     |
-| 11 | Storage SAS & Access Tiers | Storage               | PASSED      |
-| 12 | Backup & Recovery Vault    | Monitoring & Backup   | PASSED      |
-| 13 | NSG Rules & ASGs           | Networking            | PASSED      |
-| 14 | Entra ID Users & Groups    | Identity & Governance | PASSED      |
-| 15 | VM Scale Sets              | Compute               | PASSED      |
-| 16 | Azure File Shares          | Storage               | NOT STARTED |
-| 17 | Azure Key Vault            | Identity & Governance | NOT STARTED |
-| 18 | Network Watcher            | Monitoring & Backup   | NOT STARTED |
-| 19 | Container Instances        | Compute               | NOT STARTED |
-| 20 | Disk Snapshots & Images    | Compute               | NOT STARTED |
-| 21 | User Defined Routes        | Networking            | NOT STARTED |
+| #   | Topic                      | Domain                | Status      |
+| --- | -------------------------- | --------------------- | ----------- |
+| 1   | Resource Groups & RBAC     | Identity & Governance | PASSED      |
+| 2   | Storage Account & Blobs    | Storage               | PASSED      |
+| 3   | Virtual Network & Subnets  | Networking            | PASSED      |
+| 4   | Virtual Machine Deployment | Compute               | PASSED      |
+| 5   | DNS Zones & Records        | Networking            | PASSED      |
+| 6   | Log Analytics & Alerts     | Monitoring & Backup   | PASSED      |
+| 7   | Azure Policy & Locks       | Identity & Governance | PASSED      |
+| 8   | VNet Peering               | Networking            | PASSED      |
+| 9   | Load Balancer              | Networking            | PASSED      |
+| 10  | App Service & Web App      | Compute               | SKIPPED     |
+| 11  | Storage SAS & Access Tiers | Storage               | PASSED      |
+| 12  | Backup & Recovery Vault    | Monitoring & Backup   | PASSED      |
+| 13  | NSG Rules & ASGs           | Networking            | PASSED      |
+| 14  | Entra ID Users & Groups    | Identity & Governance | PASSED      |
+| 15  | VM Scale Sets              | Compute               | PASSED      |
+| 16  | Azure File Shares          | Storage               | NOT STARTED |
+| 17  | Azure Key Vault            | Identity & Governance | NOT STARTED |
+| 18  | Network Watcher            | Monitoring & Backup   | NOT STARTED |
+| 19  | Container Instances        | Compute               | NOT STARTED |
+| 20  | Disk Snapshots & Images    | Compute               | NOT STARTED |
+| 21  | User Defined Routes        | Networking            | NOT STARTED |
 
 ## Getting Started
 

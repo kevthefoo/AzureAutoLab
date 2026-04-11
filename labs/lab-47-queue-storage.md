@@ -27,13 +27,13 @@ Your application team is building an order processing pipeline that uses message
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                         | How to Verify                                                    |
-| --- | -------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 1   | Storage account exists                 | Storage accounts > `stlabqueue47`                                       | Account is listed and accessible                                 |
-| 2   | Queue exists                           | Storage accounts > `stlabqueue47` > Queues                              | `order-processing` queue is listed                               |
-| 3   | Messages were added                    | Storage accounts > `stlabqueue47` > Storage browser > Queues            | Queue shows messages were enqueued                               |
-| 4   | Peek shows front message              | Storage accounts > `stlabqueue47` > Storage browser > Queues            | First message is visible without being removed                   |
-| 5   | One message dequeued, two remain       | Storage accounts > `stlabqueue47` > Storage browser > Queues            | Queue shows approximately 2 remaining messages                   |
+| #   | What to Check                    | Where in Portal                                              | How to Verify                                  |
+| --- | -------------------------------- | ------------------------------------------------------------ | ---------------------------------------------- |
+| 1   | Storage account exists           | Storage accounts > `stlabqueue47`                            | Account is listed and accessible               |
+| 2   | Queue exists                     | Storage accounts > `stlabqueue47` > Queues                   | `order-processing` queue is listed             |
+| 3   | Messages were added              | Storage accounts > `stlabqueue47` > Storage browser > Queues | Queue shows messages were enqueued             |
+| 4   | Peek shows front message         | Storage accounts > `stlabqueue47` > Storage browser > Queues | First message is visible without being removed |
+| 5   | One message dequeued, two remain | Storage accounts > `stlabqueue47` > Storage browser > Queues | Queue shows approximately 2 remaining messages |
 
 ## Result
 

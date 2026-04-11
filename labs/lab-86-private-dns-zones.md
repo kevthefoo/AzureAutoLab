@@ -26,12 +26,12 @@ Woodgrove Bank is deploying multiple VMs in Azure and needs an internal DNS solu
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | VNet and subnet created                | Virtual networks > `vnet-privdns-01` > Subnets               | `snet-servers` exists with prefix `10.110.1.0/24`                   |
-| 2   | Private DNS zone created               | Private DNS zones > `woodgrove.internal`                     | Zone is listed and accessible                                        |
-| 3   | VNet link with auto-registration       | Private DNS zones > `woodgrove.internal` > Virtual network links | `link-vnet-privdns` linked to `vnet-privdns-01`, auto-registration enabled |
-| 4   | VM A record auto-registered            | Private DNS zones > `woodgrove.internal` > Recordsets        | A record for `vm-dns-test-01` exists pointing to VM's private IP    |
+| #   | What to Check                    | Where in Portal                                                  | How to Verify                                                              |
+| --- | -------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1   | VNet and subnet created          | Virtual networks > `vnet-privdns-01` > Subnets                   | `snet-servers` exists with prefix `10.110.1.0/24`                          |
+| 2   | Private DNS zone created         | Private DNS zones > `woodgrove.internal`                         | Zone is listed and accessible                                              |
+| 3   | VNet link with auto-registration | Private DNS zones > `woodgrove.internal` > Virtual network links | `link-vnet-privdns` linked to `vnet-privdns-01`, auto-registration enabled |
+| 4   | VM A record auto-registered      | Private DNS zones > `woodgrove.internal` > Recordsets            | A record for `vm-dns-test-01` exists pointing to VM's private IP           |
 
 ## Result
 

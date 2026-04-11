@@ -13,10 +13,10 @@ Your team needs a Linux virtual machine for testing a new application. You must 
 ## Tasks
 
 - [ ] **Task 1:** Create a Virtual Machine named `VM-Test-01` in the **West US** region inside resource group `RG-Dev-Lab`
-    - **Image:** Ubuntu Server 24.04 LTS (or any Ubuntu)
-    - **Size:** Standard_B2ps_v2
-    - **Authentication:** Password
-    - **Username:** `azureadmin`
+  - **Image:** Ubuntu Server 24.04 LTS (or any Ubuntu)
+  - **Size:** Standard_B2ps_v2
+  - **Authentication:** Password
+  - **Username:** `azureadmin`
 - [ ] **Task 2:** Place the VM's NIC in a new or existing subnet (VNet must be in **West US**)
 - [ ] **Task 3:** Ensure the VM has a **Public IP address** assigned
 - [ ] **Task 4:** Add a tag to the VM: `Purpose = Testing`

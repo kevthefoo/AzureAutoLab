@@ -25,12 +25,12 @@ Your company is deploying a new application that requires network isolation. You
 
 ## Verification Criteria
 
-| #   | What to Check                                         | CLI Command                                                                                                                     |
-| --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | VNet `VNet-Lab` exists in East US with 10.0.0.0/16    | `az network vnet show --name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location, addressSpace:addressSpace.addressPrefixes}" -o json` |
-| 2   | Subnet `web-subnet` exists with 10.0.1.0/24           | `az network vnet subnet show --name web-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, addressPrefix:addressPrefix}" -o json` |
-| 3   | Subnet `db-subnet` exists with 10.0.2.0/24            | `az network vnet subnet show --name db-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, addressPrefix:addressPrefix}" -o json` |
-| 4   | NSG `NSG-Web` is associated with `web-subnet`         | `az network vnet subnet show --name web-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{nsg:networkSecurityGroup.id}" -o json` |
+| #   | What to Check                                      | CLI Command                                                                                                                                                    |
+| --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | VNet `VNet-Lab` exists in East US with 10.0.0.0/16 | `az network vnet show --name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location, addressSpace:addressSpace.addressPrefixes}" -o json` |
+| 2   | Subnet `web-subnet` exists with 10.0.1.0/24        | `az network vnet subnet show --name web-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, addressPrefix:addressPrefix}" -o json`    |
+| 3   | Subnet `db-subnet` exists with 10.0.2.0/24         | `az network vnet subnet show --name db-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, addressPrefix:addressPrefix}" -o json`     |
+| 4   | NSG `NSG-Web` is associated with `web-subnet`      | `az network vnet subnet show --name web-subnet --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{nsg:networkSecurityGroup.id}" -o json`               |
 
 ## Result
 

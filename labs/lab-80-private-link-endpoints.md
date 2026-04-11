@@ -27,13 +27,13 @@ Fabrikam's security team requires that all access to Azure Storage accounts occu
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | VNet and subnet created                | Virtual networks > `vnet-privlink-01` > Subnets              | `snet-endpoints` exists with prefix `10.70.1.0/24`                  |
-| 2   | Storage account with public access off | Storage accounts > `stprivlinklab2026` > Networking          | Public network access is Disabled                                    |
-| 3   | Private endpoint created               | Private endpoints > `pe-storage-blob`                        | Connected to `stprivlinklab2026`, sub-resource is `blob`            |
-| 4   | Private DNS zone linked to VNet        | Private DNS zones > `privatelink.blob.core.windows.net`      | Virtual network link to `vnet-privlink-01` is listed                |
-| 5   | DNS record resolves to private IP      | Private DNS zones > `privatelink.blob.core.windows.net` > Recordsets | A record for `stprivlinklab2026` points to IP in `10.70.1.x`  |
+| #   | What to Check                          | Where in Portal                                                      | How to Verify                                                |
+| --- | -------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | VNet and subnet created                | Virtual networks > `vnet-privlink-01` > Subnets                      | `snet-endpoints` exists with prefix `10.70.1.0/24`           |
+| 2   | Storage account with public access off | Storage accounts > `stprivlinklab2026` > Networking                  | Public network access is Disabled                            |
+| 3   | Private endpoint created               | Private endpoints > `pe-storage-blob`                                | Connected to `stprivlinklab2026`, sub-resource is `blob`     |
+| 4   | Private DNS zone linked to VNet        | Private DNS zones > `privatelink.blob.core.windows.net`              | Virtual network link to `vnet-privlink-01` is listed         |
+| 5   | DNS record resolves to private IP      | Private DNS zones > `privatelink.blob.core.windows.net` > Recordsets | A record for `stprivlinklab2026` points to IP in `10.70.1.x` |
 
 ## Result
 

@@ -38,21 +38,35 @@ export default function LabFilters({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
-        <button className={pillClass(!activeDomain)} onClick={() => setFilter("domain", null)}>
+        <button
+          className={pillClass(!activeDomain)}
+          onClick={() => setFilter("domain", null)}
+        >
           All Domains
         </button>
         {domains.map((d) => (
-          <button key={d} className={pillClass(activeDomain === d)} onClick={() => setFilter("domain", activeDomain === d ? null : d)}>
+          <button
+            key={d}
+            className={pillClass(activeDomain === d)}
+            onClick={() => setFilter("domain", activeDomain === d ? null : d)}
+          >
             {d}
           </button>
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        <button className={pillClass(!activeStatus)} onClick={() => setFilter("status", null)}>
+        <button
+          className={pillClass(!activeStatus)}
+          onClick={() => setFilter("status", null)}
+        >
           All Statuses
         </button>
         {statuses.map((s) => (
-          <button key={s} className={pillClass(activeStatus === s)} onClick={() => setFilter("status", activeStatus === s ? null : s)}>
+          <button
+            key={s}
+            className={pillClass(activeStatus === s)}
+            onClick={() => setFilter("status", activeStatus === s ? null : s)}
+          >
             {s}
           </button>
         ))}

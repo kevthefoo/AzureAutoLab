@@ -27,13 +27,13 @@ Woodgrove Bank requires centralized network security for its hub-spoke architect
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                            | How to Verify                                                        |
-| --- | -------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | VNet with AzureFirewallSubnet          | Virtual networks > `vnet-hub-fw-01` > Subnets              | `AzureFirewallSubnet` exists with prefix `10.50.1.0/26`             |
-| 2   | Firewall deployed with public IP       | Firewalls > `fw-hub-01`                                    | SKU is Standard, status is Succeeded, public IP `pip-fw-hub-01`     |
-| 3   | Network rule collection exists         | Firewalls > `fw-hub-01` > Rules (classic) > Network rules  | `netcol-allow-dns` with priority 200, allows UDP 53                 |
-| 4   | Application rule collection exists     | Firewalls > `fw-hub-01` > Rules (classic) > Application rules | `appcol-allow-web` with priority 300, allows `*.microsoft.com`   |
-| 5   | DNAT rule collection exists            | Firewalls > `fw-hub-01` > Rules (classic) > NAT rules      | `natcol-rdp-inbound` translates port 4000 to `10.50.2.4:3389`      |
+| #   | What to Check                      | Where in Portal                                               | How to Verify                                                   |
+| --- | ---------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | VNet with AzureFirewallSubnet      | Virtual networks > `vnet-hub-fw-01` > Subnets                 | `AzureFirewallSubnet` exists with prefix `10.50.1.0/26`         |
+| 2   | Firewall deployed with public IP   | Firewalls > `fw-hub-01`                                       | SKU is Standard, status is Succeeded, public IP `pip-fw-hub-01` |
+| 3   | Network rule collection exists     | Firewalls > `fw-hub-01` > Rules (classic) > Network rules     | `netcol-allow-dns` with priority 200, allows UDP 53             |
+| 4   | Application rule collection exists | Firewalls > `fw-hub-01` > Rules (classic) > Application rules | `appcol-allow-web` with priority 300, allows `*.microsoft.com`  |
+| 5   | DNAT rule collection exists        | Firewalls > `fw-hub-01` > Rules (classic) > NAT rules         | `natcol-rdp-inbound` translates port 4000 to `10.50.2.4:3389`   |
 
 ## Result
 

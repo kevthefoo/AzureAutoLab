@@ -24,11 +24,11 @@ Your application needs to securely store database connection strings and API key
 
 ## Verification Criteria
 
-| #   | What to Check                          | CLI Command                                                                                                                                                 |
-| --- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Key Vault `KV-Dev-Lab-104` exists      | `az keyvault show --name KV-Dev-Lab-104 --query "{name:name, location:location, enableRbacAuthorization:properties.enableRbacAuthorization}" -o json`       |
-| 2   | Secret `DbConnectionString` exists     | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name DbConnectionString --query "{name:name, enabled:attributes.enabled}" -o json`                   |
-| 3   | Secret `ApiKey` with expiry exists     | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name ApiKey --query "{name:name, expires:attributes.expires}" -o json`                               |
+| #   | What to Check                      | CLI Command                                                                                                                                           |
+| --- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Key Vault `KV-Dev-Lab-104` exists  | `az keyvault show --name KV-Dev-Lab-104 --query "{name:name, location:location, enableRbacAuthorization:properties.enableRbacAuthorization}" -o json` |
+| 2   | Secret `DbConnectionString` exists | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name DbConnectionString --query "{name:name, enabled:attributes.enabled}" -o json`             |
+| 3   | Secret `ApiKey` with expiry exists | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name ApiKey --query "{name:name, expires:attributes.expires}" -o json`                         |
 
 ## Result
 

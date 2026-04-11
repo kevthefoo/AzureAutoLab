@@ -27,13 +27,13 @@ Your team needs to migrate a large dataset from one storage container to another
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                          | How to Verify                                                    |
-| --- | -------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------- |
-| 1   | Storage account and containers exist   | Storage accounts > `stlabazcopy50` > Containers                          | Both `source-data` and `destination-data` containers are listed  |
-| 2   | Source files uploaded                  | Storage accounts > `stlabazcopy50` > Containers > `source-data`          | Three files are listed in the container                          |
-| 3   | SAS token generated                    | Storage accounts > `stlabazcopy50` > Shared access signature             | SAS was generated with correct permissions and expiry            |
-| 4   | AzCopy transfer completed              | Local terminal / Cloud Shell                                             | AzCopy output shows successful copy of all files                 |
-| 5   | Files exist in destination             | Storage accounts > `stlabazcopy50` > Containers > `destination-data`     | All three files appear in the destination container               |
+| #   | What to Check                        | Where in Portal                                                      | How to Verify                                                   |
+| --- | ------------------------------------ | -------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | Storage account and containers exist | Storage accounts > `stlabazcopy50` > Containers                      | Both `source-data` and `destination-data` containers are listed |
+| 2   | Source files uploaded                | Storage accounts > `stlabazcopy50` > Containers > `source-data`      | Three files are listed in the container                         |
+| 3   | SAS token generated                  | Storage accounts > `stlabazcopy50` > Shared access signature         | SAS was generated with correct permissions and expiry           |
+| 4   | AzCopy transfer completed            | Local terminal / Cloud Shell                                         | AzCopy output shows successful copy of all files                |
+| 5   | Files exist in destination           | Storage accounts > `stlabazcopy50` > Containers > `destination-data` | All three files appear in the destination container             |
 
 ## Result
 

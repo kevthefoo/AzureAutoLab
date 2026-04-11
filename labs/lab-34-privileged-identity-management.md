@@ -26,12 +26,12 @@ Your security officer requires that privileged roles like Global Administrator a
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                                | How to Verify                                                       |
-| --- | ---------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | PIM is accessible and enabled                        | Entra ID > Privileged Identity Management                      | Confirm PIM dashboard loads without errors                          |
-| 2   | User Administrator role settings are configured      | PIM > Azure AD roles > Settings > User Administrator           | Confirm max duration = 2 hours, require justification = Yes         |
-| 3   | User has eligible assignment for User Administrator  | PIM > Azure AD roles > Assignments > Eligible assignments      | Find the user listed as eligible for User Administrator             |
-| 4   | Role activation is logged                            | PIM > Azure AD roles > Audit                                   | Confirm an activation event with justification is recorded          |
+| #   | What to Check                                       | Where in Portal                                           | How to Verify                                               |
+| --- | --------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| 1   | PIM is accessible and enabled                       | Entra ID > Privileged Identity Management                 | Confirm PIM dashboard loads without errors                  |
+| 2   | User Administrator role settings are configured     | PIM > Azure AD roles > Settings > User Administrator      | Confirm max duration = 2 hours, require justification = Yes |
+| 3   | User has eligible assignment for User Administrator | PIM > Azure AD roles > Assignments > Eligible assignments | Find the user listed as eligible for User Administrator     |
+| 4   | Role activation is logged                           | PIM > Azure AD roles > Audit                              | Confirm an activation event with justification is recorded  |
 
 ## Result
 

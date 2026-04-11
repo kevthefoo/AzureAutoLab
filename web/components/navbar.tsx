@@ -7,7 +7,8 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const linkClass = (href: string) => {
-    const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+    const isActive =
+      href === "/" ? pathname === "/" : pathname.startsWith(href);
     return `px-3 py-1.5 rounded text-sm transition-colors ${
       isActive
         ? "text-accent bg-accent/10"

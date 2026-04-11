@@ -27,13 +27,13 @@ A new team member needs to manage blob storage interactively without using the c
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                              | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account and container exist    | Storage accounts > `stlabexplorer54` > Containers                            | `project-files` container is listed                                 |
-| 2   | Files uploaded                         | Containers > `project-files`                                                 | `readme.txt` and `config.json` are listed                           |
-| 3   | Connected via Storage Explorer         | Azure Storage Explorer / Storage browser                                     | `project-files` container is browsable with both files visible      |
-| 4   | Virtual directory with copied file     | Containers > `project-files` > `backups/`                                    | `config.json` exists inside the `backups/` prefix                   |
-| 5   | File downloaded locally                | Local machine file system                                                    | `readme.txt` exists in the local download location                  |
+| #   | What to Check                       | Where in Portal                                   | How to Verify                                                  |
+| --- | ----------------------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| 1   | Storage account and container exist | Storage accounts > `stlabexplorer54` > Containers | `project-files` container is listed                            |
+| 2   | Files uploaded                      | Containers > `project-files`                      | `readme.txt` and `config.json` are listed                      |
+| 3   | Connected via Storage Explorer      | Azure Storage Explorer / Storage browser          | `project-files` container is browsable with both files visible |
+| 4   | Virtual directory with copied file  | Containers > `project-files` > `backups/`         | `config.json` exists inside the `backups/` prefix              |
+| 5   | File downloaded locally             | Local machine file system                         | `readme.txt` exists in the local download location             |
 
 ## Result
 

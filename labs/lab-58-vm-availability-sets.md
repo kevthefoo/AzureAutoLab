@@ -25,12 +25,12 @@ Your company is deploying a two-tier web application that requires high availabi
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-AvailSet-Lab                | Resource group is listed and located in East US                      |
-| 2   | Availability set configuration         | RG-AvailSet-Lab > avset-frontend > Overview             | Shows 3 fault domains and 5 update domains                          |
-| 3   | vm-web-01 is in the availability set   | RG-AvailSet-Lab > vm-web-01 > Properties                | Availability set shows `avset-frontend`                              |
-| 4   | vm-web-02 is in the availability set   | RG-AvailSet-Lab > vm-web-02 > Properties                | Availability set shows `avset-frontend`                              |
+| #   | What to Check                        | Where in Portal                             | How to Verify                                   |
+| --- | ------------------------------------ | ------------------------------------------- | ----------------------------------------------- |
+| 1   | Resource group exists                | Home > Resource groups > RG-AvailSet-Lab    | Resource group is listed and located in East US |
+| 2   | Availability set configuration       | RG-AvailSet-Lab > avset-frontend > Overview | Shows 3 fault domains and 5 update domains      |
+| 3   | vm-web-01 is in the availability set | RG-AvailSet-Lab > vm-web-01 > Properties    | Availability set shows `avset-frontend`         |
+| 4   | vm-web-02 is in the availability set | RG-AvailSet-Lab > vm-web-02 > Properties    | Availability set shows `avset-frontend`         |
 
 ## Result
 

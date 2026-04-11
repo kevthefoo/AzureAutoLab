@@ -27,13 +27,13 @@ Contoso's web team is deploying a multi-tier web application that requires Layer
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                             | How to Verify                                                        |
-| --- | -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Resource groups > `RG-AppGW-Lab`                            | Resource group is listed and in East US                              |
-| 2   | VNet and subnets created               | Virtual networks > `vnet-appgw-01` > Subnets                | Both `snet-appgw-frontend` and `snet-appgw-backend` are listed      |
-| 3   | Application Gateway deployed          | Application gateways > `appgw-web-01`                       | SKU is Standard_v2, status is Running, public frontend IP assigned   |
-| 4   | Backend pool and health probe          | Application gateways > `appgw-web-01` > Backend pools       | `bp-web-servers` shows two targets; health probe `probe-http-80` configured |
-| 5   | Routing rule configured                | Application gateways > `appgw-web-01` > Rules               | `rule-web-basic` routes HTTP listener to backend pool                |
+| #   | What to Check                 | Where in Portal                                       | How to Verify                                                               |
+| --- | ----------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1   | Resource group exists         | Resource groups > `RG-AppGW-Lab`                      | Resource group is listed and in East US                                     |
+| 2   | VNet and subnets created      | Virtual networks > `vnet-appgw-01` > Subnets          | Both `snet-appgw-frontend` and `snet-appgw-backend` are listed              |
+| 3   | Application Gateway deployed  | Application gateways > `appgw-web-01`                 | SKU is Standard_v2, status is Running, public frontend IP assigned          |
+| 4   | Backend pool and health probe | Application gateways > `appgw-web-01` > Backend pools | `bp-web-servers` shows two targets; health probe `probe-http-80` configured |
+| 5   | Routing rule configured       | Application gateways > `appgw-web-01` > Rules         | `rule-web-basic` routes HTTP listener to backend pool                       |
 
 ## Result
 

@@ -24,11 +24,11 @@ Your web application is experiencing variable traffic. You need to deploy a VM S
 
 ## Verification Criteria
 
-| #   | What to Check                     | CLI Command                                                                                                                                                  |
-| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | VMSS `VMSS-Web` exists            | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{name:name, sku:sku, location:location}" -o json`                                         |
-| 2   | Autoscale setting exists          | `az monitor autoscale list --resource-group RG-Dev-Lab --query "[].{name:name, enabled:enabled, profiles:profiles[0].capacity}" -o json`                     |
-| 3   | Tag `Role=WebTier` present        | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                                     |
+| #   | What to Check              | CLI Command                                                                                                                              |
+| --- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | VMSS `VMSS-Web` exists     | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{name:name, sku:sku, location:location}" -o json`                     |
+| 2   | Autoscale setting exists   | `az monitor autoscale list --resource-group RG-Dev-Lab --query "[].{name:name, enabled:enabled, profiles:profiles[0].capacity}" -o json` |
+| 3   | Tag `Role=WebTier` present | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                 |
 
 ## Result
 

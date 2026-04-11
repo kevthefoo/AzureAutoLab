@@ -27,13 +27,13 @@ An operations engineer needs to troubleshoot a VM that has become unresponsive t
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-RunCmd-Lab                  | Resource group is listed and located in East US                      |
-| 2   | VM with boot diagnostics enabled       | vm-debug-01 > Boot diagnostics                         | Boot diagnostics shows enabled with managed storage account         |
-| 3   | IP config Run Command executed         | vm-debug-01 > Run command > RunPowerShellScript         | Output shows network adapter IP configuration                       |
-| 4   | Services Run Command executed          | vm-debug-01 > Run command > RunPowerShellScript         | Output shows list of running services                               |
-| 5   | Serial Console accessible              | vm-debug-01 > Serial console                           | Serial Console connects and shows SAC prompt or login               |
+| #   | What to Check                    | Where in Portal                                 | How to Verify                                               |
+| --- | -------------------------------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| 1   | Resource group exists            | Home > Resource groups > RG-RunCmd-Lab          | Resource group is listed and located in East US             |
+| 2   | VM with boot diagnostics enabled | vm-debug-01 > Boot diagnostics                  | Boot diagnostics shows enabled with managed storage account |
+| 3   | IP config Run Command executed   | vm-debug-01 > Run command > RunPowerShellScript | Output shows network adapter IP configuration               |
+| 4   | Services Run Command executed    | vm-debug-01 > Run command > RunPowerShellScript | Output shows list of running services                       |
+| 5   | Serial Console accessible        | vm-debug-01 > Serial console                    | Serial Console connects and shows SAC prompt or login       |
 
 ## Result
 

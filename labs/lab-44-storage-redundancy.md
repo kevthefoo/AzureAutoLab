@@ -27,13 +27,13 @@ Your organization requires different levels of data durability for different wor
 
 ## Verification Criteria
 
-| #   | What to Check                            | Where in Portal                                                   | How to Verify                                                      |
-| --- | ---------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | Resource group exists                    | Resource groups > `RG-Redundancy-Lab`                             | Resource group is listed in East US                                |
-| 2   | LRS storage account exists               | Storage accounts > `stlabredundlrs44` > Overview                  | Replication shows "Locally-redundant storage (LRS)"                |
-| 3   | GRS storage account exists               | Storage accounts > `stlabredundgrs44` > Overview                  | Replication shows "Geo-redundant storage (GRS)"                    |
-| 4   | RA-GRS account with secondary endpoint   | Storage accounts > `stlabredundragrs44` > Overview                | Replication shows "RA-GRS" and secondary endpoints are listed      |
-| 5   | LRS account changed to GRS              | Storage accounts > `stlabredundlrs44` > Overview                  | Replication now shows "Geo-redundant storage (GRS)"                |
+| #   | What to Check                          | Where in Portal                                    | How to Verify                                                 |
+| --- | -------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| 1   | Resource group exists                  | Resource groups > `RG-Redundancy-Lab`              | Resource group is listed in East US                           |
+| 2   | LRS storage account exists             | Storage accounts > `stlabredundlrs44` > Overview   | Replication shows "Locally-redundant storage (LRS)"           |
+| 3   | GRS storage account exists             | Storage accounts > `stlabredundgrs44` > Overview   | Replication shows "Geo-redundant storage (GRS)"               |
+| 4   | RA-GRS account with secondary endpoint | Storage accounts > `stlabredundragrs44` > Overview | Replication shows "RA-GRS" and secondary endpoints are listed |
+| 5   | LRS account changed to GRS             | Storage accounts > `stlabredundlrs44` > Overview   | Replication now shows "Geo-redundant storage (GRS)"           |
 
 ## Result
 

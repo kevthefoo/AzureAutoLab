@@ -26,12 +26,12 @@ The product team wants to deploy a containerized microservice that can automatic
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-ContainerApps-Lab           | Resource group is listed and located in East US                      |
-| 2   | Container Apps environment exists      | RG-ContainerApps-Lab > cae-lab-env > Overview           | Environment is listed and shows Succeeded status                    |
-| 3   | Container app deployed with ingress    | RG-ContainerApps-Lab > ca-web-api > Overview            | App shows Running, external ingress on port 80, application URL     |
-| 4   | Scaling rule configured                | ca-web-api > Scale and replicas                         | Min 0, max 5 replicas; HTTP scaling rule at 100 concurrent requests |
+| #   | What to Check                       | Where in Portal                               | How to Verify                                                       |
+| --- | ----------------------------------- | --------------------------------------------- | ------------------------------------------------------------------- |
+| 1   | Resource group exists               | Home > Resource groups > RG-ContainerApps-Lab | Resource group is listed and located in East US                     |
+| 2   | Container Apps environment exists   | RG-ContainerApps-Lab > cae-lab-env > Overview | Environment is listed and shows Succeeded status                    |
+| 3   | Container app deployed with ingress | RG-ContainerApps-Lab > ca-web-api > Overview  | App shows Running, external ingress on port 80, application URL     |
+| 4   | Scaling rule configured             | ca-web-api > Scale and replicas               | Min 0, max 5 replicas; HTTP scaling rule at 100 concurrent requests |
 
 ## Result
 

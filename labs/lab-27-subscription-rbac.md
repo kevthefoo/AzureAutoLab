@@ -26,12 +26,12 @@ A new team lead needs Contributor access across all resources in the subscriptio
 
 ## Verification Criteria
 
-| #   | What to Check                                     | Where in Portal                                              | How to Verify                                                        |
-| --- | ------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | Resource group `RG-InheritTest-Lab` exists         | Portal > Resource Groups                                     | Find `RG-InheritTest-Lab` in the list                                |
-| 2   | Contributor role assigned at subscription scope    | Subscription > Access Control (IAM) > Role assignments       | Find the user with Role = Contributor                                |
-| 3   | Role is inherited at resource group level          | RG-InheritTest-Lab > Access Control (IAM) > Role assignments | Find the same user with Role = Contributor                           |
-| 4   | Assignment shows as Inherited                      | RG-InheritTest-Lab > Access Control (IAM) > Role assignments | Confirm the Scope column shows the subscription (not the RG)         |
+| #   | What to Check                                   | Where in Portal                                              | How to Verify                                                |
+| --- | ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1   | Resource group `RG-InheritTest-Lab` exists      | Portal > Resource Groups                                     | Find `RG-InheritTest-Lab` in the list                        |
+| 2   | Contributor role assigned at subscription scope | Subscription > Access Control (IAM) > Role assignments       | Find the user with Role = Contributor                        |
+| 3   | Role is inherited at resource group level       | RG-InheritTest-Lab > Access Control (IAM) > Role assignments | Find the same user with Role = Contributor                   |
+| 4   | Assignment shows as Inherited                   | RG-InheritTest-Lab > Access Control (IAM) > Role assignments | Confirm the Scope column shows the subscription (not the RG) |
 
 ## Result
 

@@ -27,13 +27,13 @@ The platform engineering team wants to centralize application settings and featu
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-AppConfig-Lab               | Resource group is listed and located in East US                      |
-| 2   | App Configuration store exists         | RG-AppConfig-Lab > appconfig-lab2026 > Overview         | Store is listed with Free tier                                      |
-| 3   | Key-value pairs exist                  | appconfig-lab2026 > Configuration explorer              | Three keys listed with correct values                               |
-| 4   | Feature flag exists                    | appconfig-lab2026 > Feature manager                     | `BetaDashboard` flag listed, state is Off                           |
-| 5   | Labeled key exists                     | appconfig-lab2026 > Configuration explorer (filter: production) | `App:Settings:Theme` with label `production` has value `light`  |
+| #   | What to Check                  | Where in Portal                                                 | How to Verify                                                  |
+| --- | ------------------------------ | --------------------------------------------------------------- | -------------------------------------------------------------- |
+| 1   | Resource group exists          | Home > Resource groups > RG-AppConfig-Lab                       | Resource group is listed and located in East US                |
+| 2   | App Configuration store exists | RG-AppConfig-Lab > appconfig-lab2026 > Overview                 | Store is listed with Free tier                                 |
+| 3   | Key-value pairs exist          | appconfig-lab2026 > Configuration explorer                      | Three keys listed with correct values                          |
+| 4   | Feature flag exists            | appconfig-lab2026 > Feature manager                             | `BetaDashboard` flag listed, state is Off                      |
+| 5   | Labeled key exists             | appconfig-lab2026 > Configuration explorer (filter: production) | `App:Settings:Theme` with label `production` has value `light` |
 
 ## Result
 

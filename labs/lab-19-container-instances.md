@@ -25,11 +25,11 @@ Your dev team wants to quickly test a containerized application without managing
 
 ## Verification Criteria
 
-| #   | What to Check                         | CLI Command                                                                                                                                                        |
-| --- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Container `aci-hello-world` exists    | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{name:name, image:containers[0].image, state:instanceView.state}" -o json`          |
-| 2   | Public IP and DNS assigned            | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{ip:ipAddress.ip, fqdn:ipAddress.fqdn, ports:ipAddress.ports}" -o json`             |
-| 3   | Container is running                  | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{state:instanceView.state}" -o json`                                                |
+| #   | What to Check                      | CLI Command                                                                                                                                               |
+| --- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Container `aci-hello-world` exists | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{name:name, image:containers[0].image, state:instanceView.state}" -o json` |
+| 2   | Public IP and DNS assigned         | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{ip:ipAddress.ip, fqdn:ipAddress.fqdn, ports:ipAddress.ports}" -o json`    |
+| 3   | Container is running               | `az container show --name aci-hello-world --resource-group RG-Dev-Lab --query "{state:instanceView.state}" -o json`                                       |
 
 ## Result
 

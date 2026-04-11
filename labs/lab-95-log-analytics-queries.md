@@ -27,13 +27,13 @@ The security operations team needs to run KQL queries against centralized logs t
 
 ## Verification Criteria
 
-| #   | What to Check                       | Where in Portal                                              | How to Verify                                                       |
-| --- | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------- |
-| 1   | Workspace exists                    | Log Analytics workspaces > `law-queries-01`                  | Workspace is listed in `RG-LogQueries-Lab`                          |
-| 2   | VM is connected to workspace        | `law-queries-01` > Agents management                         | `vm-log-source-01` appears as a connected agent                     |
-| 3   | Heartbeat query returns results     | `law-queries-01` > Logs                                      | Running the Heartbeat summary query returns grouped results          |
-| 4   | Saved search exists                 | `law-queries-01` > Logs > Queries > Saved Queries            | `Heartbeat Summary by Computer` appears under `VM Health` category  |
-| 5   | AzureActivity query runs and exports| `law-queries-01` > Logs                                      | Query returns resource creation events and CSV export downloads      |
+| #   | What to Check                        | Where in Portal                                   | How to Verify                                                      |
+| --- | ------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------ |
+| 1   | Workspace exists                     | Log Analytics workspaces > `law-queries-01`       | Workspace is listed in `RG-LogQueries-Lab`                         |
+| 2   | VM is connected to workspace         | `law-queries-01` > Agents management              | `vm-log-source-01` appears as a connected agent                    |
+| 3   | Heartbeat query returns results      | `law-queries-01` > Logs                           | Running the Heartbeat summary query returns grouped results        |
+| 4   | Saved search exists                  | `law-queries-01` > Logs > Queries > Saved Queries | `Heartbeat Summary by Computer` appears under `VM Health` category |
+| 5   | AzureActivity query runs and exports | `law-queries-01` > Logs                           | Query returns resource creation events and CSV export downloads    |
 
 ## Result
 

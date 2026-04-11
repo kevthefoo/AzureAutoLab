@@ -26,12 +26,12 @@ Your organization has regional offices and needs to delegate user management for
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                            | How to Verify                                                         |
-| --- | ---------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------- |
-| 1   | Administrative Unit `AU-Sydney-Office` exists        | Entra ID > Administrative Units                            | Find `AU-Sydney-Office` in the list                                   |
-| 2   | AU has at least two members                          | AU-Sydney-Office > Members                                 | Confirm at least two users are listed as members                      |
-| 3   | User Administrator role is scoped to the AU          | AU-Sydney-Office > Roles and administrators                | Confirm User Administrator role has an assignment for the admin user  |
-| 4   | Scoped admin assignment is visible                   | Entra ID > Roles and administrators > User Administrator   | Confirm the assignment shows scope = `AU-Sydney-Office`               |
+| #   | What to Check                                 | Where in Portal                                          | How to Verify                                                        |
+| --- | --------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1   | Administrative Unit `AU-Sydney-Office` exists | Entra ID > Administrative Units                          | Find `AU-Sydney-Office` in the list                                  |
+| 2   | AU has at least two members                   | AU-Sydney-Office > Members                               | Confirm at least two users are listed as members                     |
+| 3   | User Administrator role is scoped to the AU   | AU-Sydney-Office > Roles and administrators              | Confirm User Administrator role has an assignment for the admin user |
+| 4   | Scoped admin assignment is visible            | Entra ID > Roles and administrators > User Administrator | Confirm the assignment shows scope = `AU-Sydney-Office`              |
 
 ## Result
 

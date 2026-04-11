@@ -27,13 +27,13 @@ Your organization handles regulated financial data and requires encryption with 
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account exists                 | Storage accounts > `stlabencrypt49`                                    | Account is listed and accessible                                    |
-| 2   | Key Vault with purge protection        | Key vaults > `kv-labencrypt49` > Properties                            | Soft delete and purge protection are both enabled                   |
-| 3   | Encryption key exists                  | Key vaults > `kv-labencrypt49` > Keys                                  | `storage-cmk` key is listed with RSA type                           |
-| 4   | Managed identity with correct role     | Storage accounts > `stlabencrypt49` > Identity                         | System-assigned identity is On; role assignment visible on Key Vault |
-| 5   | CMK encryption configured              | Storage accounts > `stlabencrypt49` > Encryption                       | Encryption type shows "Customer-managed keys" with Key Vault ref    |
+| #   | What to Check                      | Where in Portal                                  | How to Verify                                                        |
+| --- | ---------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
+| 1   | Storage account exists             | Storage accounts > `stlabencrypt49`              | Account is listed and accessible                                     |
+| 2   | Key Vault with purge protection    | Key vaults > `kv-labencrypt49` > Properties      | Soft delete and purge protection are both enabled                    |
+| 3   | Encryption key exists              | Key vaults > `kv-labencrypt49` > Keys            | `storage-cmk` key is listed with RSA type                            |
+| 4   | Managed identity with correct role | Storage accounts > `stlabencrypt49` > Identity   | System-assigned identity is On; role assignment visible on Key Vault |
+| 5   | CMK encryption configured          | Storage accounts > `stlabencrypt49` > Encryption | Encryption type shows "Customer-managed keys" with Key Vault ref     |
 
 ## Result
 

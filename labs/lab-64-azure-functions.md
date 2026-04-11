@@ -27,13 +27,13 @@ The marketing team needs a lightweight API endpoint that returns promotional mes
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-Functions-Lab               | Resource group is listed and located in East US                      |
-| 2   | Storage account exists                 | RG-Functions-Lab > stfunclab2026 > Overview             | Storage account is listed                                            |
-| 3   | Function App exists                    | RG-Functions-Lab > func-http-lab2026 > Overview         | Shows Consumption plan, .NET 8 Isolated runtime                     |
-| 4   | HTTP trigger function exists           | func-http-lab2026 > Functions                           | `GetPromoMessage` function listed with HTTP trigger                 |
-| 5   | Function responds to requests          | func-http-lab2026 > Functions > GetPromoMessage > Test  | Test/Run returns HTTP 200 status                                    |
+| #   | What to Check                 | Where in Portal                                        | How to Verify                                       |
+| --- | ----------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| 1   | Resource group exists         | Home > Resource groups > RG-Functions-Lab              | Resource group is listed and located in East US     |
+| 2   | Storage account exists        | RG-Functions-Lab > stfunclab2026 > Overview            | Storage account is listed                           |
+| 3   | Function App exists           | RG-Functions-Lab > func-http-lab2026 > Overview        | Shows Consumption plan, .NET 8 Isolated runtime     |
+| 4   | HTTP trigger function exists  | func-http-lab2026 > Functions                          | `GetPromoMessage` function listed with HTTP trigger |
+| 5   | Function responds to requests | func-http-lab2026 > Functions > GetPromoMessage > Test | Test/Run returns HTTP 200 status                    |
 
 ## Result
 

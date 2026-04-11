@@ -25,11 +25,11 @@ Your security team requires all outbound traffic from the development subnet to 
 
 ## Verification Criteria
 
-| #   | What to Check                        | CLI Command                                                                                                                                                    |
-| --- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Route table `RT-Dev-Lab` exists      | `az network route-table show --name RT-Dev-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location}" -o json`                                   |
-| 2   | Route `Route-To-NVA` exists          | `az network route-table route show --route-table-name RT-Dev-Lab --resource-group RG-Dev-Lab --name Route-To-NVA --query "{name:name, addressPrefix:addressPrefix, nextHopType:nextHopType, nextHopIpAddress:nextHopIpAddress}" -o json` |
-| 3   | Route table associated with subnet   | `az network route-table show --name RT-Dev-Lab --resource-group RG-Dev-Lab --query "{subnets:subnets[].id}" -o json`                                           |
+| #   | What to Check                      | CLI Command                                                                                                                                                                                                                              |
+| --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Route table `RT-Dev-Lab` exists    | `az network route-table show --name RT-Dev-Lab --resource-group RG-Dev-Lab --query "{name:name, location:location}" -o json`                                                                                                             |
+| 2   | Route `Route-To-NVA` exists        | `az network route-table route show --route-table-name RT-Dev-Lab --resource-group RG-Dev-Lab --name Route-To-NVA --query "{name:name, addressPrefix:addressPrefix, nextHopType:nextHopType, nextHopIpAddress:nextHopIpAddress}" -o json` |
+| 3   | Route table associated with subnet | `az network route-table show --name RT-Dev-Lab --resource-group RG-Dev-Lab --query "{subnets:subnets[].id}" -o json`                                                                                                                     |
 
 ## Result
 

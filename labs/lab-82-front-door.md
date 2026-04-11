@@ -27,13 +27,13 @@ Litware Inc. is launching a global e-commerce platform and needs a content deliv
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Resource groups > `RG-FrontDoor-Lab`                         | Resource group is listed in East US                                  |
-| 2   | Backend web apps created               | App Services                                                 | Both `app-fd-eastus-2026` and `app-fd-westus-2026` are listed       |
-| 3   | Front Door profile deployed            | Front Door and CDN profiles > `fd-litware-01`                | Profile is active with endpoint `fd-litware-endpoint`               |
-| 4   | Origin group with health probes        | Front Door > `fd-litware-01` > Origin groups                 | `og-web-backends` has two origins, probe path `/`, interval 30s     |
-| 5   | WAF policy in Prevention mode          | Web Application Firewall policies > `wafpolicyLitware`       | Mode is Prevention, DefaultRuleSet enabled, associated with endpoint |
+| #   | What to Check                   | Where in Portal                                        | How to Verify                                                        |
+| --- | ------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------- |
+| 1   | Resource group exists           | Resource groups > `RG-FrontDoor-Lab`                   | Resource group is listed in East US                                  |
+| 2   | Backend web apps created        | App Services                                           | Both `app-fd-eastus-2026` and `app-fd-westus-2026` are listed        |
+| 3   | Front Door profile deployed     | Front Door and CDN profiles > `fd-litware-01`          | Profile is active with endpoint `fd-litware-endpoint`                |
+| 4   | Origin group with health probes | Front Door > `fd-litware-01` > Origin groups           | `og-web-backends` has two origins, probe path `/`, interval 30s      |
+| 5   | WAF policy in Prevention mode   | Web Application Firewall policies > `wafpolicyLitware` | Mode is Prevention, DefaultRuleSet enabled, associated with endpoint |
 
 ## Result
 

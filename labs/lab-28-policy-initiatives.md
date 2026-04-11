@@ -26,12 +26,12 @@ Your compliance team requires multiple tagging policies to be enforced together.
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                     | How to Verify                                                       |
-| --- | ---------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Resource group `RG-PolicyInit-Lab` exists            | Portal > Resource Groups                            | Find `RG-PolicyInit-Lab` in the list                                |
-| 2   | Initiative `Initiative-RequiredTags` exists          | Portal > Policy > Definitions                       | Search for `Initiative-RequiredTags` in definitions                 |
-| 3   | Initiative is assigned to the resource group         | Portal > Policy > Assignments                       | Find assignment scoped to `RG-PolicyInit-Lab`                       |
-| 4   | Compliance evaluation shows results                  | Portal > Policy > Compliance                        | Check compliance state for `Initiative-RequiredTags`                |
+| #   | What to Check                                | Where in Portal               | How to Verify                                        |
+| --- | -------------------------------------------- | ----------------------------- | ---------------------------------------------------- |
+| 1   | Resource group `RG-PolicyInit-Lab` exists    | Portal > Resource Groups      | Find `RG-PolicyInit-Lab` in the list                 |
+| 2   | Initiative `Initiative-RequiredTags` exists  | Portal > Policy > Definitions | Search for `Initiative-RequiredTags` in definitions  |
+| 3   | Initiative is assigned to the resource group | Portal > Policy > Assignments | Find assignment scoped to `RG-PolicyInit-Lab`        |
+| 4   | Compliance evaluation shows results          | Portal > Policy > Compliance  | Check compliance state for `Initiative-RequiredTags` |
 
 ## Result
 

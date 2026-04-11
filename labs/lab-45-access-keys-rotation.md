@@ -26,12 +26,12 @@ A recent security audit revealed that your team has not rotated storage account 
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                        | How to Verify                                                      |
-| --- | -------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | Storage account exists                 | Storage accounts > `stlabkeyrotate45`                                  | Account is listed and accessible                                   |
-| 2   | Key1 has been regenerated              | Storage accounts > `stlabkeyrotate45` > Access keys                    | Key1 value differs from original (rotation timestamp updated)      |
-| 3   | Connection string reflects new key     | Storage accounts > `stlabkeyrotate45` > Access keys                    | Connection string contains the new key1 value                      |
-| 4   | Key expiration policy set to 90 days   | Storage accounts > `stlabkeyrotate45` > Access keys                    | Key expiration policy shows 90-day reminder period                 |
+| #   | What to Check                        | Where in Portal                                     | How to Verify                                                 |
+| --- | ------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------- |
+| 1   | Storage account exists               | Storage accounts > `stlabkeyrotate45`               | Account is listed and accessible                              |
+| 2   | Key1 has been regenerated            | Storage accounts > `stlabkeyrotate45` > Access keys | Key1 value differs from original (rotation timestamp updated) |
+| 3   | Connection string reflects new key   | Storage accounts > `stlabkeyrotate45` > Access keys | Connection string contains the new key1 value                 |
+| 4   | Key expiration policy set to 90 days | Storage accounts > `stlabkeyrotate45` > Access keys | Key expiration policy shows 90-day reminder period            |
 
 ## Result
 

@@ -27,13 +27,13 @@ The development team is containerizing their microservices application and needs
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-AKS-Lab                     | Resource group is listed and located in East US                      |
-| 2   | AKS cluster is running                | RG-AKS-Lab > aks-app-cluster > Overview                 | Cluster status shows Running with 1 node                            |
-| 3   | Pod is running                         | aks-app-cluster > Workloads > Pods                      | Pod `web-frontend` shows Running status                             |
-| 4   | Service has external IP               | aks-app-cluster > Services and ingresses                | `web-frontend-svc` shows LoadBalancer type with external IP         |
-| 5   | Nginx is accessible                    | Browser                                                 | Navigate to external IP and confirm nginx welcome page              |
+| #   | What to Check           | Where in Portal                          | How to Verify                                               |
+| --- | ----------------------- | ---------------------------------------- | ----------------------------------------------------------- |
+| 1   | Resource group exists   | Home > Resource groups > RG-AKS-Lab      | Resource group is listed and located in East US             |
+| 2   | AKS cluster is running  | RG-AKS-Lab > aks-app-cluster > Overview  | Cluster status shows Running with 1 node                    |
+| 3   | Pod is running          | aks-app-cluster > Workloads > Pods       | Pod `web-frontend` shows Running status                     |
+| 4   | Service has external IP | aks-app-cluster > Services and ingresses | `web-frontend-svc` shows LoadBalancer type with external IP |
+| 5   | Nginx is accessible     | Browser                                  | Navigate to external IP and confirm nginx welcome page      |
 
 ## Result
 

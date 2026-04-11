@@ -27,13 +27,13 @@ Tailwind Traders needs to accelerate delivery of static web content (images, scr
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | Storage account and container          | Storage accounts > `stcdnorigin2026` > Containers            | `web-assets` container exists with blob access level                |
-| 2   | Sample file uploaded                   | Storage accounts > `stcdnorigin2026` > Containers > `web-assets` | `index.html` is listed in the container                         |
-| 3   | CDN profile created                    | Front Door and CDN profiles > `cdn-tailwind-01`              | Profile exists with Microsoft Standard tier                          |
-| 4   | CDN endpoint with storage origin       | CDN profiles > `cdn-tailwind-01` > Endpoints                 | `cdn-tailwind-endpoint` points to `stcdnorigin2026.blob.core.windows.net` |
-| 5   | Caching rules configured              | CDN endpoints > `cdn-tailwind-endpoint` > Caching rules      | Global rule overrides with 1-day expiration, query string caching enabled |
+| #   | What to Check                    | Where in Portal                                                  | How to Verify                                                             |
+| --- | -------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 1   | Storage account and container    | Storage accounts > `stcdnorigin2026` > Containers                | `web-assets` container exists with blob access level                      |
+| 2   | Sample file uploaded             | Storage accounts > `stcdnorigin2026` > Containers > `web-assets` | `index.html` is listed in the container                                   |
+| 3   | CDN profile created              | Front Door and CDN profiles > `cdn-tailwind-01`                  | Profile exists with Microsoft Standard tier                               |
+| 4   | CDN endpoint with storage origin | CDN profiles > `cdn-tailwind-01` > Endpoints                     | `cdn-tailwind-endpoint` points to `stcdnorigin2026.blob.core.windows.net` |
+| 5   | Caching rules configured         | CDN endpoints > `cdn-tailwind-endpoint` > Caching rules          | Global rule overrides with 1-day expiration, query string caching enabled |
 
 ## Result
 

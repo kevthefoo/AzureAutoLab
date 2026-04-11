@@ -26,12 +26,12 @@ Your organization stores large volumes of log data in blob storage. To reduce co
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                              | How to Verify                                                    |
-| --- | -------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 1   | Storage account with Hot default tier  | Storage accounts > `stlablifecycle43` > Overview                             | Default access tier shows "Hot"                                  |
-| 2   | Container and blob exist               | Storage accounts > `stlablifecycle43` > Containers > `logs-archive`          | `app-log-2025.txt` is listed in the container                    |
-| 3   | Lifecycle policy moves to Cool at 30d  | Storage accounts > `stlablifecycle43` > Lifecycle management                 | Rule shows "Move to cool storage" after 30 days                  |
-| 4   | Policy archives at 90d, deletes at 365d| Storage accounts > `stlablifecycle43` > Lifecycle management                 | Rule shows Archive at 90 days and Delete at 365 days             |
+| #   | What to Check                           | Where in Portal                                                     | How to Verify                                        |
+| --- | --------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------- |
+| 1   | Storage account with Hot default tier   | Storage accounts > `stlablifecycle43` > Overview                    | Default access tier shows "Hot"                      |
+| 2   | Container and blob exist                | Storage accounts > `stlablifecycle43` > Containers > `logs-archive` | `app-log-2025.txt` is listed in the container        |
+| 3   | Lifecycle policy moves to Cool at 30d   | Storage accounts > `stlablifecycle43` > Lifecycle management        | Rule shows "Move to cool storage" after 30 days      |
+| 4   | Policy archives at 90d, deletes at 365d | Storage accounts > `stlablifecycle43` > Lifecycle management        | Rule shows Archive at 90 days and Delete at 365 days |
 
 ## Result
 

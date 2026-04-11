@@ -27,13 +27,13 @@ Adventure Works has workloads in two Azure regions (East US and West US) that ne
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                              | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1   | East VNet with GatewaySubnet           | Virtual networks > `vnet-east-vpn` > Subnets                 | `GatewaySubnet` and `snet-east-workload` both exist                 |
-| 2   | West VNet with GatewaySubnet           | Virtual networks > `vnet-west-vpn` > Subnets                 | `GatewaySubnet` and `snet-west-workload` both exist                 |
-| 3   | Both VPN gateways deployed             | Virtual network gateways                                     | `vpngw-east-01` and `vpngw-west-01` both show Succeeded             |
-| 4   | East-to-West connection created        | Virtual network gateways > `vpngw-east-01` > Connections     | `conn-east-to-west` exists with type VNet-to-VNet                   |
-| 5   | Connections are Connected              | Virtual network gateways > Connections                       | Both `conn-east-to-west` and `conn-west-to-east` show Connected     |
+| #   | What to Check                   | Where in Portal                                          | How to Verify                                                   |
+| --- | ------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
+| 1   | East VNet with GatewaySubnet    | Virtual networks > `vnet-east-vpn` > Subnets             | `GatewaySubnet` and `snet-east-workload` both exist             |
+| 2   | West VNet with GatewaySubnet    | Virtual networks > `vnet-west-vpn` > Subnets             | `GatewaySubnet` and `snet-west-workload` both exist             |
+| 3   | Both VPN gateways deployed      | Virtual network gateways                                 | `vpngw-east-01` and `vpngw-west-01` both show Succeeded         |
+| 4   | East-to-West connection created | Virtual network gateways > `vpngw-east-01` > Connections | `conn-east-to-west` exists with type VNet-to-VNet               |
+| 5   | Connections are Connected       | Virtual network gateways > Connections                   | Both `conn-east-to-west` and `conn-west-to-east` show Connected |
 
 ## Result
 

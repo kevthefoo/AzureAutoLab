@@ -104,7 +104,7 @@ function parseLabFile(filename: string): Lab {
   const resultSection = sections["result"] || "";
   const statusMatch = resultSection.match(/\*\*Status:\*\*\s*(.+)/);
   const dateCompletedMatch = resultSection.match(
-    /\*\*Date(?:\s+Completed)?:\*\*\s*(.+)/
+    /\*\*Date(?:\s+Completed)?:\*\*\s*(.+)/,
   );
   const notesMatch = resultSection.match(/\*\*Notes:\*\*\s*([\s\S]*)/);
   const result = {
@@ -114,8 +114,18 @@ function parseLabFile(filename: string): Lab {
   };
 
   return {
-    id, number, filename, title, domain, difficulty, dateAssigned,
-    scenario, tasks, skillsTested, verificationHtml, result,
+    id,
+    number,
+    filename,
+    title,
+    domain,
+    difficulty,
+    dateAssigned,
+    scenario,
+    tasks,
+    skillsTested,
+    verificationHtml,
+    result,
   };
 }
 
@@ -163,15 +173,20 @@ export function getDomainStats(): DomainStats[] {
     domainMap.set(lab.domain, existing);
   }
   return Array.from(domainMap.entries()).map(([domain, stats]) => ({
-    domain, ...stats,
+    domain,
+    ...stats,
   }));
 }
 
 export function getOverallStats() {
   const labs = getAllLabs();
   const total = labs.length;
-  const passed = labs.filter((l) => l.result.status.startsWith("PASSED")).length;
-  const skipped = labs.filter((l) => l.result.status.startsWith("SKIPPED")).length;
+  const passed = labs.filter((l) =>
+    l.result.status.startsWith("PASSED"),
+  ).length;
+  const skipped = labs.filter((l) =>
+    l.result.status.startsWith("SKIPPED"),
+  ).length;
   const remaining = total - passed - skipped;
   const percentage = Math.round((passed / total) * 100);
   return { total, passed, skipped, remaining, percentage };

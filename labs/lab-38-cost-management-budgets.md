@@ -26,12 +26,12 @@ The finance department wants proactive notifications when Azure spending approac
 
 ## Verification Criteria
 
-| #   | What to Check                                   | Where in Portal                                    | How to Verify                                                       |
-| --- | ----------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Budget `Budget-DevTeam` exists                  | Cost Management > Budgets                          | Find `Budget-DevTeam` with monthly amount $100                      |
-| 2   | Three alert thresholds are configured           | Budget-DevTeam > Alert conditions                  | Confirm alerts at 50%, 75%, and 100% thresholds                     |
-| 3   | Action group `AG-CostAlerts` exists             | RG-CostMgmt-Lab > Resources                       | Find `AG-CostAlerts` action group with email notification           |
-| 4   | Action group is linked to budget                | Budget-DevTeam > Alert conditions                  | Confirm `AG-CostAlerts` is associated with the alert rules          |
+| #   | What to Check                         | Where in Portal                   | How to Verify                                              |
+| --- | ------------------------------------- | --------------------------------- | ---------------------------------------------------------- |
+| 1   | Budget `Budget-DevTeam` exists        | Cost Management > Budgets         | Find `Budget-DevTeam` with monthly amount $100             |
+| 2   | Three alert thresholds are configured | Budget-DevTeam > Alert conditions | Confirm alerts at 50%, 75%, and 100% thresholds            |
+| 3   | Action group `AG-CostAlerts` exists   | RG-CostMgmt-Lab > Resources       | Find `AG-CostAlerts` action group with email notification  |
+| 4   | Action group is linked to budget      | Budget-DevTeam > Alert conditions | Confirm `AG-CostAlerts` is associated with the alert rules |
 
 ## Result
 

@@ -58,7 +58,9 @@ export default async function LabDetailPage({
           <ul className="space-y-2">
             {lab.tasks.map((task, i) => (
               <li key={i} className="flex items-start gap-3">
-                <span className={`mt-0.5 ${task.completed ? "text-status-passed" : "text-text-secondary"}`}>
+                <span
+                  className={`mt-0.5 ${task.completed ? "text-status-passed" : "text-text-secondary"}`}
+                >
                   {task.completed ? "✓" : "○"}
                 </span>
                 <span className="text-text-secondary">{task.text}</span>

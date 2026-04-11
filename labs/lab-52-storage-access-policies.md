@@ -27,13 +27,13 @@ Your application team distributes SAS tokens to partner companies for accessing 
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                              | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account and container exist    | Storage accounts > `stlabpolicy52` > Containers                              | `partner-data` container is listed                                  |
-| 2   | Read policy created                    | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-read-policy` is listed with Read, List permissions     |
-| 3   | SAS token linked to policy             | Generated SAS token string                                                   | SAS token references the stored access policy identifier            |
-| 4   | Write policy created                   | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-write-policy` is listed with Read, Write, List perms   |
-| 5   | Read policy deleted (access revoked)   | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-read-policy` is no longer listed                       |
+| #   | What to Check                        | Where in Portal                                                                  | How to Verify                                                 |
+| --- | ------------------------------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 1   | Storage account and container exist  | Storage accounts > `stlabpolicy52` > Containers                                  | `partner-data` container is listed                            |
+| 2   | Read policy created                  | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-read-policy` is listed with Read, List permissions   |
+| 3   | SAS token linked to policy           | Generated SAS token string                                                       | SAS token references the stored access policy identifier      |
+| 4   | Write policy created                 | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-write-policy` is listed with Read, Write, List perms |
+| 5   | Read policy deleted (access revoked) | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-read-policy` is no longer listed                     |
 
 ## Result
 

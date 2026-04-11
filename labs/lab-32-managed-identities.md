@@ -26,12 +26,12 @@ Your application team wants a virtual machine to access secrets in Azure Key Vau
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                           | How to Verify                                                       |
-| --- | ---------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Resource group `RG-ManagedID-Lab` exists             | Portal > Resource Groups                                  | Find `RG-ManagedID-Lab` in the list                                 |
-| 2   | VM `VM-ManagedID-Lab` exists                         | RG-ManagedID-Lab > Resources                              | Find the VM in the resource group                                   |
-| 3   | System-assigned managed identity is enabled          | VM-ManagedID-Lab > Identity                               | Confirm Status = On under System assigned tab                       |
-| 4   | Key Vault Secrets User role assigned to MI           | kv-managedid-lab > Access Control (IAM) > Role assignments | Find VM-ManagedID-Lab with Role = Key Vault Secrets User           |
+| #   | What to Check                               | Where in Portal                                            | How to Verify                                            |
+| --- | ------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------- |
+| 1   | Resource group `RG-ManagedID-Lab` exists    | Portal > Resource Groups                                   | Find `RG-ManagedID-Lab` in the list                      |
+| 2   | VM `VM-ManagedID-Lab` exists                | RG-ManagedID-Lab > Resources                               | Find the VM in the resource group                        |
+| 3   | System-assigned managed identity is enabled | VM-ManagedID-Lab > Identity                                | Confirm Status = On under System assigned tab            |
+| 4   | Key Vault Secrets User role assigned to MI  | kv-managedid-lab > Access Control (IAM) > Role assignments | Find VM-ManagedID-Lab with Role = Key Vault Secrets User |
 
 ## Result
 

@@ -27,13 +27,13 @@ The compliance team requires that all production VMs have automated backups with
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-VMBackup-Lab                | Resource group is listed and located in East US                      |
-| 2   | VM is running                          | RG-VMBackup-Lab > vm-prod-db > Overview                 | VM status shows Running                                              |
-| 3   | Recovery Services vault exists         | RG-VMBackup-Lab > rsv-backup-lab > Overview             | Vault is listed and shows correct resource group                    |
-| 4   | Custom backup policy exists            | rsv-backup-lab > Backup policies                        | `policy-daily-30d` shows daily schedule, 30-day retention           |
-| 5   | VM backup is configured               | rsv-backup-lab > Backup items > Azure Virtual Machine   | `vm-prod-db` listed with backup status and last backup timestamp    |
+| #   | What to Check                  | Where in Portal                                       | How to Verify                                                    |
+| --- | ------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------- |
+| 1   | Resource group exists          | Home > Resource groups > RG-VMBackup-Lab              | Resource group is listed and located in East US                  |
+| 2   | VM is running                  | RG-VMBackup-Lab > vm-prod-db > Overview               | VM status shows Running                                          |
+| 3   | Recovery Services vault exists | RG-VMBackup-Lab > rsv-backup-lab > Overview           | Vault is listed and shows correct resource group                 |
+| 4   | Custom backup policy exists    | rsv-backup-lab > Backup policies                      | `policy-daily-30d` shows daily schedule, 30-day retention        |
+| 5   | VM backup is configured        | rsv-backup-lab > Backup items > Azure Virtual Machine | `vm-prod-db` listed with backup status and last backup timestamp |
 
 ## Result
 

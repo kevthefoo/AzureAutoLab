@@ -26,12 +26,12 @@ Your organization is rolling out multi-factor authentication for all employees. 
 
 ## Verification Criteria
 
-| #   | What to Check                                       | Where in Portal                                          | How to Verify                                                       |
-| --- | --------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | MFA settings page is accessible                     | Entra ID > Security > MFA                                | Confirm the MFA configuration page loads                            |
-| 2   | Trusted IP `10.0.0.0/24` is configured              | MFA > Named locations or Trusted IPs                     | Confirm `Corporate-Office` with `10.0.0.0/24` is listed             |
-| 3   | Verification options are enabled                    | MFA > Service settings                                   | Confirm mobile app notification and verification code are checked   |
-| 4   | Remember MFA setting is 14 days                     | MFA > Service settings                                   | Confirm "remember multi-factor authentication" = 14 days            |
+| #   | What to Check                          | Where in Portal                      | How to Verify                                                     |
+| --- | -------------------------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| 1   | MFA settings page is accessible        | Entra ID > Security > MFA            | Confirm the MFA configuration page loads                          |
+| 2   | Trusted IP `10.0.0.0/24` is configured | MFA > Named locations or Trusted IPs | Confirm `Corporate-Office` with `10.0.0.0/24` is listed           |
+| 3   | Verification options are enabled       | MFA > Service settings               | Confirm mobile app notification and verification code are checked |
+| 4   | Remember MFA setting is 14 days        | MFA > Service settings               | Confirm "remember multi-factor authentication" = 14 days          |
 
 ## Result
 

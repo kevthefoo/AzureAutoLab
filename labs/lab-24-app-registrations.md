@@ -26,12 +26,12 @@ The development team needs an application registered in Entra ID to authenticate
 
 ## Verification Criteria
 
-| #   | What to Check                                | Where in Portal                                              | How to Verify                                                     |
-| --- | -------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------- |
-| 1   | App `App-GraphReader-Lab` is registered      | Entra ID > App registrations                                 | Find `App-GraphReader-Lab` in the list                            |
-| 2   | `User.Read.All` permission with admin consent| App-GraphReader-Lab > API permissions                        | Confirm `User.Read.All` is listed with Status = Granted           |
-| 3   | Client secret `lab-secret` exists            | App-GraphReader-Lab > Certificates & secrets                 | Confirm secret with description `lab-secret` exists               |
-| 4   | Application ID and Tenant ID are visible     | App-GraphReader-Lab > Overview                               | Confirm both IDs are displayed on the overview page               |
+| #   | What to Check                                 | Where in Portal                              | How to Verify                                           |
+| --- | --------------------------------------------- | -------------------------------------------- | ------------------------------------------------------- |
+| 1   | App `App-GraphReader-Lab` is registered       | Entra ID > App registrations                 | Find `App-GraphReader-Lab` in the list                  |
+| 2   | `User.Read.All` permission with admin consent | App-GraphReader-Lab > API permissions        | Confirm `User.Read.All` is listed with Status = Granted |
+| 3   | Client secret `lab-secret` exists             | App-GraphReader-Lab > Certificates & secrets | Confirm secret with description `lab-secret` exists     |
+| 4   | Application ID and Tenant ID are visible      | App-GraphReader-Lab > Overview               | Confirm both IDs are displayed on the overview page     |
 
 ## Result
 

@@ -27,13 +27,13 @@ The infrastructure team needs a reusable visual report that combines VM performa
 
 ## Verification Criteria
 
-| #   | What to Check                       | Where in Portal                                          | How to Verify                                                     |
-| --- | ----------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| 1   | Resource group and LAW exist        | Resource Groups > `RG-Workbooks-Lab`                     | `law-workbooks-01` is listed in the resource group                |
-| 2   | Workbook exists                     | Monitor > Workbooks                                      | `Workbook-Infra-Overview` appears in the workbooks list           |
-| 3   | Metric chart step present           | Monitor > Workbooks > `Workbook-Infra-Overview`          | A metrics visualization showing CPU percentage is displayed       |
-| 4   | Log query step present              | Monitor > Workbooks > `Workbook-Infra-Overview`          | A log query step with Heartbeat KQL query is displayed            |
-| 5   | Workbook is shared                  | Monitor > Workbooks > `Workbook-Infra-Overview` > Details| Saved as shared workbook in `RG-Workbooks-Lab`                    |
+| #   | What to Check                | Where in Portal                                           | How to Verify                                               |
+| --- | ---------------------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| 1   | Resource group and LAW exist | Resource Groups > `RG-Workbooks-Lab`                      | `law-workbooks-01` is listed in the resource group          |
+| 2   | Workbook exists              | Monitor > Workbooks                                       | `Workbook-Infra-Overview` appears in the workbooks list     |
+| 3   | Metric chart step present    | Monitor > Workbooks > `Workbook-Infra-Overview`           | A metrics visualization showing CPU percentage is displayed |
+| 4   | Log query step present       | Monitor > Workbooks > `Workbook-Infra-Overview`           | A log query step with Heartbeat KQL query is displayed      |
+| 5   | Workbook is shared           | Monitor > Workbooks > `Workbook-Infra-Overview` > Details | Saved as shared workbook in `RG-Workbooks-Lab`              |
 
 ## Result
 

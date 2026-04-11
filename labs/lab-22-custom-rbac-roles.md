@@ -26,12 +26,12 @@ Your organization needs a custom role that allows helpdesk operators to restart 
 
 ## Verification Criteria
 
-| #   | What to Check                                  | Where in Portal                                             | How to Verify                                                        |
-| --- | ---------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group `RG-CustomRBAC-Lab` exists      | Portal > Resource Groups                                    | Find `RG-CustomRBAC-Lab` in the list, confirm Location = East US     |
-| 2   | Custom role `VM Operator Custom` exists         | RG-CustomRBAC-Lab > Access Control (IAM) > Roles            | Search for `VM Operator Custom` in the roles list                    |
-| 3   | Role assignment exists for the custom role      | RG-CustomRBAC-Lab > Access Control (IAM) > Role assignments | Find an entry with Role = `VM Operator Custom`                       |
-| 4   | Custom role has correct permissions             | Access Control (IAM) > Roles > VM Operator Custom > Permissions | Confirm the four VM actions are listed under allowed actions        |
+| #   | What to Check                              | Where in Portal                                                 | How to Verify                                                    |
+| --- | ------------------------------------------ | --------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 1   | Resource group `RG-CustomRBAC-Lab` exists  | Portal > Resource Groups                                        | Find `RG-CustomRBAC-Lab` in the list, confirm Location = East US |
+| 2   | Custom role `VM Operator Custom` exists    | RG-CustomRBAC-Lab > Access Control (IAM) > Roles                | Search for `VM Operator Custom` in the roles list                |
+| 3   | Role assignment exists for the custom role | RG-CustomRBAC-Lab > Access Control (IAM) > Role assignments     | Find an entry with Role = `VM Operator Custom`                   |
+| 4   | Custom role has correct permissions        | Access Control (IAM) > Roles > VM Operator Custom > Permissions | Confirm the four VM actions are listed under allowed actions     |
 
 ## Result
 

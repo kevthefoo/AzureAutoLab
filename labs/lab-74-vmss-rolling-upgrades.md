@@ -27,13 +27,13 @@ The platform team manages a VM Scale Set that serves production traffic. They ne
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-RollingUpgrade-Lab          | Resource group is listed and located in East US                      |
-| 2   | VMSS exists with 3 instances          | RG-RollingUpgrade-Lab > vmss-web-prod > Instances       | 3 instances listed and running                                      |
-| 3   | Rolling upgrade policy configured      | vmss-web-prod > Upgrade policy                          | Policy set to Rolling; batch 20%, unhealthy 20%, pause 5s           |
-| 4   | Health probe configured                | vmss-web-prod > Health and repair                       | Health probe monitoring on port 80                                   |
-| 5   | Rolling upgrade executed               | vmss-web-prod > Activity log                            | Rolling upgrade operation recorded                                   |
+| #   | What to Check                     | Where in Portal                                   | How to Verify                                             |
+| --- | --------------------------------- | ------------------------------------------------- | --------------------------------------------------------- |
+| 1   | Resource group exists             | Home > Resource groups > RG-RollingUpgrade-Lab    | Resource group is listed and located in East US           |
+| 2   | VMSS exists with 3 instances      | RG-RollingUpgrade-Lab > vmss-web-prod > Instances | 3 instances listed and running                            |
+| 3   | Rolling upgrade policy configured | vmss-web-prod > Upgrade policy                    | Policy set to Rolling; batch 20%, unhealthy 20%, pause 5s |
+| 4   | Health probe configured           | vmss-web-prod > Health and repair                 | Health probe monitoring on port 80                        |
+| 5   | Rolling upgrade executed          | vmss-web-prod > Activity log                      | Rolling upgrade operation recorded                        |
 
 ## Result
 

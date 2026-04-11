@@ -27,13 +27,13 @@ Your company is rolling out a new alerting strategy and needs action groups conf
 
 ## Verification Criteria
 
-| #   | What to Check                       | Where in Portal                                              | How to Verify                                                         |
-| --- | ----------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------- |
-| 1   | Resource group exists               | Resource Groups > `RG-ActionGroups-Lab`                      | Resource group is listed in East US                                   |
-| 2   | On-call action group exists         | Monitor > Alerts > Action groups                             | `ag-oncall-team` listed with Email and SMS actions configured         |
-| 3   | DevOps action group exists          | Monitor > Alerts > Action groups                             | `ag-devops-webhook` listed with webhook action to contoso URL         |
-| 4   | Test notification was sent          | Monitor > Alerts > Action groups > `ag-oncall-team` > Test   | Test history shows a completed test run                               |
-| 5   | Activity log alert exists           | Monitor > Alerts > Alert rules                               | `alert-rg-delete` is listed and linked to `ag-oncall-team`           |
+| #   | What to Check               | Where in Portal                                            | How to Verify                                                 |
+| --- | --------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
+| 1   | Resource group exists       | Resource Groups > `RG-ActionGroups-Lab`                    | Resource group is listed in East US                           |
+| 2   | On-call action group exists | Monitor > Alerts > Action groups                           | `ag-oncall-team` listed with Email and SMS actions configured |
+| 3   | DevOps action group exists  | Monitor > Alerts > Action groups                           | `ag-devops-webhook` listed with webhook action to contoso URL |
+| 4   | Test notification was sent  | Monitor > Alerts > Action groups > `ag-oncall-team` > Test | Test history shows a completed test run                       |
+| 5   | Activity log alert exists   | Monitor > Alerts > Alert rules                             | `alert-rg-delete` is listed and linked to `ag-oncall-team`    |
 
 ## Result
 

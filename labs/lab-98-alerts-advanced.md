@@ -27,13 +27,13 @@ Your organization manages multiple VMs across several resource groups and needs 
 
 ## Verification Criteria
 
-| #   | What to Check                         | Where in Portal                                              | How to Verify                                                              |
-| --- | ------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| 1   | Both VMs exist                        | Virtual Machines                                             | `vm-alerts-web-01` and `vm-alerts-web-02` are running in `RG-AlertsAdv-Lab`|
-| 2   | Multi-resource alert rule exists      | Monitor > Alerts > Alert rules                               | `alert-multi-vm-cpu` targets the resource group scope with both VMs        |
-| 3   | Alert severity and action group set   | Monitor > Alerts > Alert rules > `alert-multi-vm-cpu`        | Severity is 1 (Error) and `ag-critical-alerts` is assigned                 |
-| 4   | Suppression rule exists               | Monitor > Alerts > Alert processing rules                    | `apr-maintenance-suppress` shows Saturday 22:00–Sunday 06:00 UTC schedule  |
-| 5   | Action group addition rule exists     | Monitor > Alerts > Alert processing rules                    | `apr-add-devops-ag` targets Severity 0 alerts at subscription scope        |
+| #   | What to Check                       | Where in Portal                                       | How to Verify                                                               |
+| --- | ----------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1   | Both VMs exist                      | Virtual Machines                                      | `vm-alerts-web-01` and `vm-alerts-web-02` are running in `RG-AlertsAdv-Lab` |
+| 2   | Multi-resource alert rule exists    | Monitor > Alerts > Alert rules                        | `alert-multi-vm-cpu` targets the resource group scope with both VMs         |
+| 3   | Alert severity and action group set | Monitor > Alerts > Alert rules > `alert-multi-vm-cpu` | Severity is 1 (Error) and `ag-critical-alerts` is assigned                  |
+| 4   | Suppression rule exists             | Monitor > Alerts > Alert processing rules             | `apr-maintenance-suppress` shows Saturday 22:00–Sunday 06:00 UTC schedule   |
+| 5   | Action group addition rule exists   | Monitor > Alerts > Alert processing rules             | `apr-add-devops-ag` targets Severity 0 alerts at subscription scope         |
 
 ## Result
 

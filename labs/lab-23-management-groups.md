@@ -26,12 +26,12 @@ Your company is expanding and needs a management group hierarchy to organize sub
 
 ## Verification Criteria
 
-| #   | What to Check                                      | Where in Portal                          | How to Verify                                                         |
-| --- | -------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
-| 1   | Management group `MG-CorpIT` exists                | Portal > Management Groups               | Find `MG-CorpIT` in the hierarchy tree                                |
-| 2   | `MG-CorpIT-Production` is a child of `MG-CorpIT`  | Portal > Management Groups > MG-CorpIT   | Confirm `MG-CorpIT-Production` appears as a child group               |
-| 3   | `MG-CorpIT-Development` is a child of `MG-CorpIT` | Portal > Management Groups > MG-CorpIT   | Confirm `MG-CorpIT-Development` appears as a child group              |
-| 4   | Subscription is under `MG-CorpIT-Development`      | Portal > Management Groups > MG-CorpIT-Development | Confirm your subscription appears listed under this group    |
+| #   | What to Check                                     | Where in Portal                                    | How to Verify                                             |
+| --- | ------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------- |
+| 1   | Management group `MG-CorpIT` exists               | Portal > Management Groups                         | Find `MG-CorpIT` in the hierarchy tree                    |
+| 2   | `MG-CorpIT-Production` is a child of `MG-CorpIT`  | Portal > Management Groups > MG-CorpIT             | Confirm `MG-CorpIT-Production` appears as a child group   |
+| 3   | `MG-CorpIT-Development` is a child of `MG-CorpIT` | Portal > Management Groups > MG-CorpIT             | Confirm `MG-CorpIT-Development` appears as a child group  |
+| 4   | Subscription is under `MG-CorpIT-Development`     | Portal > Management Groups > MG-CorpIT-Development | Confirm your subscription appears listed under this group |
 
 ## Result
 

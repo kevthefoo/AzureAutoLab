@@ -27,13 +27,13 @@ After an accidental deletion of a production storage account, management require
 
 ## Verification Criteria
 
-| #   | What to Check                                   | Where in Portal                                    | How to Verify                                                       |
-| --- | ----------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Resource group `RG-LockScale-Lab` exists        | Portal > Resource Groups                           | Find `RG-LockScale-Lab` in the list                                 |
-| 2   | Storage account `stlockscalelab` exists         | RG-LockScale-Lab > Resources                       | Find the storage account in the resource group                      |
-| 3   | CanNotDelete lock exists on the RG              | RG-LockScale-Lab > Locks                           | Confirm `Lock-NoDeletion` with type CanNotDelete is listed          |
-| 4   | Deletion is blocked                             | Portal > attempt delete on stlockscalelab          | Confirm an error message referencing the lock appears                |
-| 5   | ReadOnly lock exists on storage account         | stlockscalelab > Locks                             | Confirm `Lock-ReadOnly` with type ReadOnly is listed                |
+| #   | What to Check                            | Where in Portal                           | How to Verify                                              |
+| --- | ---------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| 1   | Resource group `RG-LockScale-Lab` exists | Portal > Resource Groups                  | Find `RG-LockScale-Lab` in the list                        |
+| 2   | Storage account `stlockscalelab` exists  | RG-LockScale-Lab > Resources              | Find the storage account in the resource group             |
+| 3   | CanNotDelete lock exists on the RG       | RG-LockScale-Lab > Locks                  | Confirm `Lock-NoDeletion` with type CanNotDelete is listed |
+| 4   | Deletion is blocked                      | Portal > attempt delete on stlockscalelab | Confirm an error message referencing the lock appears      |
+| 5   | ReadOnly lock exists on storage account  | stlockscalelab > Locks                    | Confirm `Lock-ReadOnly` with type ReadOnly is listed       |
 
 ## Result
 

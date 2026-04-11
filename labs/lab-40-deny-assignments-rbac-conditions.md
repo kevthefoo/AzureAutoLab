@@ -26,12 +26,12 @@ Your security team wants to restrict a Contributor from managing certain storage
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                              | How to Verify                                                       |
-| --- | ---------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------- |
-| 1   | Resource group `RG-RBACCondition-Lab` exists         | Portal > Resource Groups                                     | Find `RG-RBACCondition-Lab` in the list                             |
-| 2   | Storage account with two containers exists           | strbaccondlab > Containers                                   | Confirm `public-data` and `confidential-data` containers exist      |
-| 3   | Conditional role assignment exists                   | strbaccondlab > Access Control (IAM) > Role assignments      | Find the user with Storage Blob Data Contributor + Condition column  |
-| 4   | Condition restricts to `public-data` container       | Role assignment > Condition tab                              | Confirm the condition expression references container = `public-data`|
+| #   | What to Check                                  | Where in Portal                                         | How to Verify                                                         |
+| --- | ---------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- |
+| 1   | Resource group `RG-RBACCondition-Lab` exists   | Portal > Resource Groups                                | Find `RG-RBACCondition-Lab` in the list                               |
+| 2   | Storage account with two containers exists     | strbaccondlab > Containers                              | Confirm `public-data` and `confidential-data` containers exist        |
+| 3   | Conditional role assignment exists             | strbaccondlab > Access Control (IAM) > Role assignments | Find the user with Storage Blob Data Contributor + Condition column   |
+| 4   | Condition restricts to `public-data` container | Role assignment > Condition tab                         | Confirm the condition expression references container = `public-data` |
 
 ## Result
 

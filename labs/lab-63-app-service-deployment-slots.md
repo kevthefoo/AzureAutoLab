@@ -27,13 +27,13 @@ The release engineering team wants zero-downtime deployments for the company web
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-Slots-Lab                   | Resource group is listed and located in East US                      |
-| 2   | App Service Plan is Standard S1       | RG-Slots-Lab > asp-slots-lab > Overview                 | Pricing tier shows Standard S1                                      |
-| 3   | Web App exists                         | RG-Slots-Lab > webapp-slots-lab2026 > Overview          | Web app is running with .NET 8 runtime                              |
-| 4   | Staging slot exists                    | webapp-slots-lab2026 > Deployment slots                 | `staging` slot is listed with its own URL                           |
-| 5   | Swap completed                         | webapp-slots-lab2026 > Deployment slots > Activity Log  | Swap operation recorded in activity log                             |
+| #   | What to Check                   | Where in Portal                                        | How to Verify                                   |
+| --- | ------------------------------- | ------------------------------------------------------ | ----------------------------------------------- |
+| 1   | Resource group exists           | Home > Resource groups > RG-Slots-Lab                  | Resource group is listed and located in East US |
+| 2   | App Service Plan is Standard S1 | RG-Slots-Lab > asp-slots-lab > Overview                | Pricing tier shows Standard S1                  |
+| 3   | Web App exists                  | RG-Slots-Lab > webapp-slots-lab2026 > Overview         | Web app is running with .NET 8 runtime          |
+| 4   | Staging slot exists             | webapp-slots-lab2026 > Deployment slots                | `staging` slot is listed with its own URL       |
+| 5   | Swap completed                  | webapp-slots-lab2026 > Deployment slots > Activity Log | Swap operation recorded in activity log         |
 
 ## Result
 

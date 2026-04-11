@@ -27,13 +27,13 @@ Your organization requires a disaster recovery plan for a critical production VM
 
 ## Verification Criteria
 
-| #   | What to Check                        | Where in Portal                                                      | How to Verify                                                              |
-| --- | ------------------------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 1   | Source VM exists                     | Virtual Machines > `vm-critical-app-01`                              | VM is running in East US                                                   |
-| 2   | Recovery vault exists                | Recovery Services vaults > `rsv-dr-westus`                           | Vault is in West US with Site Recovery enabled                             |
-| 3   | Replication is enabled               | `rsv-dr-westus` > Replicated items                                   | `vm-critical-app-01` shows as a replicated item with healthy status        |
-| 4   | Replication policy is correct        | `rsv-dr-westus` > Site Recovery infrastructure > Replication policies | Policy shows 24-hour retention and 4-hour app-consistent frequency         |
-| 5   | Test failover completed successfully | `rsv-dr-westus` > Replicated items > `vm-critical-app-01` > History  | Test failover job completed successfully and cleanup was performed          |
+| #   | What to Check                        | Where in Portal                                                       | How to Verify                                                       |
+| --- | ------------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1   | Source VM exists                     | Virtual Machines > `vm-critical-app-01`                               | VM is running in East US                                            |
+| 2   | Recovery vault exists                | Recovery Services vaults > `rsv-dr-westus`                            | Vault is in West US with Site Recovery enabled                      |
+| 3   | Replication is enabled               | `rsv-dr-westus` > Replicated items                                    | `vm-critical-app-01` shows as a replicated item with healthy status |
+| 4   | Replication policy is correct        | `rsv-dr-westus` > Site Recovery infrastructure > Replication policies | Policy shows 24-hour retention and 4-hour app-consistent frequency  |
+| 5   | Test failover completed successfully | `rsv-dr-westus` > Replicated items > `vm-critical-app-01` > History   | Test failover job completed successfully and cleanup was performed  |
 
 ## Result
 

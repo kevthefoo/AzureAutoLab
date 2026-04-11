@@ -24,11 +24,11 @@ Your network team needs tools to diagnose connectivity issues and monitor networ
 
 ## Verification Criteria
 
-| #   | What to Check                     | CLI Command                                                                                                                                                               |
-| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Network Watcher enabled           | `az network watcher show --resource-group NetworkWatcherRG --query "{name:name, location:location, provisioningState:provisioningState}" -o json`                         |
-| 2   | NSG flow log exists               | `az network watcher flow-log list --location eastus --query "[].{name:name, enabled:enabled, retentionDays:retentionPolicy.days}" -o json`                                |
-| 3   | IP flow verify result             | Manual verification — run the test and confirm the result shows Allow or Deny                                                                                             |
+| #   | What to Check           | CLI Command                                                                                                                                       |
+| --- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Network Watcher enabled | `az network watcher show --resource-group NetworkWatcherRG --query "{name:name, location:location, provisioningState:provisioningState}" -o json` |
+| 2   | NSG flow log exists     | `az network watcher flow-log list --location eastus --query "[].{name:name, enabled:enabled, retentionDays:retentionPolicy.days}" -o json`        |
+| 3   | IP flow verify result   | Manual verification — run the test and confirm the result shows Allow or Deny                                                                     |
 
 ## Result
 

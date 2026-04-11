@@ -26,12 +26,12 @@ Your security team mandates that all users accessing the Azure portal must authe
 
 ## Verification Criteria
 
-| #   | What to Check                                         | Where in Portal                                        | How to Verify                                                          |
-| --- | ----------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Security group `SG-CA-Exclude-BreakGlass` exists      | Entra ID > Groups                                      | Find the group and confirm it has at least one member                   |
-| 2   | CA policy `CA-Require-MFA-AzurePortal` exists         | Entra ID > Security > Conditional Access > Policies    | Find the policy in the list                                            |
-| 3   | Policy targets correct apps and requires MFA          | CA policy > Conditions / Grant                         | Confirm target app = Microsoft Azure Management, grant = Require MFA   |
-| 4   | Policy is in Report-only mode                         | CA policy > Enable policy                              | Confirm the policy state is set to Report-only                         |
+| #   | What to Check                                    | Where in Portal                                     | How to Verify                                                        |
+| --- | ------------------------------------------------ | --------------------------------------------------- | -------------------------------------------------------------------- |
+| 1   | Security group `SG-CA-Exclude-BreakGlass` exists | Entra ID > Groups                                   | Find the group and confirm it has at least one member                |
+| 2   | CA policy `CA-Require-MFA-AzurePortal` exists    | Entra ID > Security > Conditional Access > Policies | Find the policy in the list                                          |
+| 3   | Policy targets correct apps and requires MFA     | CA policy > Conditions / Grant                      | Confirm target app = Microsoft Azure Management, grant = Require MFA |
+| 4   | Policy is in Report-only mode                    | CA policy > Enable policy                           | Confirm the policy state is set to Report-only                       |
 
 ## Result
 

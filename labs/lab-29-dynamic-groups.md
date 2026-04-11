@@ -26,12 +26,12 @@ Your HR team frequently onboards users to different departments. Instead of manu
 
 ## Verification Criteria
 
-| #   | What to Check                                       | Where in Portal                               | How to Verify                                                        |
-| --- | --------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | User `DynUser-Sales01` exists with Department=Sales | Entra ID > Users > DynUser-Sales01 > Profile  | Confirm Department field = `Sales`                                   |
-| 2   | User `DynUser-Engineering01` exists                 | Entra ID > Users                               | Find user in the list with Department = `Engineering`                |
-| 3   | Dynamic group `DG-Sales-Team` exists                | Entra ID > Groups                              | Find group, confirm Membership type = Dynamic User                   |
-| 4   | Correct membership in `DG-Sales-Team`               | DG-Sales-Team > Members                        | `DynUser-Sales01` is listed; `DynUser-Engineering01` is not          |
+| #   | What to Check                                       | Where in Portal                              | How to Verify                                               |
+| --- | --------------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------- |
+| 1   | User `DynUser-Sales01` exists with Department=Sales | Entra ID > Users > DynUser-Sales01 > Profile | Confirm Department field = `Sales`                          |
+| 2   | User `DynUser-Engineering01` exists                 | Entra ID > Users                             | Find user in the list with Department = `Engineering`       |
+| 3   | Dynamic group `DG-Sales-Team` exists                | Entra ID > Groups                            | Find group, confirm Membership type = Dynamic User          |
+| 4   | Correct membership in `DG-Sales-Team`               | DG-Sales-Team > Members                      | `DynUser-Sales01` is listed; `DynUser-Engineering01` is not |
 
 ## Result
 

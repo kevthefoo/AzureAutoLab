@@ -26,12 +26,12 @@ Northwind Traders wants to restrict access to their Azure Storage account so tha
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                             | How to Verify                                                        |
-| --- | -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | VNet and subnet created                | Virtual networks > `vnet-svcep-01` > Subnets                | `snet-app-tier` exists with prefix `10.80.1.0/24`                   |
-| 2   | Service endpoint enabled               | Virtual networks > `vnet-svcep-01` > Subnets > `snet-app-tier` | `Microsoft.Storage` listed under service endpoints                |
-| 3   | Storage account denies public access   | Storage accounts > `stsvceplab2026` > Networking             | Default action is Deny                                               |
-| 4   | VNet rule allows subnet access         | Storage accounts > `stsvceplab2026` > Networking > VNet      | `snet-app-tier` from `vnet-svcep-01` is listed as allowed           |
+| #   | What to Check                        | Where in Portal                                                | How to Verify                                             |
+| --- | ------------------------------------ | -------------------------------------------------------------- | --------------------------------------------------------- |
+| 1   | VNet and subnet created              | Virtual networks > `vnet-svcep-01` > Subnets                   | `snet-app-tier` exists with prefix `10.80.1.0/24`         |
+| 2   | Service endpoint enabled             | Virtual networks > `vnet-svcep-01` > Subnets > `snet-app-tier` | `Microsoft.Storage` listed under service endpoints        |
+| 3   | Storage account denies public access | Storage accounts > `stsvceplab2026` > Networking               | Default action is Deny                                    |
+| 4   | VNet rule allows subnet access       | Storage accounts > `stsvceplab2026` > Networking > VNet        | `snet-app-tier` from `vnet-svcep-01` is listed as allowed |
 
 ## Result
 

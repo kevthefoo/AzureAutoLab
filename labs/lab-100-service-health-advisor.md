@@ -27,13 +27,13 @@ Management wants proactive visibility into Azure platform issues and cost optimi
 
 ## Verification Criteria
 
-| #   | What to Check                         | Where in Portal                                              | How to Verify                                                            |
-| --- | ------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| 1   | Resource group exists                 | Resource Groups > `RG-ServiceHealth-Lab`                     | Resource group is listed in East US                                      |
-| 2   | Service Health alert exists           | Service Health > Health alerts                               | `alert-service-health-all` monitors 3 event types in East US + West US   |
-| 3   | Action group is attached              | Monitor > Alerts > Action groups                             | `ag-platform-notify` exists with email to `platform-team@contoso.com`    |
-| 4   | Advisor recommendations reviewed      | Advisor > Overview                                           | All five recommendation categories are visible with current counts       |
-| 5   | Advisor alert configured              | Advisor > Alerts                                             | `alert-advisor-new-recs` exists and is linked to `ag-platform-notify`    |
+| #   | What to Check                    | Where in Portal                          | How to Verify                                                          |
+| --- | -------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------- |
+| 1   | Resource group exists            | Resource Groups > `RG-ServiceHealth-Lab` | Resource group is listed in East US                                    |
+| 2   | Service Health alert exists      | Service Health > Health alerts           | `alert-service-health-all` monitors 3 event types in East US + West US |
+| 3   | Action group is attached         | Monitor > Alerts > Action groups         | `ag-platform-notify` exists with email to `platform-team@contoso.com`  |
+| 4   | Advisor recommendations reviewed | Advisor > Overview                       | All five recommendation categories are visible with current counts     |
+| 5   | Advisor alert configured         | Advisor > Alerts                         | `alert-advisor-new-recs` exists and is linked to `ag-platform-notify`  |
 
 ## Result
 

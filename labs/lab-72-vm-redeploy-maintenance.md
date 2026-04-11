@@ -26,12 +26,12 @@ A production VM is experiencing intermittent connectivity issues that may be rel
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-Redeploy-Lab                | Resource group is listed and located in East US                      |
-| 2   | VM is running                          | RG-Redeploy-Lab > vm-app-01 > Overview                  | VM status shows Running                                              |
-| 3   | VM was redeployed                      | vm-app-01 > Activity log                                | Activity log shows a successful Redeploy operation                  |
-| 4   | Maintenance configuration assigned     | Home > Maintenance Configurations > mc-weekend-window   | Shows Saturday 2:00 AM window, 5-hour duration, `vm-app-01` assigned |
+| #   | What to Check                      | Where in Portal                                       | How to Verify                                                        |
+| --- | ---------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------- |
+| 1   | Resource group exists              | Home > Resource groups > RG-Redeploy-Lab              | Resource group is listed and located in East US                      |
+| 2   | VM is running                      | RG-Redeploy-Lab > vm-app-01 > Overview                | VM status shows Running                                              |
+| 3   | VM was redeployed                  | vm-app-01 > Activity log                              | Activity log shows a successful Redeploy operation                   |
+| 4   | Maintenance configuration assigned | Home > Maintenance Configurations > mc-weekend-window | Shows Saturday 2:00 AM window, 5-hour duration, `vm-app-01` assigned |
 
 ## Result
 

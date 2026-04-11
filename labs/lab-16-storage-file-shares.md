@@ -24,11 +24,11 @@ Your team needs a shared file system accessible from multiple VMs. You must crea
 
 ## Verification Criteria
 
-| #   | What to Check                     | CLI Command                                                                                                                                                          |
-| --- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | File share `team-share` exists    | `az storage share show --name team-share --account-name <STORAGE_ACCOUNT> --auth-mode login --query "{name:name, quota:properties.quota}" -o json`                   |
-| 2   | Directory `docs` exists           | `az storage directory exists --share-name team-share --name docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query exists -o json`                          |
-| 3   | File exists in `docs`             | `az storage file list --share-name team-share --path docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query "[].name" -o json`                              |
+| #   | What to Check                  | CLI Command                                                                                                                                        |
+| --- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | File share `team-share` exists | `az storage share show --name team-share --account-name <STORAGE_ACCOUNT> --auth-mode login --query "{name:name, quota:properties.quota}" -o json` |
+| 2   | Directory `docs` exists        | `az storage directory exists --share-name team-share --name docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query exists -o json`        |
+| 3   | File exists in `docs`          | `az storage file list --share-name team-share --path docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query "[].name" -o json`            |
 
 ## Result
 

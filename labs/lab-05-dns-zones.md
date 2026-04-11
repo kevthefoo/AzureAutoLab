@@ -25,12 +25,12 @@ Your company has registered a domain and needs to manage DNS records in Azure. Y
 
 ## Verification Criteria
 
-| #   | What to Check                                  | CLI Command                                                                                                     |
-| --- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| 1   | DNS zone `contoso-lab.com` exists              | `az network dns zone show --name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, type:type}" -o json` |
-| 2   | A record `www` points to 10.0.1.10             | `az network dns record-set a show --name www --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, aRecords:aRecords, ttl:ttl}" -o json` |
-| 3   | CNAME `portal` points to www.contoso-lab.com   | `az network dns record-set cname show --name portal --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, cnameRecord:cnameRecord, ttl:ttl}" -o json` |
-| 4   | TXT record at `@` with SPF value               | `az network dns record-set txt show --name "@" --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, txtRecords:txtRecords, ttl:ttl}" -o json` |
+| #   | What to Check                                | CLI Command                                                                                                                                                                  |
+| --- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | DNS zone `contoso-lab.com` exists            | `az network dns zone show --name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, type:type}" -o json`                                                       |
+| 2   | A record `www` points to 10.0.1.10           | `az network dns record-set a show --name www --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, aRecords:aRecords, ttl:ttl}" -o json`              |
+| 3   | CNAME `portal` points to www.contoso-lab.com | `az network dns record-set cname show --name portal --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, cnameRecord:cnameRecord, ttl:ttl}" -o json` |
+| 4   | TXT record at `@` with SPF value             | `az network dns record-set txt show --name "@" --zone-name contoso-lab.com --resource-group RG-Dev-Lab --query "{name:name, txtRecords:txtRecords, ttl:ttl}" -o json`        |
 
 ## Result
 

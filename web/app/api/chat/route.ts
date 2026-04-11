@@ -81,9 +81,7 @@ export async function POST(req: Request) {
                     text: block.text,
                     sessionId: event.session_id,
                   });
-                  controller.enqueue(
-                    encoder.encode(`data: ${data}\n\n`)
-                  );
+                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
                   lastText = block.text;
                 }
               }

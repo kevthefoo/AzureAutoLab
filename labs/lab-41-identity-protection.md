@@ -26,12 +26,12 @@ After a recent phishing attack, your CISO wants to implement risk-based policies
 
 ## Verification Criteria
 
-| #   | What to Check                                       | Where in Portal                                          | How to Verify                                                       |
-| --- | --------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Identity Protection dashboard is accessible         | Entra ID > Security > Identity Protection                | Confirm the overview dashboard loads with risk metrics               |
-| 2   | User risk policy is configured                      | Identity Protection > User risk policy                   | Confirm target = All users, risk level = High, action = Block/Change |
-| 3   | Sign-in risk policy is configured                   | Identity Protection > Sign-in risk policy                | Confirm target = All users, risk = Medium+, action = Require MFA    |
-| 4   | Risk reports are accessible                         | Identity Protection > Risky users / Risky sign-ins       | Confirm both reports load and show policy enforcement status         |
+| #   | What to Check                               | Where in Portal                                    | How to Verify                                                        |
+| --- | ------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
+| 1   | Identity Protection dashboard is accessible | Entra ID > Security > Identity Protection          | Confirm the overview dashboard loads with risk metrics               |
+| 2   | User risk policy is configured              | Identity Protection > User risk policy             | Confirm target = All users, risk level = High, action = Block/Change |
+| 3   | Sign-in risk policy is configured           | Identity Protection > Sign-in risk policy          | Confirm target = All users, risk = Medium+, action = Require MFA     |
+| 4   | Risk reports are accessible                 | Identity Protection > Risky users / Risky sign-ins | Confirm both reports load and show policy enforcement status         |
 
 ## Result
 

@@ -27,13 +27,13 @@ The infrastructure team needs to create a golden image from a fully configured V
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-CustomImage-Lab             | Resource group is listed and located in East US                      |
-| 2   | Source VM is deallocated/generalized   | RG-CustomImage-Lab > vm-golden-src > Overview           | VM status shows Stopped (deallocated)                               |
-| 3   | Managed image exists                   | RG-CustomImage-Lab > img-golden-2026 > Overview         | Image shows source VM and OS type                                   |
-| 4   | Captured image details                 | img-golden-2026 > Overview                              | Shows Windows OS, source VM reference, and region                   |
-| 5   | New VM deployed from image            | RG-CustomImage-Lab > vm-from-image > Overview           | VM is running, created from `img-golden-2026`                       |
+| #   | What to Check                        | Where in Portal                                 | How to Verify                                     |
+| --- | ------------------------------------ | ----------------------------------------------- | ------------------------------------------------- |
+| 1   | Resource group exists                | Home > Resource groups > RG-CustomImage-Lab     | Resource group is listed and located in East US   |
+| 2   | Source VM is deallocated/generalized | RG-CustomImage-Lab > vm-golden-src > Overview   | VM status shows Stopped (deallocated)             |
+| 3   | Managed image exists                 | RG-CustomImage-Lab > img-golden-2026 > Overview | Image shows source VM and OS type                 |
+| 4   | Captured image details               | img-golden-2026 > Overview                      | Shows Windows OS, source VM reference, and region |
+| 5   | New VM deployed from image           | RG-CustomImage-Lab > vm-from-image > Overview   | VM is running, created from `img-golden-2026`     |
 
 ## Result
 

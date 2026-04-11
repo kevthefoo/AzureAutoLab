@@ -27,13 +27,13 @@ Your compliance team requires that critical business documents stored in blob st
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                                | How to Verify                                                       |
-| --- | -------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| 1   | Storage account exists                 | Storage accounts > `stlabversioning48`                                         | Account is listed and accessible                                    |
-| 2   | Soft delete enabled                    | Storage accounts > `stlabversioning48` > Data protection                       | Blob soft delete shows 14 days, container soft delete shows 7 days  |
-| 3   | Versioning enabled                     | Storage accounts > `stlabversioning48` > Data protection                       | Blob versioning is turned on                                        |
-| 4   | Multiple versions exist                | Storage accounts > `stlabversioning48` > Containers > `documents` > `report.txt` | Previous versions tab shows at least 2 versions                   |
-| 5   | Blob restored after deletion           | Storage accounts > `stlabversioning48` > Containers > `documents`              | `report.txt` is present after restore                               |
+| #   | What to Check                | Where in Portal                                                                  | How to Verify                                                      |
+| --- | ---------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 1   | Storage account exists       | Storage accounts > `stlabversioning48`                                           | Account is listed and accessible                                   |
+| 2   | Soft delete enabled          | Storage accounts > `stlabversioning48` > Data protection                         | Blob soft delete shows 14 days, container soft delete shows 7 days |
+| 3   | Versioning enabled           | Storage accounts > `stlabversioning48` > Data protection                         | Blob versioning is turned on                                       |
+| 4   | Multiple versions exist      | Storage accounts > `stlabversioning48` > Containers > `documents` > `report.txt` | Previous versions tab shows at least 2 versions                    |
+| 5   | Blob restored after deletion | Storage accounts > `stlabversioning48` > Containers > `documents`                | `report.txt` is present after restore                              |
 
 ## Result
 

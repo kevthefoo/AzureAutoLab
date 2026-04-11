@@ -27,13 +27,13 @@ Your media team stores thousands of image and video files across multiple contai
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                              | How to Verify                                                       |
-| --- | -------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Storage account and container exist    | Storage accounts > `stlabindextags53` > Containers                           | `media-library` container is listed                                 |
-| 2   | First blob has correct tags            | Containers > `media-library` > `banner-image.png` > Blob index tags          | Tags show Department=Marketing, Project=Campaign2026, FileType=Image|
-| 3   | Second blob has correct tags           | Containers > `media-library` > `product-video.mp4` > Blob index tags         | Tags show Department=Sales, Project=ProductLaunch, FileType=Video   |
-| 4   | Third blob has correct tags            | Containers > `media-library` > `logo-draft.png` > Blob index tags            | Tags show Department=Marketing, Project=Rebrand, FileType=Image     |
-| 5   | Tag filter returns correct results     | Storage accounts > `stlabindextags53` > Filter by blob index tags            | Query `Department = 'Marketing'` returns 2 blobs                    |
+| #   | What to Check                       | Where in Portal                                                      | How to Verify                                                        |
+| --- | ----------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1   | Storage account and container exist | Storage accounts > `stlabindextags53` > Containers                   | `media-library` container is listed                                  |
+| 2   | First blob has correct tags         | Containers > `media-library` > `banner-image.png` > Blob index tags  | Tags show Department=Marketing, Project=Campaign2026, FileType=Image |
+| 3   | Second blob has correct tags        | Containers > `media-library` > `product-video.mp4` > Blob index tags | Tags show Department=Sales, Project=ProductLaunch, FileType=Video    |
+| 4   | Third blob has correct tags         | Containers > `media-library` > `logo-draft.png` > Blob index tags    | Tags show Department=Marketing, Project=Rebrand, FileType=Image      |
+| 5   | Tag filter returns correct results  | Storage accounts > `stlabindextags53` > Filter by blob index tags    | Query `Department = 'Marketing'` returns 2 blobs                     |
 
 ## Result
 

@@ -27,13 +27,13 @@ Your IT operations team needs to automate OS patching for a fleet of Azure VMs. 
 
 ## Verification Criteria
 
-| #   | What to Check                         | Where in Portal                                                    | How to Verify                                                            |
-| --- | ------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| 1   | Automation account exists             | Automation Accounts > `aa-ops-automation-01`                       | Account is in `RG-Automation-Lab` with system-assigned managed identity  |
-| 2   | VM exists and is running              | Virtual Machines > `vm-patch-target-01`                            | VM is running in `RG-Automation-Lab`                                     |
-| 3   | Update assessment completed           | Azure Update Manager > `vm-patch-target-01` > Updates              | Assessment shows a list of available/missing updates                      |
-| 4   | Maintenance configuration exists      | Azure Update Manager > Maintenance Configurations                  | `mc-weekly-patch` is listed with Sunday 02:00 UTC schedule               |
-| 5   | Correct update classifications        | Maintenance Configurations > `mc-weekly-patch` > Updates           | Only Critical and Security classifications are selected                  |
+| #   | What to Check                    | Where in Portal                                          | How to Verify                                                           |
+| --- | -------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1   | Automation account exists        | Automation Accounts > `aa-ops-automation-01`             | Account is in `RG-Automation-Lab` with system-assigned managed identity |
+| 2   | VM exists and is running         | Virtual Machines > `vm-patch-target-01`                  | VM is running in `RG-Automation-Lab`                                    |
+| 3   | Update assessment completed      | Azure Update Manager > `vm-patch-target-01` > Updates    | Assessment shows a list of available/missing updates                    |
+| 4   | Maintenance configuration exists | Azure Update Manager > Maintenance Configurations        | `mc-weekly-patch` is listed with Sunday 02:00 UTC schedule              |
+| 5   | Correct update classifications   | Maintenance Configurations > `mc-weekly-patch` > Updates | Only Critical and Security classifications are selected                 |
 
 ## Result
 

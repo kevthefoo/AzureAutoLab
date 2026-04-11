@@ -27,13 +27,13 @@ Your development team needs a lightweight NoSQL data store for an IoT device reg
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                                          | How to Verify                                                      |
-| --- | -------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| 1   | Storage account exists                 | Storage accounts > `stlabtable46`                                        | Account is listed and accessible                                   |
-| 2   | Table exists                           | Storage accounts > `stlabtable46` > Tables                               | `DeviceRegistry` table is listed                                   |
-| 3   | First entity exists                    | Storage accounts > `stlabtable46` > Storage browser > Tables             | Entity with `building-a` / `sensor-001` with correct properties    |
-| 4   | Second entity exists                   | Storage accounts > `stlabtable46` > Storage browser > Tables             | Entity with `building-b` / `sensor-002` with correct properties    |
-| 5   | Query returns correct results          | Storage accounts > `stlabtable46` > Storage browser > Tables             | Filtering by PartitionKey `building-a` returns only sensor-001     |
+| #   | What to Check                 | Where in Portal                                              | How to Verify                                                   |
+| --- | ----------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- |
+| 1   | Storage account exists        | Storage accounts > `stlabtable46`                            | Account is listed and accessible                                |
+| 2   | Table exists                  | Storage accounts > `stlabtable46` > Tables                   | `DeviceRegistry` table is listed                                |
+| 3   | First entity exists           | Storage accounts > `stlabtable46` > Storage browser > Tables | Entity with `building-a` / `sensor-001` with correct properties |
+| 4   | Second entity exists          | Storage accounts > `stlabtable46` > Storage browser > Tables | Entity with `building-b` / `sensor-002` with correct properties |
+| 5   | Query returns correct results | Storage accounts > `stlabtable46` > Storage browser > Tables | Filtering by PartitionKey `building-a` returns only sensor-001  |
 
 ## Result
 

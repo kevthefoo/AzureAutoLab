@@ -26,12 +26,12 @@ The security team requires that certain regulated workloads run on physically is
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                         | How to Verify                                                        |
-| --- | -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Home > Resource groups > RG-DedicatedHost-Lab           | Resource group is listed and located in East US                      |
-| 2   | Host group exists                      | RG-DedicatedHost-Lab > hg-regulated-01 > Overview       | Host group shows 2 fault domains, zone 1                            |
-| 3   | Dedicated host provisioned            | hg-regulated-01 > Hosts > dh-host-01                    | Host shows Succeeded status and available capacity                  |
-| 4   | VM deployed on dedicated host         | RG-DedicatedHost-Lab > vm-regulated-01 > Properties     | Host field shows `dh-host-01`                                       |
+| #   | What to Check                 | Where in Portal                                     | How to Verify                                      |
+| --- | ----------------------------- | --------------------------------------------------- | -------------------------------------------------- |
+| 1   | Resource group exists         | Home > Resource groups > RG-DedicatedHost-Lab       | Resource group is listed and located in East US    |
+| 2   | Host group exists             | RG-DedicatedHost-Lab > hg-regulated-01 > Overview   | Host group shows 2 fault domains, zone 1           |
+| 3   | Dedicated host provisioned    | hg-regulated-01 > Hosts > dh-host-01                | Host shows Succeeded status and available capacity |
+| 4   | VM deployed on dedicated host | RG-DedicatedHost-Lab > vm-regulated-01 > Properties | Host field shows `dh-host-01`                      |
 
 ## Result
 

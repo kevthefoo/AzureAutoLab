@@ -27,13 +27,13 @@ Adventure Works operates web applications in multiple Azure regions and needs DN
 
 ## Verification Criteria
 
-| #   | What to Check                          | Where in Portal                                             | How to Verify                                                        |
-| --- | -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Resource group exists                  | Resource groups > `RG-TrafficMgr-Lab`                       | Resource group is listed in East US                                  |
-| 2   | Both web apps deployed                 | App Services                                                | `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US |
-| 3   | Traffic Manager profile created        | Traffic Manager profiles > `tm-adventureworks-01`           | Routing method is Priority, DNS TTL is 30                            |
-| 4   | Endpoints with correct priorities      | Traffic Manager profiles > `tm-adventureworks-01` > Endpoints | Primary has priority 1, secondary has priority 2                  |
-| 5   | Health check configured                | Traffic Manager profiles > `tm-adventureworks-01` > Configuration | Path `/`, protocol HTTP, port 80, interval 10s                 |
+| #   | What to Check                     | Where in Portal                                                   | How to Verify                                                           |
+| --- | --------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1   | Resource group exists             | Resource groups > `RG-TrafficMgr-Lab`                             | Resource group is listed in East US                                     |
+| 2   | Both web apps deployed            | App Services                                                      | `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US |
+| 3   | Traffic Manager profile created   | Traffic Manager profiles > `tm-adventureworks-01`                 | Routing method is Priority, DNS TTL is 30                               |
+| 4   | Endpoints with correct priorities | Traffic Manager profiles > `tm-adventureworks-01` > Endpoints     | Primary has priority 1, secondary has priority 2                        |
+| 5   | Health check configured           | Traffic Manager profiles > `tm-adventureworks-01` > Configuration | Path `/`, protocol HTTP, port 80, interval 10s                          |
 
 ## Result
 

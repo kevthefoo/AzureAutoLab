@@ -26,12 +26,12 @@ Your governance team wants to standardize new subscription setups by deploying a
 
 ## Verification Criteria
 
-| #   | What to Check                                        | Where in Portal                                    | How to Verify                                                       |
-| --- | ---------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | Blueprint `BP-StandardGovernance` definition exists   | Portal > Blueprints > Blueprint definitions        | Find `BP-StandardGovernance` in the list                            |
-| 2   | Policy artifact is included in the blueprint          | BP-StandardGovernance > Artifacts                  | Confirm a policy assignment artifact for tag `Environment` exists   |
-| 3   | Role assignment artifact is included                  | BP-StandardGovernance > Artifacts                  | Confirm a Reader role assignment artifact exists                    |
-| 4   | Blueprint is assigned with version 1.0                | Portal > Blueprints > Assigned blueprints          | Find the assignment with version `1.0` and lock = Do Not Delete     |
+| #   | What to Check                                       | Where in Portal                             | How to Verify                                                     |
+| --- | --------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | Blueprint `BP-StandardGovernance` definition exists | Portal > Blueprints > Blueprint definitions | Find `BP-StandardGovernance` in the list                          |
+| 2   | Policy artifact is included in the blueprint        | BP-StandardGovernance > Artifacts           | Confirm a policy assignment artifact for tag `Environment` exists |
+| 3   | Role assignment artifact is included                | BP-StandardGovernance > Artifacts           | Confirm a Reader role assignment artifact exists                  |
+| 4   | Blueprint is assigned with version 1.0              | Portal > Blueprints > Assigned blueprints   | Find the assignment with version `1.0` and lock = Do Not Delete   |
 
 ## Result
 
