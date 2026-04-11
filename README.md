@@ -54,6 +54,20 @@ See [LAB.md](LAB.md) for the full tracker with links to each lab.
 6. Run the verification CLI commands from the lab's **Verification Criteria** table to check your work
 7. Update the lab's **Result** section with your status
 
+## Web Dashboard
+
+View your progress in a local web dashboard:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Open http://localhost:3000 to see the dashboard. It reads your lab files in real-time — as you update lab statuses, the dashboard reflects your progress.
+
+**Requires:** [Node.js](https://nodejs.org/) 18+
+
 ## Structure
 
 ```
@@ -62,6 +76,7 @@ labs/
   lab-01-*.md           # Individual lab files with scenario, tasks, and results
   lab-02-*.md
   ...
+web/                    # Next.js dashboard app
 ```
 
 ## AZ-104 Domains Covered
