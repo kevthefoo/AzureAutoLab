@@ -1,2 +1,4 @@
 .claude/
 .env*
+web/.next/
+web/node_modules/
