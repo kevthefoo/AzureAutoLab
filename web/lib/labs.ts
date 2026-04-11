@@ -29,6 +29,7 @@ export interface LabSummary {
   number: number;
   topic: string;
   domain: string;
+  difficulty: string;
   status: string;
 }
 
@@ -141,6 +142,7 @@ export function getLabSummaries(): LabSummary[] {
     number: lab.number,
     topic: lab.title.replace(/^Lab \d+\s*[—–-]\s*/, ""),
     domain: lab.domain,
+    difficulty: lab.difficulty,
     status: lab.result.status,
   }));
 }

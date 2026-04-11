@@ -2,7 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLabById } from "@/lib/labs";
 import StatusBadge from "@/components/status-badge";
+import DomainBadge from "@/components/domain-badge";
+import DifficultyBadge from "@/components/difficulty-badge";
 import SectionCard from "@/components/section-card";
+import ChatPanel from "@/components/chat-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -29,15 +32,14 @@ export default async function LabDetailPage({
       <div className="mb-8">
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-2xl font-bold">{lab.title}</h1>
-          <StatusBadge status={lab.result.status} />
+          <div className="flex items-center gap-2 shrink-0">
+            <StatusBadge status={lab.result.status} />
+            <ChatPanel labId={id} />
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2 mt-3">
-          <span className="bg-accent/15 text-accent px-2.5 py-0.5 rounded text-xs font-medium">
-            {lab.domain}
-          </span>
-          <span className="bg-bg-surface border border-border px-2.5 py-0.5 rounded text-xs text-text-secondary">
-            {lab.difficulty}
-          </span>
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+          <DomainBadge domain={lab.domain} />
+          <DifficultyBadge difficulty={lab.difficulty} />
           <span className="text-text-secondary text-xs py-0.5">
             Assigned: {lab.dateAssigned}
           </span>

@@ -1,0 +1,40 @@
+# Lab 38 — Cost Management & Budgets
+
+**Domain:** Identity & Governance  
+**Difficulty:** Beginner  
+**Date Assigned:** 2026-04-11
+
+---
+
+## Scenario
+
+The finance department wants proactive notifications when Azure spending approaches predefined limits. You must create budgets with multiple alert thresholds and configure action groups to notify the appropriate stakeholders via email.
+
+## Tasks
+
+- [ ] **Task 1:** Navigate to Cost Management and create a budget named `Budget-DevTeam` with a monthly amount of $100, scoped to your subscription
+- [ ] **Task 2:** Add alert conditions at 50%, 75%, and 100% of the budget amount
+- [ ] **Task 3:** Create an action group named `AG-CostAlerts` in a resource group named `RG-CostMgmt-Lab` (East US) with an email notification to your email address
+- [ ] **Task 4:** Associate the `AG-CostAlerts` action group with the budget alerts
+
+## Skills Tested
+
+- Creating budgets in Azure Cost Management
+- Configuring multiple alert thresholds
+- Creating action groups with email notifications
+- Linking action groups to budget alerts
+
+## Verification Criteria
+
+| #   | What to Check                                   | Where in Portal                                    | How to Verify                                                       |
+| --- | ----------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
+| 1   | Budget `Budget-DevTeam` exists                  | Cost Management > Budgets                          | Find `Budget-DevTeam` with monthly amount $100                      |
+| 2   | Three alert thresholds are configured           | Budget-DevTeam > Alert conditions                  | Confirm alerts at 50%, 75%, and 100% thresholds                     |
+| 3   | Action group `AG-CostAlerts` exists             | RG-CostMgmt-Lab > Resources                       | Find `AG-CostAlerts` action group with email notification           |
+| 4   | Action group is linked to budget                | Budget-DevTeam > Alert conditions                  | Confirm `AG-CostAlerts` is associated with the alert rules          |
+
+## Result
+
+- **Status:** NOT STARTED
+- **Date Completed:** —
+- **Notes:** —

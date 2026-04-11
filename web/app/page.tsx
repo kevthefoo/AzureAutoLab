@@ -14,11 +14,9 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-8">
         <StatCard label="Total Labs" value={stats.total} />
         <StatCard label="Passed" value={stats.passed} color="text-status-passed" />
-        <StatCard label="Skipped" value={stats.skipped} color="text-status-skipped" />
-        <StatCard label="Remaining" value={stats.remaining} />
       </div>
 
       {/* Overall Progress */}
