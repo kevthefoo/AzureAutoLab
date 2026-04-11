@@ -12,9 +12,9 @@ Your web application is experiencing variable traffic. You need to deploy a VM S
 
 ## Tasks
 
-- [ ] **Task 1:** Create a **VM Scale Set** named `VMSS-Web` in **East US** inside resource group `RG-Dev-Lab` with **2** initial instances, using **Standard_B1s** size and **Ubuntu** image
-- [ ] **Task 2:** Configure **autoscale** on `VMSS-Web` — scale out to **4** instances when CPU > **75%**, scale in to **2** instances when CPU < **25%**
-- [ ] **Task 3:** Add a **tag** `Role=WebTier` to the scale set
+- [x] **Task 1:** Create a **VM Scale Set** named `VMSS-Web` in **East US** inside resource group `RG-Dev-Lab` with **2** initial instances, using **Standard_B1s** size and **Ubuntu** image
+- [x] **Task 2:** Configure **autoscale** on `VMSS-Web` — scale out to **4** instances when CPU > **75%**, scale in to **2** instances when CPU < **25%**
+- [x] **Task 3:** Add a **tag** `Role=WebTier` to the scale set
 
 ## Skills Tested
 
@@ -32,4 +32,6 @@ Your web application is experiencing variable traffic. You need to deploy a VM S
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED
+- **Date:** 2026-04-11
+- **Notes:** VMSS-Web created with 2 instances in East US. Autoscale configured: max 4 at 75% CPU, min 2 at 25% CPU. Tag Role=WebTier applied. Used Standard_L2aos_v4 SKU (B1s unavailable).

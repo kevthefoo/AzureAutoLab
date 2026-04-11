@@ -16,9 +16,9 @@
 | 10  | App Service & Web App      | [Create App Service Plan, Web App, enable logging](labs/lab-10-app-service.md)          | Compute               | SKIPPED     |
 | 11  | Storage SAS & Access Tiers | [Create container, set tier, generate SAS](labs/lab-11-storage-sas-tiers.md)            | Storage               | PASSED      |
 | 12  | Backup & Recovery Vault    | [Create vault, backup policy, protect VM](labs/lab-12-backup-recovery.md)               | Monitoring & Backup   | PASSED      |
-| 13  | NSG Rules & ASGs           | [Create ASG, custom NSG rules](labs/lab-13-nsg-rules.md)                                | Networking            | NOT STARTED |
-| 14  | Entra ID Users & Groups    | [Create group, user, manage membership](labs/lab-14-entra-users-groups.md)              | Identity & Governance | NOT STARTED |
-| 15  | VM Scale Sets              | [Create VMSS, autoscale rules](labs/lab-15-vm-scale-sets.md)                            | Compute               | NOT STARTED |
+| 13  | NSG Rules & ASGs           | [Create ASG, custom NSG rules](labs/lab-13-nsg-rules.md)                                | Networking            | PASSED      |
+| 14  | Entra ID Users & Groups    | [Create group, user, manage membership](labs/lab-14-entra-users-groups.md)              | Identity & Governance | PASSED      |
+| 15  | VM Scale Sets              | [Create VMSS, autoscale rules](labs/lab-15-vm-scale-sets.md)                            | Compute               | PASSED      |
 | 16  | Azure File Shares          | [Create file share, directories, upload](labs/lab-16-storage-file-shares.md)            | Storage               | NOT STARTED |
 | 17  | Azure Key Vault            | [Create vault, add secrets with expiry](labs/lab-17-key-vault.md)                       | Identity & Governance | NOT STARTED |
 | 18  | Network Watcher            | [Flow logs, IP flow verify](labs/lab-18-network-watcher.md)                             | Monitoring & Backup   | NOT STARTED |
