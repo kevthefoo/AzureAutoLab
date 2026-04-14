@@ -35,7 +35,8 @@ Your development team needs a storage account to store application logs as blobs
 
 - **Status:** PASSED (3/3)
 - **Date Completed:** 2026-04-03
+- **Last Verified:** 2026-04-14
 - **Notes:**
-  - Storage account `stdevlab104` exists in East US with Standard_LRS
-  - Blob container `app-logs` exists with Private access (publicAccess: null)
-  - 1 blob found: `PCA_woman_view.gif`
+  - Storage account `stdevlab104` exists in East US with Standard_LRS ✅
+  - Blob container `app-logs` exists with Private access (`publicAccess: null`) ✅
+  - 1 blob found in `app-logs`: `PCA_woman_view.gif` ✅

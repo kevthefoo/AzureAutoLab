@@ -5,7 +5,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default function StatusBadge({ status }: { status: string }) {
-  const normalized = status.startsWith("PASSED") ? "PASSED" : status;
+  const normalized = status.startsWith("PASSED") || status === "PASS" ? "PASSED" : status;
   const style = STATUS_STYLES[normalized] || STATUS_STYLES["NOT STARTED"];
 
   return (

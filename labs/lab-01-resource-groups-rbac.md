@@ -33,8 +33,8 @@ Your company needs a new resource group for the development team. You must also 
 ## Result
 
 - **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-03
+- **Date Completed:** 2026-04-14
 - **Notes:**
-  - RG-Dev-Lab exists in East US
-  - Tag Environment = Development confirmed
-  - Reader role assigned to Kevin Hsu (scope: This resource)
+  - ✅ Task 1: `RG-Dev-Lab` exists in `eastus`, provisioningState = Succeeded
+  - ✅ Task 2: Tag `Environment = Development` confirmed present
+  - ✅ Task 3: Reader role assigned to `kevthebug_gmail.com#EXT#@kevthebuggmail.onmicrosoft.com` (type: User)

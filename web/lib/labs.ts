@@ -104,11 +104,14 @@ function parseLabFile(filename: string): Lab {
   const resultSection = sections["result"] || "";
   const statusMatch = resultSection.match(/\*\*Status:\*\*\s*(.+)/);
   const dateCompletedMatch = resultSection.match(
-    /\*\*Date(?:\s+Completed)?:\*\*\s*(.+)/,
+    /\*\*Date[\w\s]*:\*\*\s*(.+)/,
   );
   const notesMatch = resultSection.match(/\*\*Notes:\*\*\s*([\s\S]*)/);
+  let rawStatus = statusMatch?.[1]?.trim() || "NOT STARTED";
+  // Normalize variations: "PASS", "PASS (3/3)", "PARTIAL PASS" etc.
+  if (/^PASS(\s|$)/.test(rawStatus)) rawStatus = rawStatus.replace(/^PASS/, "PASSED");
   const result = {
-    status: statusMatch?.[1]?.trim() || "NOT STARTED",
+    status: rawStatus,
     date: dateCompletedMatch?.[1]?.trim() || "",
     notes: notesMatch?.[1]?.trim() || "",
   };

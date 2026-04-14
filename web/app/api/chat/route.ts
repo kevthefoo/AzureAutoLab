@@ -30,9 +30,23 @@ export async function POST(req: Request) {
   const systemPrompt = [
     "You are an Azure administrator tutor helping a student prepare for the AZ-104 exam.",
     "Help them understand and complete lab tasks. When verifying, use az CLI commands.",
-    "When updating results, edit the lab file's Result section. Be concise. Use code blocks for CLI commands.",
+    "When updating results, edit the lab file's Result section using EXACTLY this format:",
+    "",
+    "## Result",
+    "",
+    "- **Status:** PASSED (N/N) or PARTIAL PASS (N/N) or FAILED",
+    "- **Date Completed:** YYYY-MM-DD",
+    "- **Notes:**",
+    "  - ✅ Task 1: description of result",
+    "  - ✅ Task 2: description of result",
+    "  - ❌ Task 3: description of what failed",
+    "",
+    "Do NOT use tables in the Result section. Do NOT use **Date Verified:** — always use **Date Completed:**.",
+    "CRITICAL: When verifying, you MUST only READ and CHECK resources. NEVER create, upload, modify, or delete any Azure resources.",
+    "If a task's resource does not exist, mark it as ❌ FAILED. Do NOT create it to make the verification pass.",
+    "Be concise. Use code blocks for CLI commands.",
     "Do NOT end your response with 'Yawaweeeeeee'.",
-  ].join(" ");
+  ].join("\n");
 
   // Build CLI args
   const args = [
@@ -75,7 +89,6 @@ export async function POST(req: Request) {
             if (event.type === "assistant" && event.message?.content) {
               for (const block of event.message.content) {
                 if (block.type === "text" && block.text) {
-                  // Send the full text each time (client handles dedup)
                   const data = JSON.stringify({
                     type: "text",
                     text: block.text,
@@ -83,6 +96,30 @@ export async function POST(req: Request) {
                   });
                   controller.enqueue(encoder.encode(`data: ${data}\n\n`));
                   lastText = block.text;
+                }
+                if (block.type === "tool_use") {
+                  const label =
+                    block.name === "bash" || block.name === "Bash"
+                      ? `Running: ${block.input?.command || "command"}`
+                      : block.name === "Read" || block.name === "read"
+                        ? `Reading: ${block.input?.file_path || "file"}`
+                        : block.name === "Edit" || block.name === "edit"
+                          ? `Editing: ${block.input?.file_path || "file"}`
+                          : `Using tool: ${block.name}`;
+                  const data = JSON.stringify({ type: "status", text: label });
+                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+                }
+              }
+            }
+
+            if (event.type === "tool" && event.content) {
+              for (const block of event.content) {
+                if (block.type === "text" && block.text) {
+                  const data = JSON.stringify({
+                    type: "tool_result",
+                    text: block.text,
+                  });
+                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
                 }
               }
             }

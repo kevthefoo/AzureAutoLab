@@ -1,11 +1,13 @@
 import data from "@/data/quiz-questions.json";
 
 export interface Question {
+  id: number;
   question: string;
   options: { A: string; B: string; C: string; D: string };
   correct: string;
   domain: string;
   explanation: string;
+  tip: string;
 }
 
 const questions: Question[] = data;
