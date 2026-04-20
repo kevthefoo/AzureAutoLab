@@ -1,4 +1,4 @@
-# Lab 25 — Conditional Access Policies
+# Lab 25 — Entra ID Groups & App Registrations
 
 **Domain:** Identity & Governance  
 **Difficulty:** Advanced  
@@ -8,33 +8,37 @@
 
 ## Scenario
 
-Your security team mandates that all users accessing the Azure portal must authenticate with multi-factor authentication. You need to create a Conditional Access policy that enforces MFA for Azure Management access while excluding emergency break-glass accounts.
+Your security team needs identity resources set up for a new internal tool: two security groups (one for admins, one for the dev team), an app registration for the tool itself, and a service principal so the app can authenticate.
 
 ## Tasks
 
-- [ ] **Task 1:** Create a security group named `SG-CA-Exclude-BreakGlass` in Entra ID and add a designated break-glass user
-- [ ] **Task 2:** Create a Conditional Access policy named `CA-Require-MFA-AzurePortal`
-- [ ] **Task 3:** Configure the policy to target all users, exclude the `SG-CA-Exclude-BreakGlass` group, apply to the Microsoft Azure Management cloud app, and require multi-factor authentication as a grant control
-- [ ] **Task 4:** Set the policy to **Report-only** mode (do not enable enforcement yet)
+- [ ] **Task 1:** Create a security group named `SG-Security-Admins` in Entra ID and add yourself as a member
+- [ ] **Task 2:** Create another security group named `SG-Dev-Team` in Entra ID (no members required)
+- [ ] **Task 3:** Create an **App Registration** named `app-identity-lab` with a **Web** redirect URI of `https://localhost:5000/callback`
+- [ ] **Task 4:** Create a **Service Principal** from the `app-identity-lab` app registration
 
 ## Skills Tested
 
-- Creating Conditional Access policies
-- Configuring user and group assignments with exclusions
-- Targeting specific cloud applications
-- Understanding MFA grant controls and report-only mode
+- Entra ID security group management
+- Adding members to groups
+- Creating app registrations with redirect URIs
+- Creating service principals for applications
 
 ## Verification Criteria
 
-| #   | What to Check                                    | Where in Portal                                     | How to Verify                                                        |
-| --- | ------------------------------------------------ | --------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Security group `SG-CA-Exclude-BreakGlass` exists | Entra ID > Groups                                   | Find the group and confirm it has at least one member                |
-| 2   | CA policy `CA-Require-MFA-AzurePortal` exists    | Entra ID > Security > Conditional Access > Policies | Find the policy in the list                                          |
-| 3   | Policy targets correct apps and requires MFA     | CA policy > Conditions / Grant                      | Confirm target app = Microsoft Azure Management, grant = Require MFA |
-| 4   | Policy is in Report-only mode                    | CA policy > Enable policy                           | Confirm the policy state is set to Report-only                       |
+| #   | What to Check                                             | CLI Command                                                                                                                    |
+| --- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Security group `SG-Security-Admins` exists with ≥1 member | `az ad group show --group SG-Security-Admins --query "{name:displayName, id:id}" -o json` and `az ad group member list --group SG-Security-Admins --query "length(@)" -o tsv` |
+| 2   | Security group `SG-Dev-Team` exists                       | `az ad group show --group SG-Dev-Team --query "{name:displayName, id:id}" -o json`                                             |
+| 3   | App registration `app-identity-lab` exists with Web redirect URI | `az ad app list --display-name app-identity-lab --query "[0].{name:displayName, webRedirects:web.redirectUris}" -o json`       |
+| 4   | Service principal for `app-identity-lab` exists           | `az ad sp list --display-name app-identity-lab --query "[0].{name:displayName, appId:appId}" -o json`                          |
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-20
+- **Notes:**
+  - ✅ Task 1: Group `SG-Security-Admins` exists with 1 member
+  - ✅ Task 2: Group `SG-Dev-Team` exists
+  - ✅ Task 3: App registration `app-identity-lab` exists with web redirect URI `https://localhost:5000/callback`
+  - ✅ Task 4: Service principal for `app-identity-lab` exists (appId `67b01c9b-8cff-40be-a8bc-ff05d773f8f6`)

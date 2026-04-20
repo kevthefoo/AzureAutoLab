@@ -13,23 +13,28 @@ Your network team needs tools to diagnose connectivity issues and monitor networ
 ## Tasks
 
 - [ ] **Task 1:** Verify that **Network Watcher** is enabled in the **East US** region
-- [ ] **Task 2:** Create an **NSG Flow Log** on your existing NSG, storing logs in your existing storage account with a retention of **7 days**
-- [ ] **Task 3:** Run an **IP flow verify** test to check if TCP traffic on port 443 is allowed from the internet to your VM's private IP
+- [ ] **Task 2:** Create a **VNet Flow Log** on your existing virtual network, storing logs in your existing storage account with a retention of **7 days**
+- [ ] **Task 3:** Create a **Connection Monitor** named `cm-web-check` that tests TCP connectivity from your VM to `www.microsoft.com` on port **443**
 
 ## Skills Tested
 
 - Network Watcher enablement and usage
-- NSG flow log configuration
-- IP flow verify diagnostics
+- VNet flow log configuration
+- Connection Monitor configuration
 
 ## Verification Criteria
 
 | #   | What to Check           | CLI Command                                                                                                                                       |
 | --- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Network Watcher enabled | `az network watcher show --resource-group NetworkWatcherRG --query "{name:name, location:location, provisioningState:provisioningState}" -o json` |
-| 2   | NSG flow log exists     | `az network watcher flow-log list --location eastus --query "[].{name:name, enabled:enabled, retentionDays:retentionPolicy.days}" -o json`        |
-| 3   | IP flow verify result   | Manual verification — run the test and confirm the result shows Allow or Deny                                                                     |
+| 2   | VNet flow log exists    | `az network watcher flow-log list --location eastus --query "[].{name:name, enabled:enabled, retentionDays:retentionPolicy.days}" -o json`        |
+| 3   | Connection Monitor exists | `az network watcher connection-monitor list --location eastus --query "[?name=='cm-web-check'].{name:name, status:testGroups[0].destinations}" -o json` |
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PARTIAL PASS (2/3)
+- **Date Completed:** 2026-04-15
+- **Notes:**
+  - ✅ Task 1: Network Watcher `NetworkWatcher_eastus` is enabled in East US (provisioningState: Succeeded)
+  - ✅ Task 2: VNet Flow Log `vnet-eastus-rg-dev-lab-flowlog` exists, enabled, with 7-day retention
+  - ❌ Task 3: Connection Monitor `cm-web-check` not found — query returned empty in East US

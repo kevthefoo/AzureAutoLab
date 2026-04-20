@@ -35,6 +35,10 @@ The development team needs an application registered in Entra ID to authenticate
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-20
+- **Notes:**
+  - ✅ Task 1: App `App-GraphReader-Lab` is registered in Entra ID (appId: `4932e9ad-7032-48ec-a2f3-531440ad7669`)
+  - ✅ Task 2: `User.Read.All` (Application/Role, id: `df021288-bdef-4463-88db-98f22de89214`) is present in the manifest and admin consent has been granted — `appRoleAssignments` confirms the role assigned to `App-GraphReader-Lab`
+  - ✅ Task 3: Client secret `lab-secret` exists, expiring 2026-10-17 (~6 months)
+  - ✅ Task 4: Application ID (`4932e9ad-7032-48ec-a2f3-531440ad7669`) and Tenant ID (`cdd94ae6-b7b6-4fc1-867c-c1c7fc457df2`) are both recorded

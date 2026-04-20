@@ -135,9 +135,10 @@ function parseLabFile(filename: string): Lab {
 export function getAllLabs(): Lab[] {
   const files = fs
     .readdirSync(LABS_DIR)
-    .filter((f) => f.startsWith("lab-") && f.endsWith(".md"))
-    .sort();
-  return files.map(parseLabFile);
+    .filter((f) => f.startsWith("lab-") && f.endsWith(".md"));
+  const labs = files.map(parseLabFile);
+  labs.sort((a, b) => a.number - b.number);
+  return labs;
 }
 
 export function getLabById(id: string): Lab | undefined {

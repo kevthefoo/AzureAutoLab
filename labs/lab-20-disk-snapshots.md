@@ -32,4 +32,9 @@ Before performing a risky OS update on a production VM, your team needs a point-
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED (3/3)
+- **Date Completed:** 2026-04-16
+- **Notes:**
+  - ✅ Task 1: Snapshot `Snap-OSDisk-01` exists in `RG-Dev-Lab` (created 2026-04-16)
+  - ✅ Task 2: Tags confirmed — `Purpose=Backup` and `Source=VM-Dev-Lab`
+  - ✅ Task 3: Managed disk `Disk-From-Snap` exists, created via `Copy` (from snapshot)

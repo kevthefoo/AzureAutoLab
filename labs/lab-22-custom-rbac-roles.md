@@ -35,6 +35,10 @@ Your organization needs a custom role that allows helpdesk operators to restart 
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-16
+- **Notes:**
+  - ✅ Task 1: Resource group `RG-CustomRBAC-Lab` exists in East US (provisioningState: Succeeded)
+  - ✅ Task 2: Custom role `VM Operator Custom` exists, scoped to `RG-CustomRBAC-Lab`, with all 4 required permissions: read, start, restart, powerOff
+  - ✅ Task 3: Role `VM Operator Custom` assigned to user `kevthebug_gmail.com#EXT#` at the `RG-CustomRBAC-Lab` scope
+  - ✅ Task 4: Custom role confirmed in role definitions list with correct assignable scope on the resource group

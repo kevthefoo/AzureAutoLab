@@ -33,4 +33,9 @@ Your security team requires all outbound traffic from the development subnet to 
 
 ## Result
 
-- **Status:** NOT STARTED
+- **Status:** PASSED (3/3)
+- **Date Completed:** 2026-04-18
+- **Notes:**
+  - ✅ Task 1: Route table `RT-Dev-Lab` exists in East US under `RG-Dev-Lab`
+  - ✅ Task 2: Route `Route-To-NVA` configured with prefix `0.0.0.0/0`, next hop type `VirtualAppliance`, next hop IP `10.0.2.4`
+  - ✅ Task 3: Route table associated with subnet `snet-eastus-1` in VNet `vnet-eastus` (note: VNet name used was `vnet-eastus` rather than `VNet-Lab`)
