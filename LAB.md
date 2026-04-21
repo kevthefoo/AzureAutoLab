@@ -4,11 +4,11 @@
 
 | Domain                | Target | Count | Weight |
 | --------------------- | ------ | ----- | ------ |
-| Identity & Governance | 20–25% | 24    | 24%    |
+| Identity & Governance | 20–25% | 21    | 21%    |
 | Storage               | 15–20% | 19    | 19%    |
-| Compute               | 20–25% | 24    | 24%    |
-| Networking            | 15–20% | 19    | 19%    |
-| Monitoring & Backup   | 10–15% | 14    | 14%    |
+| Compute               | 20–25% | 25    | 25%    |
+| Networking            | 15–20% | 20    | 20%    |
+| Monitoring & Backup   | 10–15% | 15    | 15%    |
 
 ## All Labs
 
@@ -40,22 +40,22 @@
 | 23  | [Management Groups](labs/lab-23-management-groups.md)                                 | Identity & Governance | NOT STARTED  |
 | 24  | [Azure AD App Registrations](labs/lab-24-app-registrations.md)                        | Identity & Governance | NOT STARTED  |
 | 25  | [Conditional Access Policies](labs/lab-25-conditional-access.md)                      | Identity & Governance | NOT STARTED  |
-| 26  | [Azure AD Administrative Units](labs/lab-26-administrative-units.md)                  | Identity & Governance | NOT STARTED  |
+| 26  | [Azure Policy Exemption](labs/lab-26-policy-exemption.md)                             | Identity & Governance | NOT STARTED  |
 | 27  | [Subscription-Level RBAC](labs/lab-27-subscription-rbac.md)                           | Identity & Governance | NOT STARTED  |
 | 28  | [Azure Policy Initiatives](labs/lab-28-policy-initiatives.md)                         | Identity & Governance | NOT STARTED  |
-| 29  | [Azure AD Dynamic Groups](labs/lab-29-dynamic-groups.md)                              | Identity & Governance | NOT STARTED  |
+| 29  | [Resource Move Between Resource Groups](labs/lab-29-resource-move.md)                 | Identity & Governance | NOT STARTED  |
 | 30  | [Resource Tags & Cost Management](labs/lab-30-tags-cost-management.md)                | Identity & Governance | NOT STARTED  |
-| 31  | [Azure AD Self-Service Password Reset](labs/lab-31-self-service-password-reset.md)    | Identity & Governance | NOT STARTED  |
+| 31  | [Service Principal Client Secret & RBAC](labs/lab-31-service-principal-credentials.md) | Identity & Governance | NOT STARTED  |
 | 32  | [Managed Identities](labs/lab-32-managed-identities.md)                               | Identity & Governance | NOT STARTED  |
-| 33  | [Azure Blueprints](labs/lab-33-azure-blueprints.md)                                   | Identity & Governance | NOT STARTED  |
-| 34  | [PIM — Privileged Identity Management](labs/lab-34-privileged-identity-management.md) | Identity & Governance | NOT STARTED  |
+| 33  | [Azure Resource Graph Queries](labs/lab-33-resource-graph.md)                         | Identity & Governance | NOT STARTED  |
+| 34  | [Tag Inheritance Policy & Remediation](labs/lab-34-tag-inheritance-policy.md)         | Identity & Governance | NOT STARTED  |
 | 35  | [Azure AD B2B Guest Users](labs/lab-35-b2b-guest-users.md)                            | Identity & Governance | NOT STARTED  |
 | 36  | [Resource Locks at Scale](labs/lab-36-resource-locks-at-scale.md)                     | Identity & Governance | NOT STARTED  |
-| 37  | [Azure AD MFA Configuration](labs/lab-37-mfa-configuration.md)                        | Identity & Governance | NOT STARTED  |
+| 37  | [Subnet Delegation](labs/lab-37-subnet-delegation.md)                                 | Networking            | NOT STARTED  |
 | 38  | [Cost Management & Budgets](labs/lab-38-cost-management-budgets.md)                   | Identity & Governance | NOT STARTED  |
-| 39  | [Azure AD Access Reviews](labs/lab-39-access-reviews.md)                              | Identity & Governance | NOT STARTED  |
+| 39  | [VM Auto-Shutdown Schedule](labs/lab-39-vm-auto-shutdown.md)                          | Compute               | NOT STARTED  |
 | 40  | [Deny Assignments & RBAC Conditions](labs/lab-40-deny-assignments-rbac-conditions.md) | Identity & Governance | NOT STARTED  |
-| 41  | [Azure AD Identity Protection](labs/lab-41-identity-protection.md)                    | Identity & Governance | NOT STARTED  |
+| 41  | [Subscription-Level Diagnostic Settings](labs/lab-41-subscription-diagnostic-settings.md) | Monitoring & Backup   | NOT STARTED  |
 | 42  | [Storage Account Networking](labs/lab-42-storage-networking.md)                       | Storage               | NOT STARTED  |
 | 43  | [Blob Lifecycle Management](labs/lab-43-blob-lifecycle-management.md)                 | Storage               | NOT STARTED  |
 | 44  | [Azure Storage Redundancy](labs/lab-44-storage-redundancy.md)                         | Storage               | NOT STARTED  |
@@ -117,8 +117,8 @@
 
 ## AZ-104 Domains Covered
 
-- [x] Identity & Governance (24 labs)
+- [x] Identity & Governance (21 labs)
 - [x] Storage (19 labs)
-- [x] Compute (24 labs)
-- [x] Networking (19 labs)
-- [x] Monitoring & Backup (14 labs)
+- [x] Compute (25 labs)
+- [x] Networking (20 labs)
+- [x] Monitoring & Backup (15 labs)
