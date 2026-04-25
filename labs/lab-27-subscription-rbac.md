@@ -35,6 +35,10 @@ A new team lead needs Contributor access across all resources in the subscriptio
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-25
+- **Notes:**
+  - ✅ Task 1: Resource group `RG-InheritTest-Lab` exists in `eastus` (provisioningState: Succeeded)
+  - ✅ Task 2: Contributor role assigned at subscription scope (`/subscriptions/5968a609-a57a-4abc-8360-8fa25a1b929f`) to `kevthebug_gmail.com#EXT#@kevthebuggmail.onmicrosoft.com`, created 2026-04-25
+  - ✅ Task 3: Contributor role assignment visible at `RG-InheritTest-Lab` level when queried with `--include-inherited`
+  - ✅ Task 4: Assignment scope is the subscription (not the RG), confirming the role is inherited — not directly assigned at RG level
