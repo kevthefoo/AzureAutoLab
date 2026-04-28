@@ -35,6 +35,10 @@ Your finance team has reorganized the chargeback structure. A storage account cu
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (4/4)
+- **Date Completed:** 2026-04-28
+- **Notes:**
+  - ✅ Task 1: Both `RG-Move-Source` and `RG-Move-Target` exist in East US
+  - ✅ Task 2: Storage account `stmovelab` (matches `stmove<suffix>` pattern) was created and confirmed
+  - ✅ Task 3: Move completed — `stmovelab` is now in `RG-Move-Target`
+  - ✅ Task 4: `RG-Move-Source` contains 0 resources; `RG-Move-Target` contains `stmovelab`
