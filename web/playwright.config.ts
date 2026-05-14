@@ -6,16 +6,16 @@ export default defineConfig({
   workers: 1,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3010",
     trace: "retain-on-failure",
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: true,
-    timeout: 60_000,
+    command: "next dev -p 3010",
+    url: "http://localhost:3010",
+    reuseExistingServer: false,
+    timeout: 120_000,
   },
 });
