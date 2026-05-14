@@ -7,8 +7,17 @@ import DifficultyBadge from "@/components/difficulty-badge";
 import SectionCard from "@/components/section-card";
 import ChatPanel from "@/components/chat-panel";
 import TroubleshootPanel from "@/components/troubleshoot-panel";
+import { readLabState } from "@/lib/lab-state";
 
 export const dynamic = "force-dynamic";
+
+function getDisplayStatus(labId: string, fallback: string): string {
+  const state = readLabState(labId.padStart(2, "0"));
+  if (state.phase !== "NOT_PROVISIONED" && state.phase !== "CLEANED_UP") {
+    return state.phase;
+  }
+  return fallback;
+}
 
 export default async function LabDetailPage({
   params,
@@ -34,7 +43,13 @@ export default async function LabDetailPage({
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-2xl font-bold">{lab.title}</h1>
           <div className="flex items-center gap-2 shrink-0">
-            <StatusBadge status={lab.result.status} />
+            <StatusBadge
+              status={
+                lab.isTroubleshooting
+                  ? getDisplayStatus(id, lab.result.status)
+                  : lab.result.status
+              }
+            />
             <ChatPanel labId={id} showVerify={!lab.isTroubleshooting} />
           </div>
         </div>

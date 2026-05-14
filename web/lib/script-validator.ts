@@ -19,7 +19,9 @@ export function validateCleanupScript(
   _labId: string,
 ): ValidationResult {
   const hasGroupDelete = /\baz\s+group\s+delete\b/.test(script);
-  const hasResourceDelete = /\baz\s+resource\s+delete\b.*--ids\b/s.test(script);
+  const hasResourceDelete = /\baz\s+resource\s+delete\b[\s\S]*--ids\b/.test(
+    script,
+  );
   if (!hasGroupDelete && !hasResourceDelete) {
     return {
       ok: false,
