@@ -5,3 +5,6 @@ web/node_modules/
 .superpowers/
 .playwright-mcp/
 docs/
+labs/.state/
+web/test-results/
+web/playwright-report/

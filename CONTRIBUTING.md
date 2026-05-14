@@ -49,6 +49,27 @@ A realistic business context explaining why this task is needed.
 - **Notes:**
 ```
 
+## Troubleshooting Lab Format
+
+A lab becomes a troubleshooting lab if its markdown contains a `## Setup` section.
+When present, the lab detail page renders Start / Verify / Cleanup buttons that
+execute the embedded bash blocks server-side.
+
+Authoring requirements:
+
+- The `## Setup` bash block must tag every Azure resource it creates with
+  `AutoLabId=<lab number>`. The server-side validator rejects setup scripts that
+  don't include this tag.
+- A matching `## Cleanup` section must be present. It must end with the tag-based
+  safety sweep so any resource that escaped the dedicated RG is still deleted:
+
+  ```bash
+  az resource list --tag AutoLabId=<NN> --query "[].id" -o tsv \
+    | xargs -r -n1 az resource delete --ids
+  ```
+
+- Use a dedicated resource group named `RG-TS-<NN>` for all created resources.
+
 ## Guidelines
 
 - Each task must be verifiable with an `az` CLI command
