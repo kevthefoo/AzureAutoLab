@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { marked } from "marked";
+import { extractBashBlock } from "./script-extractor";
 
 const LABS_DIR = path.join(process.cwd(), "..", "labs");
 const TRACKER_PATH = path.join(process.cwd(), "..", "LAB.md");
@@ -22,6 +23,9 @@ export interface Lab {
     date: string;
     notes: string;
   };
+  setupScript: string | null;
+  cleanupScript: string | null;
+  isTroubleshooting: boolean;
 }
 
 export interface LabSummary {
@@ -33,7 +37,7 @@ export interface LabSummary {
   status: string;
 }
 
-function parseLabFile(filename: string): Lab {
+export function parseLabFile(filename: string): Lab {
   const filepath = path.join(LABS_DIR, filename);
   const raw = fs.readFileSync(filepath, "utf-8");
   const lines = raw.split("\n");
@@ -116,6 +120,10 @@ function parseLabFile(filename: string): Lab {
     notes: notesMatch?.[1]?.trim() || "",
   };
 
+  const setupScript = extractBashBlock(raw, "Setup");
+  const cleanupScript = extractBashBlock(raw, "Cleanup");
+  const isTroubleshooting = setupScript !== null;
+
   return {
     id,
     number,
@@ -129,6 +137,9 @@ function parseLabFile(filename: string): Lab {
     skillsTested,
     verificationHtml,
     result,
+    setupScript,
+    cleanupScript,
+    isTroubleshooting,
   };
 }
 
