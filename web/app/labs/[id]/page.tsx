@@ -6,6 +6,7 @@ import DomainBadge from "@/components/domain-badge";
 import DifficultyBadge from "@/components/difficulty-badge";
 import SectionCard from "@/components/section-card";
 import ChatPanel from "@/components/chat-panel";
+import TroubleshootPanel from "@/components/troubleshoot-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export default async function LabDetailPage({
           <h1 className="text-2xl font-bold">{lab.title}</h1>
           <div className="flex items-center gap-2 shrink-0">
             <StatusBadge status={lab.result.status} />
-            <ChatPanel labId={id} />
+            <ChatPanel labId={id} showVerify={!lab.isTroubleshooting} />
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -45,6 +46,12 @@ export default async function LabDetailPage({
           </span>
         </div>
       </div>
+
+      {lab.isTroubleshooting && (
+        <div className="mb-4">
+          <TroubleshootPanel labId={id} />
+        </div>
+      )}
 
       {/* Content sections */}
       <div className="space-y-4">

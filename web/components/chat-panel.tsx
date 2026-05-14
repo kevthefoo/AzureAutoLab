@@ -11,7 +11,13 @@ interface Message {
 const VERIFY_PROMPT =
   "Verify all tasks for this lab. Run the appropriate az CLI commands to check each task, then update the lab file's Result section with the results.";
 
-export default function ChatPanel({ labId }: { labId: string }) {
+export default function ChatPanel({
+  labId,
+  showVerify = true,
+}: {
+  labId: string;
+  showVerify?: boolean;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -343,39 +349,43 @@ export default function ChatPanel({ labId }: { labId: string }) {
 
   return (
     <>
-      {/* Verify button */}
-      <button
-        onClick={handleVerify}
-        disabled={isVerifying || isLoading}
-        className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
-      >
-        {isVerifying ? "Verifying..." : "Verify"}
-      </button>
+      {showVerify && (
+        <>
+          {/* Verify button */}
+          <button
+            onClick={handleVerify}
+            disabled={isVerifying || isLoading}
+            className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+          >
+            {isVerifying ? "Verifying..." : "Verify"}
+          </button>
 
-      {/* Verification progress banner */}
-      {(isVerifying || verifyError) && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg">
-          {isVerifying && (
-            <div className="bg-bg-surface border border-accent/30 rounded-xl shadow-2xl px-5 py-4 mx-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <span className="text-sm font-medium text-text-primary">
-                  Verifying lab tasks...
-                </span>
-              </div>
-              {verifyStatus && (
-                <p className="text-xs text-accent font-mono truncate pl-5">
-                  {verifyStatus}
-                </p>
+          {/* Verification progress banner */}
+          {(isVerifying || verifyError) && (
+            <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg">
+              {isVerifying && (
+                <div className="bg-bg-surface border border-accent/30 rounded-xl shadow-2xl px-5 py-4 mx-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                    <span className="text-sm font-medium text-text-primary">
+                      Verifying lab tasks...
+                    </span>
+                  </div>
+                  {verifyStatus && (
+                    <p className="text-xs text-accent font-mono truncate pl-5">
+                      {verifyStatus}
+                    </p>
+                  )}
+                </div>
+              )}
+              {verifyError && !isVerifying && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl shadow-2xl px-5 py-4 mx-4">
+                  <p className="text-sm text-red-400">{verifyError}</p>
+                </div>
               )}
             </div>
           )}
-          {verifyError && !isVerifying && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl shadow-2xl px-5 py-4 mx-4">
-              <p className="text-sm text-red-400">{verifyError}</p>
-            </div>
-          )}
-        </div>
+        </>
       )}
 
       {/* Chat icon button — fixed bottom-right */}
