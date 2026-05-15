@@ -12,13 +12,13 @@ The DevOps team is preparing to deploy Windows web servers into the `SUB-Web`
 subnet of `VNET-TS-101` (in resource group `RG-TS-101`) but reports that RDP
 will not work — the network security group attached to the subnet is blocking
 it. You've been asked to inspect the NSG and restore RDP access from the
-office IP range only, without weakening other controls. No VMs exist yet;
-fixing the NSG is the entire task.
+office IP range `203.0.113.0/24` only, without weakening other controls.
+No VMs exist yet; fixing the NSG is the entire task.
 
 ## Tasks
 
 - [ ] **Task 1:** Identify the root cause of the RDP failure (NSG rules, VM state, etc.)
-- [ ] **Task 2:** Restore RDP (port 3389) access from your current public IP only
+- [ ] **Task 2:** Restore RDP (port 3389) access from the office range `203.0.113.0/24` only
 - [ ] **Task 3:** Document the misconfiguration and your fix in the Result section
 
 ## Setup
