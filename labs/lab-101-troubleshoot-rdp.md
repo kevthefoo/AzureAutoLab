@@ -8,11 +8,12 @@
 
 ## Scenario
 
-The DevOps team reports they cannot RDP into a recently deployed Windows VM
-(`VM-Web01`) in resource group `RG-TS-101`. You've been asked to investigate
-and restore RDP access. There is a deliberate misconfiguration somewhere in
-the resource group — find it and fix it without disabling other security
-controls.
+The DevOps team is preparing to deploy Windows web servers into the `SUB-Web`
+subnet of `VNET-TS-101` (in resource group `RG-TS-101`) but reports that RDP
+will not work — the network security group attached to the subnet is blocking
+it. You've been asked to inspect the NSG and restore RDP access from the
+office IP range only, without weakening other controls. No VMs exist yet;
+fixing the NSG is the entire task.
 
 ## Tasks
 
@@ -44,21 +45,7 @@ az network nsg rule create -g "$RG" --nsg-name NSG-Web \
 az network vnet subnet update -g "$RG" --vnet-name VNET-TS-101 -n SUB-Web \
   --network-security-group NSG-Web >/dev/null
 
-az network public-ip create -g "$RG" -n PIP-Web01 --sku Standard \
-  --tags "$TAG" >/dev/null
-
-az network nic create -g "$RG" -n NIC-Web01 \
-  --vnet-name VNET-TS-101 --subnet SUB-Web \
-  --public-ip-address PIP-Web01 \
-  --tags "$TAG" >/dev/null
-
-az vm create -g "$RG" -n VM-Web01 \
-  --image Win2022Datacenter --size Standard_D2s_v5 \
-  --admin-username azureuser --admin-password 'P@ssw0rd-Lab101!' \
-  --nics NIC-Web01 --public-ip-sku Standard \
-  --tags "$TAG" --no-wait
-
-echo "Setup kicked off. VM is provisioning asynchronously."
+echo "Setup complete. Inspect NSG-Web in RG-TS-101."
 ```
 
 ## Skills Tested
