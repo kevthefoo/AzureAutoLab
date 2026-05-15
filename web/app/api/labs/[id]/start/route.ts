@@ -62,7 +62,14 @@ export function runBashStream(opts: {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     start(controller) {
-      const child = spawn("bash", ["-lc", opts.script], { stdio: "pipe" });
+      const child = spawn("bash", ["-lc", opts.script], {
+        stdio: "pipe",
+        env: {
+          ...process.env,
+          MSYS_NO_PATHCONV: "1",
+          MSYS2_ARG_CONV_EXCL: "*",
+        },
+      });
       let stderrTail = "";
 
       const send = (type: string, text: string) =>
