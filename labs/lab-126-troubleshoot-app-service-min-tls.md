@@ -24,6 +24,7 @@ LOC=eastus; RG=RG-TS-126; TAG="AutoLabId=126"
 PLAN="plan-ts126-$(date +%s | tail -c 7)"
 APP="app-ts126-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
+az provider register --namespace Microsoft.Web --wait
 az appservice plan create -n "$PLAN" -g "$RG" -l "$LOC" --sku F1 --tags "$TAG" >/dev/null
 az webapp create -n "$APP" -g "$RG" --plan "$PLAN" --tags "$TAG" >/dev/null
 az webapp config set -n "$APP" -g "$RG" --min-tls-version 1.0 >/dev/null

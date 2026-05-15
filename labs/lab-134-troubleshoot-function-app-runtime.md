@@ -24,6 +24,7 @@ LOC=eastus; RG=RG-TS-134; TAG="AutoLabId=134"
 SA="stautolab134$(date +%s | tail -c 7)"
 FUNC="func-ts134-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
+az provider register --namespace Microsoft.Web --wait
 az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
 az functionapp create -n "$FUNC" -g "$RG" -s "$SA" --consumption-plan-location "$LOC" \
   --functions-version 4 --runtime node --tags "$TAG" >/dev/null

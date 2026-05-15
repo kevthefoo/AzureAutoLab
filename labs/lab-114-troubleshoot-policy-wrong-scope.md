@@ -28,8 +28,8 @@ OTHER_RG="RG-TS-114-Wrong"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az group create -n "$OTHER_RG" -l "$LOC" --tags "$TAG" >/dev/null
 
-# Built-in: "Allowed locations" (e56962a6-4747-49cd-b67b-bf8b01975c4c)
-DEF="/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c"
+# Built-in: "Allowed locations"
+DEF="e56962a6-4747-49cd-b67b-bf8b01975c4c"
 SCOPE_WRONG=$(az group show -n "$OTHER_RG" --query id -o tsv)
 
 az policy assignment create -n "ts114-allowed-locations" \
