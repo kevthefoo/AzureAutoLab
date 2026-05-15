@@ -1,0 +1,72 @@
+# Lab 112 — Troubleshoot Budget Alert Threshold
+
+**Domain:** Identity & Governance
+**Difficulty:** Beginner
+**Date Assigned:** 2026-05-15
+
+---
+
+## Scenario
+
+A consumption budget `budget-ts112` is configured at the `RG-TS-112` scope, but FinOps reports that the team only hears about overruns after the bill arrives. The current notification threshold is 99% of the amount, which fires too late to act. Lower the threshold so notifications fire earlier (50%).
+
+## Tasks
+
+- [ ] **Task 1:** Locate the budget on `RG-TS-112` and read its notification threshold
+- [ ] **Task 2:** Update the budget so notifications fire at **50% of actual cost** (instead of 99%)
+- [ ] **Task 3:** Document the misconfiguration and fix in the Result section
+
+## Setup
+
+```bash
+set -euo pipefail
+LOC=eastus
+RG=RG-TS-112
+TAG="AutoLabId=112"
+
+az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
+
+# Register the Consumption provider in case it isn't already
+az provider register --namespace Microsoft.Consumption --wait
+
+# Budget end date one year out (required by API)
+END=$(date -d "+12 months" +%Y-%m-01T00:00:00Z 2>/dev/null || date -v+12m +%Y-%m-01T00:00:00Z)
+START=$(date +%Y-%m-01T00:00:00Z)
+
+az consumption budget create-with-rg --resource-group "$RG" \
+  --budget-name "budget-ts112" \
+  --amount 50 --time-grain Monthly --category Cost \
+  --start-date "$START" --end-date "$END" \
+  --notifications '{"NotifyAt99":{"enabled":true,"operator":"GreaterThan","threshold":99,"contactEmails":["finops@contoso.local"],"thresholdType":"Actual"}}' >/dev/null \
+  || echo "(budget API can be picky; if this errored, recreate via portal — Cost Management + Billing > Budgets)"
+
+echo "Setup complete. Budget threshold is 99% (too late)."
+```
+
+## Skills Tested
+
+- Locating budgets in the Cost Management blade
+- Editing budget notification thresholds
+
+## Verification Criteria
+
+| #   | What to Check                                | CLI Command                                                                                                                                  |
+| --- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Budget `budget-ts112` exists on `RG-TS-112`  | `az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query name -o tsv`                                        |
+| 2   | At least one notification threshold ≤ 50     | `az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query "notifications.*.threshold" -o json`                |
+
+## Cleanup
+
+```bash
+set -euo pipefail
+az consumption budget delete --budget-name budget-ts112 --resource-group RG-TS-112 2>/dev/null || true
+az group delete -n RG-TS-112 --yes --no-wait || true
+ids=$(az resource list --tag AutoLabId=112 --query "[].id" -o tsv)
+if [ -n "$ids" ]; then echo "$ids" | xargs -r -n1 az resource delete --ids; fi
+```
+
+## Result
+
+- **Status:** NOT STARTED
+- **Date Completed:** —
+- **Notes:** —
