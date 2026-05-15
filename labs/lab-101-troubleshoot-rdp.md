@@ -53,7 +53,7 @@ az network nic create -g "$RG" -n NIC-Web01 \
   --tags "$TAG" >/dev/null
 
 az vm create -g "$RG" -n VM-Web01 \
-  --image Win2022Datacenter --size Standard_B2s \
+  --image Win2022Datacenter --size Standard_D2s_v5 \
   --admin-username azureuser --admin-password 'P@ssw0rd-Lab101!' \
   --nics NIC-Web01 --public-ip-sku Standard \
   --tags "$TAG" --no-wait
