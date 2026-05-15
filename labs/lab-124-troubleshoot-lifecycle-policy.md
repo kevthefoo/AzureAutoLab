@@ -25,27 +25,8 @@ SA="stautolab124$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
 
-cat > /tmp/lc-policy.json <<'JSON'
-{
-  "rules": [
-    {
-      "enabled": true,
-      "name": "deletes-after-1-day",
-      "type": "Lifecycle",
-      "definition": {
-        "actions": {
-          "baseBlob": {
-            "delete": { "daysAfterModificationGreaterThan": 1 }
-          }
-        },
-        "filters": { "blobTypes": ["blockBlob"] }
-      }
-    }
-  ]
-}
-JSON
-
-az storage account management-policy create --account-name "$SA" --resource-group "$RG" --policy @/tmp/lc-policy.json >/dev/null
+az storage account management-policy create --account-name "$SA" --resource-group "$RG" \
+  --policy '{"rules":[{"enabled":true,"name":"deletes-after-1-day","type":"Lifecycle","definition":{"actions":{"baseBlob":{"delete":{"daysAfterModificationGreaterThan":1}}},"filters":{"blobTypes":["blockBlob"]}}}]}' >/dev/null
 echo "Setup complete. Lifecycle rule 'deletes-after-1-day' active."
 ```
 

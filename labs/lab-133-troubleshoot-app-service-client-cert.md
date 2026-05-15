@@ -1,4 +1,4 @@
-# Lab 133 — Troubleshoot Client Certificate Auth Enabled
+# Lab 133 — Troubleshoot Function App Client Cert Auth Enabled
 
 **Domain:** Compute
 **Difficulty:** Intermediate
@@ -8,11 +8,11 @@
 
 ## Scenario
 
-Users browsing `app-ts133-<random>` keep getting browser certificate prompts and most fail to log in. The web app has **incoming client certificate** authentication enabled, but the team never intended to require client certs. Disable client certificate auth on the app.
+Clients calling `func-ts133-<random>` keep getting TLS handshake errors and most requests fail. The Function App has **incoming client certificate** authentication required, but the team never intended to require client certs. Disable client cert auth.
 
 ## Tasks
 
-- [ ] **Task 1:** Inspect the web app's `clientCertEnabled` property
+- [ ] **Task 1:** Inspect the Function App's `clientCertEnabled` property
 - [ ] **Task 2:** Disable client cert auth
 - [ ] **Task 3:** Document the misconfiguration and fix in the Result section
 
@@ -21,15 +21,16 @@ Users browsing `app-ts133-<random>` keep getting browser certificate prompts and
 ```bash
 set -euo pipefail
 LOC=eastus; RG=RG-TS-133; TAG="AutoLabId=133"
-PLAN="plan-ts133-$(date +%s | tail -c 7)"
-APP="app-ts133-$(date +%s | tail -c 7)"
+SA="stautolab133$(date +%s | tail -c 7)"
+FUNC="func-ts133-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.Web --wait
-az appservice plan create -n "$PLAN" -g "$RG" -l "$LOC" --sku F1 --tags "$TAG" >/dev/null
-az webapp create -n "$APP" -g "$RG" --plan "$PLAN" --tags "$TAG" >/dev/null
-az webapp update -n "$APP" -g "$RG" --set clientCertEnabled=true clientCertMode=Required >/dev/null
-az group update -n "$RG" --set tags.AppName="$APP" >/dev/null
-echo "Setup complete. $APP has clientCertEnabled=true clientCertMode=Required."
+az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
+az functionapp create -n "$FUNC" -g "$RG" -s "$SA" --consumption-plan-location "$LOC" \
+  --functions-version 4 --runtime node --tags "$TAG" >/dev/null
+az functionapp update -n "$FUNC" -g "$RG" --set clientCertEnabled=true clientCertMode=Required >/dev/null
+az group update -n "$RG" --set tags.FuncName="$FUNC" >/dev/null
+echo "Setup complete. $FUNC has clientCertEnabled=true clientCertMode=Required."
 ```
 
 ## Skills Tested
@@ -41,8 +42,8 @@ echo "Setup complete. $APP has clientCertEnabled=true clientCertMode=Required."
 
 | #   | What to Check                              | CLI Command                                                                                              |
 | --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| 1   | Lab web app still exists                   | `app=$(az group show -n RG-TS-133 --query tags.AppName -o tsv); az webapp show -n "$app" -g RG-TS-133 --query name -o tsv` |
-| 2   | `clientCertEnabled` is `false`             | `app=$(az group show -n RG-TS-133 --query tags.AppName -o tsv); az webapp show -n "$app" -g RG-TS-133 --query clientCertEnabled -o tsv` |
+| 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-133 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-133 --query name -o tsv` |
+| 2   | `clientCertEnabled` is `false`             | `f=$(az group show -n RG-TS-133 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-133 --query clientCertEnabled -o tsv` |
 
 ## Cleanup
 

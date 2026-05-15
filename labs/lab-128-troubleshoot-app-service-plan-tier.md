@@ -1,21 +1,19 @@
-# Lab 128 — Troubleshoot App Service Plan Tier Too Low
+# Lab 128 — Troubleshoot Function App Missing AzureWebJobsStorage
 
 **Domain:** Compute
-**Difficulty:** Beginner
+**Difficulty:** Intermediate
 **Date Assigned:** 2026-05-15
 
 ---
 
 ## Scenario
 
-`app-ts128-<random>` is on a **Free (F1)** App Service plan, but the dev team needs custom domains and SSL — features only available on **Basic or higher**. Upgrade the plan SKU to **B1** so the team can move forward. Don't recreate the plan.
-
-> Note: scaling up to B1 starts billing the plan (~$0.02/hr). Clean up promptly.
+`func-ts128-<random>` fails to start with `Could not connect to AzureWebJobsStorage`. The `AzureWebJobsStorage` app setting is missing — a required configuration for every Function App. Restore it to point at the lab's storage account.
 
 ## Tasks
 
-- [ ] **Task 1:** Identify the plan's current SKU tier
-- [ ] **Task 2:** Scale the plan up to **B1 (Basic)**
+- [ ] **Task 1:** Inspect Function App app settings and confirm `AzureWebJobsStorage` is absent
+- [ ] **Task 2:** Set `AzureWebJobsStorage` to a valid connection string for the lab storage account (use a key-based connection string)
 - [ ] **Task 3:** Document the misconfiguration and fix in the Result section
 
 ## Setup
@@ -23,27 +21,30 @@
 ```bash
 set -euo pipefail
 LOC=eastus; RG=RG-TS-128; TAG="AutoLabId=128"
-PLAN="plan-ts128-$(date +%s | tail -c 7)"
-APP="app-ts128-$(date +%s | tail -c 7)"
+SA="stautolab128$(date +%s | tail -c 7)"
+FUNC="func-ts128-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.Web --wait
-az appservice plan create -n "$PLAN" -g "$RG" -l "$LOC" --sku F1 --tags "$TAG" >/dev/null
-az webapp create -n "$APP" -g "$RG" --plan "$PLAN" --tags "$TAG" >/dev/null
-az group update -n "$RG" --set tags.PlanName="$PLAN" tags.AppName="$APP" >/dev/null
-echo "Setup complete. Plan $PLAN is F1."
+az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
+az functionapp create -n "$FUNC" -g "$RG" -s "$SA" --consumption-plan-location "$LOC" \
+  --functions-version 4 --runtime node --tags "$TAG" >/dev/null
+# Unset the AzureWebJobsStorage setting to simulate misconfig
+az functionapp config appsettings delete -n "$FUNC" -g "$RG" --setting-names AzureWebJobsStorage >/dev/null
+az group update -n "$RG" --set tags.FuncName="$FUNC" tags.SaName="$SA" >/dev/null
+echo "Setup complete. $FUNC is missing AzureWebJobsStorage setting."
 ```
 
 ## Skills Tested
 
-- Reading `sku.tier` on an App Service plan
-- Scaling a plan via portal Scale up blade
+- Reading Function App app settings
+- Restoring `AzureWebJobsStorage` via portal Configuration blade
 
 ## Verification Criteria
 
-| #   | What to Check                              | CLI Command                                                                                                          |
-| --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| 1   | Lab plan still exists                      | `plan=$(az group show -n RG-TS-128 --query tags.PlanName -o tsv); az appservice plan show -n "$plan" -g RG-TS-128 --query name -o tsv` |
-| 2   | Plan SKU tier is at least `Basic`          | `plan=$(az group show -n RG-TS-128 --query tags.PlanName -o tsv); az appservice plan show -n "$plan" -g RG-TS-128 --query sku.tier -o tsv` |
+| #   | What to Check                              | CLI Command                                                                                                                            |
+| --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-128 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-128 --query name -o tsv`            |
+| 2   | `AzureWebJobsStorage` setting exists       | `f=$(az group show -n RG-TS-128 --query tags.FuncName -o tsv); az functionapp config appsettings list -n "$f" -g RG-TS-128 --query "[?name=='AzureWebJobsStorage'].name" -o tsv` |
 
 ## Cleanup
 

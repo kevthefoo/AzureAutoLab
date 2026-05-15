@@ -27,7 +27,7 @@ az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind 
 SID=$(az storage account show -n "$SA" -g "$RG" --query id -o tsv)
 # Use a metric guaranteed to exist on storage accounts
 az monitor metrics alert create -g "$RG" -n alert-ts148-cpu --scopes "$SID" \
-  --condition "avg Transactions > 1000000" --description "Bad severity demo" --severity 3 >/dev/null
+  --condition "total Transactions > 1000000" --description "Bad severity demo" --severity 3 >/dev/null
 echo "Setup complete. alert-ts148-cpu severity=3."
 ```
 

@@ -1,4 +1,4 @@
-# Lab 125 — Troubleshoot App Service HTTPS-Only Off
+# Lab 125 — Troubleshoot Function App HTTPS-Only Off
 
 **Domain:** Compute
 **Difficulty:** Beginner
@@ -8,11 +8,11 @@
 
 ## Scenario
 
-A new web app `app-ts125-<random>` in `RG-TS-125` is accessible over plain HTTP. Security policy requires all App Service apps to redirect HTTP to HTTPS. Flip the **HTTPS Only** setting so unencrypted requests get a 301 redirect.
+A new Function App `func-ts125-<random>` in `RG-TS-125` is accepting calls over plain HTTP. Security policy requires all Function Apps to redirect HTTP to HTTPS. Flip the **HTTPS Only** setting.
 
 ## Tasks
 
-- [ ] **Task 1:** Find the web app and inspect its `httpsOnly` property
+- [ ] **Task 1:** Find the Function App and inspect its `httpsOnly` property
 - [ ] **Task 2:** Set `httpsOnly` to `true`
 - [ ] **Task 3:** Document the misconfiguration and fix in the Result section
 
@@ -21,28 +21,29 @@ A new web app `app-ts125-<random>` in `RG-TS-125` is accessible over plain HTTP.
 ```bash
 set -euo pipefail
 LOC=eastus; RG=RG-TS-125; TAG="AutoLabId=125"
-PLAN="plan-ts125-$(date +%s | tail -c 7)"
-APP="app-ts125-$(date +%s | tail -c 7)"
+SA="stautolab125$(date +%s | tail -c 7)"
+FUNC="func-ts125-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.Web --wait
-az appservice plan create -n "$PLAN" -g "$RG" -l "$LOC" --sku F1 --tags "$TAG" >/dev/null
-az webapp create -n "$APP" -g "$RG" --plan "$PLAN" --tags "$TAG" >/dev/null
-az webapp update -n "$APP" -g "$RG" --set httpsOnly=false >/dev/null
-az group update -n "$RG" --set tags.AppName="$APP" >/dev/null
-echo "Setup complete. Web app $APP has httpsOnly=false."
+az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
+az functionapp create -n "$FUNC" -g "$RG" -s "$SA" --consumption-plan-location "$LOC" \
+  --functions-version 4 --runtime node --tags "$TAG" >/dev/null
+az functionapp update -n "$FUNC" -g "$RG" --set httpsOnly=false >/dev/null
+az group update -n "$RG" --set tags.FuncName="$FUNC" >/dev/null
+echo "Setup complete. Function App $FUNC has httpsOnly=false."
 ```
 
 ## Skills Tested
 
-- Reading `httpsOnly` on a Web App
+- Reading `httpsOnly` on a Function App
 - Updating it via portal TLS/SSL settings blade
 
 ## Verification Criteria
 
 | #   | What to Check                              | CLI Command                                                                                              |
 | --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| 1   | Lab web app still exists                   | `app=$(az group show -n RG-TS-125 --query tags.AppName -o tsv); az webapp show -n "$app" -g RG-TS-125 --query name -o tsv` |
-| 2   | `httpsOnly` is `true`                      | `app=$(az group show -n RG-TS-125 --query tags.AppName -o tsv); az webapp show -n "$app" -g RG-TS-125 --query httpsOnly -o tsv` |
+| 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-125 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-125 --query name -o tsv` |
+| 2   | `httpsOnly` is `true`                      | `f=$(az group show -n RG-TS-125 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-125 --query httpsOnly -o tsv` |
 
 ## Cleanup
 

@@ -1,4 +1,4 @@
-# Lab 151 — Troubleshoot Recovery Vault Soft Delete Disabled
+# Lab 151 — Troubleshoot Recovery Vault Immutability Disabled
 
 **Domain:** Monitoring & Backup
 **Difficulty:** Intermediate
@@ -8,12 +8,12 @@
 
 ## Scenario
 
-A Recovery Services Vault `rsv-ts151` in `RG-TS-151` has **soft delete** disabled. The team wants protection against accidental deletion of backup items. Re-enable soft delete.
+Compliance requires Recovery Services Vaults that hold production backups to have **immutability** enabled (at minimum in the `Unlocked` state) so backup data can't be tampered with. The vault `rsv-ts151` in `RG-TS-151` was provisioned with immutability `Disabled`. Update it.
 
 ## Tasks
 
-- [ ] **Task 1:** Read the vault's soft delete state
-- [ ] **Task 2:** Enable soft delete on the vault
+- [ ] **Task 1:** Read the vault's `securitySettings.immutabilitySettings.state`
+- [ ] **Task 2:** Set the immutability state to **Unlocked** (do not Lock — that's irreversible)
 - [ ] **Task 3:** Document the misconfiguration and fix in the Result section
 
 ## Setup
@@ -24,23 +24,20 @@ LOC=eastus; RG=RG-TS-151; TAG="AutoLabId=151"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.RecoveryServices --wait
 az backup vault create -g "$RG" -n rsv-ts151 -l "$LOC" --tags "$TAG" >/dev/null
-az backup vault backup-properties set -g "$RG" -n rsv-ts151 --soft-delete-feature-state Disable >/dev/null
-echo "Setup complete. rsv-ts151 has soft delete disabled."
+echo "Setup complete. rsv-ts151 created with default immutability state (Disabled)."
 ```
 
 ## Skills Tested
 
-- Reading `softDeleteFeatureState` on a backup vault
-- Toggling via portal Backup vaults > Properties > Security settings
+- Reading `immutabilitySettings.state` on a backup vault
+- Setting immutability via portal Backup vaults > Properties > Immutability
 
 ## Verification Criteria
 
 | #   | What to Check                              | CLI Command                                                                                                          |
 | --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | 1   | Vault `rsv-ts151` exists                   | `az backup vault show -g RG-TS-151 -n rsv-ts151 --query name -o tsv`                                                  |
-| 2   | Soft delete is enabled                     | `az backup vault backup-properties show -g RG-TS-151 -n rsv-ts151 --query "softDeleteFeatureState" -o tsv`            |
-
-A correct fix returns `Enabled` (or `AlwaysON`).
+| 2   | Immutability state is `Unlocked` or `Locked` | `az backup vault show -g RG-TS-151 -n rsv-ts151 --query "properties.securitySettings.immutabilitySettings.state" -o tsv` |
 
 ## Cleanup
 

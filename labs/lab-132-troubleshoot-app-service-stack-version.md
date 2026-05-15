@@ -1,4 +1,4 @@
-# Lab 132 — Troubleshoot App Service Outdated Stack Version
+# Lab 132 — Troubleshoot Function App Outdated Node Version
 
 **Domain:** Compute
 **Difficulty:** Beginner
@@ -8,12 +8,12 @@
 
 ## Scenario
 
-`app-ts132-<random>` is running on **Node.js 14**, which has been out of support for over a year. The dev team needs to upgrade to **Node 20 LTS**. Update the app's runtime stack without recreating the app.
+`func-ts132-<random>` (Windows Function App) was provisioned with `WEBSITE_NODE_DEFAULT_VERSION=~14`, which is end-of-life. The team needs to upgrade to `~20` or newer. Update the app setting.
 
 ## Tasks
 
-- [ ] **Task 1:** Inspect the web app's `linuxFxVersion` (or `nodeVersion` on Windows)
-- [ ] **Task 2:** Change the runtime to **Node 20 LTS** (linuxFxVersion `NODE|20-lts` on Linux)
+- [ ] **Task 1:** Inspect the `WEBSITE_NODE_DEFAULT_VERSION` app setting on the Function App
+- [ ] **Task 2:** Update it to `~20` (or newer LTS)
 - [ ] **Task 3:** Document the misconfiguration and fix in the Result section
 
 ## Setup
@@ -21,29 +21,30 @@
 ```bash
 set -euo pipefail
 LOC=eastus; RG=RG-TS-132; TAG="AutoLabId=132"
-PLAN="plan-ts132-$(date +%s | tail -c 7)"
-APP="app-ts132-$(date +%s | tail -c 7)"
+SA="stautolab132$(date +%s | tail -c 7)"
+FUNC="func-ts132-$(date +%s | tail -c 7)"
 az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.Web --wait
-az appservice plan create -n "$PLAN" -g "$RG" -l "$LOC" --sku B1 --is-linux --tags "$TAG" >/dev/null
-az webapp create -n "$APP" -g "$RG" --plan "$PLAN" --runtime "NODE|14-lts" --tags "$TAG" >/dev/null
-az group update -n "$RG" --set tags.AppName="$APP" >/dev/null
-echo "Setup complete. $APP runtime is NODE|14-lts."
+az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind StorageV2 --tags "$TAG" >/dev/null
+az functionapp create -n "$FUNC" -g "$RG" -s "$SA" --consumption-plan-location "$LOC" \
+  --functions-version 4 --runtime node --tags "$TAG" >/dev/null
+# Downgrade Node version app setting
+az functionapp config appsettings set -n "$FUNC" -g "$RG" --settings WEBSITE_NODE_DEFAULT_VERSION="~14" >/dev/null
+az group update -n "$RG" --set tags.FuncName="$FUNC" >/dev/null
+echo "Setup complete. $FUNC WEBSITE_NODE_DEFAULT_VERSION=~14."
 ```
 
 ## Skills Tested
 
-- Reading `siteConfig.linuxFxVersion`
-- Updating runtime stack via portal Configuration > General settings
+- Reading Function App app settings
+- Updating `WEBSITE_NODE_DEFAULT_VERSION` via portal Configuration blade
 
 ## Verification Criteria
 
-| #   | What to Check                                | CLI Command                                                                                                                            |
-| --- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Lab web app still exists                     | `app=$(az group show -n RG-TS-132 --query tags.AppName -o tsv); az webapp show -n "$app" -g RG-TS-132 --query name -o tsv`              |
-| 2   | linuxFxVersion is Node 20 LTS                | `app=$(az group show -n RG-TS-132 --query tags.AppName -o tsv); az webapp config show -n "$app" -g RG-TS-132 --query linuxFxVersion -o tsv` |
-
-A correct fix returns `NODE|20-lts` (case may vary).
+| #   | What to Check                              | CLI Command                                                                                                                            |
+| --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-132 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-132 --query name -o tsv`            |
+| 2   | `WEBSITE_NODE_DEFAULT_VERSION` is `~20` or newer | `f=$(az group show -n RG-TS-132 --query tags.FuncName -o tsv); az functionapp config appsettings list -n "$f" -g RG-TS-132 --query "[?name=='WEBSITE_NODE_DEFAULT_VERSION'].value" -o tsv` |
 
 ## Cleanup
 

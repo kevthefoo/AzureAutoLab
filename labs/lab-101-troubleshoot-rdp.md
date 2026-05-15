@@ -78,6 +78,9 @@ fi
 
 ## Result
 
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —
+- **Status:** PASSED (3/3)
+- **Date Completed:** 2026-05-15
+- **Notes:**
+  - ✅ Task 1: Identified root cause — NSG-Web had a `Deny-RDP` (priority 100) rule blocking all TCP 3389 inbound traffic.
+  - ✅ Task 2: Added `AllowRDPFromOffice` rule (Allow, TCP 3389, source `203.0.113.0/24`, priority 100); original `Deny-RDP` rule was removed, leaving RDP open only to the office range.
+  - ✅ Task 3: Misconfiguration documented — a broad deny rule with no scoped allow override was the failure; fix was removing the deny and replacing it with a source-scoped allow at the same priority.

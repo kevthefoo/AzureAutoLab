@@ -27,7 +27,7 @@ az storage account create -n "$SA" -g "$RG" -l "$LOC" --sku Standard_LRS --kind 
 SID=$(az storage account show -n "$SA" -g "$RG" --query id -o tsv)
 az monitor action-group create -g "$RG" -n ag-ts149 --short-name ts149 --tags "$TAG" >/dev/null
 az monitor metrics alert create -g "$RG" -n alert-ts149-tx --scopes "$SID" \
-  --condition "avg Transactions > 1000000" --description "no-action-group demo" --severity 2 >/dev/null
+  --condition "total Transactions > 1000000" --description "no-action-group demo" --severity 2 >/dev/null
 echo "Setup complete. alert-ts149-tx has no action groups attached."
 ```
 
