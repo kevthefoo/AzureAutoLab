@@ -33,6 +33,30 @@ Your operations team needs fast, subscription-wide inventory reporting. Use Azur
 | 3   | RG-scoped query returns results               | `az graph query -q "Resources \| where resourceGroup == 'rg-graph-lab'" --query "count" -o json`                                                              |
 | 4   | Shared query `sq-untagged-resources` exists   | `az graph shared-query show --resource-group RG-Graph-Lab --name sq-untagged-resources --query "{name:name, query:query}" -o json`                            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+T=$(az group show -n RG-Graph-Lab --query "tags.Purpose" -o tsv 2>/dev/null)
+if [ "$T" = "Graph" ]; then echo "[PASS] Task 1: RG-Graph-Lab has tag Purpose=Graph"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: RG-Graph-Lab missing or wrong tag (Purpose=$T)"; FAIL=$((FAIL+1)); fi
+
+C=$(az graph query -q "Resources | summarize count() by type" --query count -o tsv 2>/dev/null)
+if [ -n "$C" ] && [ "${C:-0}" -gt 0 ]; then echo "[PASS] Task 2: type-count query returned $C row(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: type-count query failed or empty"; FAIL=$((FAIL+1)); fi
+
+RGC=$(az graph query -q "Resources | where resourceGroup == 'rg-graph-lab'" --query count -o tsv 2>/dev/null)
+if [ -n "$RGC" ]; then echo "[PASS] Task 3: RG-scoped query returned $RGC row(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: RG-scoped query failed"; FAIL=$((FAIL+1)); fi
+
+SQ=$(az graph shared-query show -g RG-Graph-Lab -n sq-untagged-resources --query name -o tsv 2>/dev/null)
+if [ "$SQ" = "sq-untagged-resources" ]; then echo "[PASS] Task 4: shared query sq-untagged-resources exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: shared query missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

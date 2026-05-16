@@ -33,6 +33,32 @@ Finance needs to track cloud spending by department. You must apply a tag inheri
 | 3   | Storage account has inherited `Department` tag             | stcosttagslab > Tags          | Confirm `Department = Marketing` tag is present               |
 | 4   | Budget `Budget-Marketing` exists with 80% alert            | Cost Management > Budgets     | Find budget with $50 amount and 80% alert threshold           |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-CostTags-Lab
+D=$(az group show -n "$RG" --query "tags.Department" -o tsv 2>/dev/null)
+P=$(az group show -n "$RG" --query "tags.Project" -o tsv 2>/dev/null)
+if [ "$D" = "Marketing" ] && [ "$P" = "Campaign2026" ]; then echo "[PASS] Task 1: tags Department=Marketing, Project=Campaign2026"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: tags wrong (Dept=$D Proj=$P)"; FAIL=$((FAIL+1)); fi
+
+PCNT=$(az policy assignment list -g "$RG" --query "[?contains(displayName, 'Inherit')] | length(@)" -o tsv 2>/dev/null)
+if [ "${PCNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: tag inheritance policy assigned to $RG"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no tag inheritance policy on $RG"; FAIL=$((FAIL+1)); fi
+
+SD=$(az storage account show -n stcosttagslab -g "$RG" --query "tags.Department" -o tsv 2>/dev/null)
+if [ "$SD" = "Marketing" ]; then echo "[PASS] Task 3: stcosttagslab inherited Department=Marketing"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: stcosttagslab Department tag is '$SD'"; FAIL=$((FAIL+1)); fi
+
+BNAME=$(az consumption budget list --query "[?name=='Budget-Marketing'].name | [0]" -o tsv 2>/dev/null)
+if [ "$BNAME" = "Budget-Marketing" ]; then echo "[PASS] Task 4: Budget-Marketing exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: Budget-Marketing missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (4/4)

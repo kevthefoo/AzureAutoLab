@@ -33,6 +33,34 @@ Your application team wants a virtual machine to access secrets in Azure Key Vau
 | 3   | System-assigned managed identity is enabled | VM-ManagedID-Lab > Identity                                | Confirm Status = On under System assigned tab            |
 | 4   | Key Vault Secrets User role assigned to MI  | kv-managedid-lab > Access Control (IAM) > Role assignments | Find VM-ManagedID-Lab with Role = Key Vault Secrets User |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ManagedID-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+VM=$(az vm show -n VM-ManagedID-Lab -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$VM" = "VM-ManagedID-Lab" ]; then echo "[PASS] Task 2: VM exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VM missing"; FAIL=$((FAIL+1)); fi
+
+MIT=$(az vm show -n VM-ManagedID-Lab -g "$RG" --query identity.type -o tsv 2>/dev/null)
+case "$MIT" in *SystemAssigned*) echo "[PASS] Task 3: system-assigned identity enabled ($MIT)"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: VM identity is '$MIT'"; FAIL=$((FAIL+1));; esac
+
+PID=$(az vm show -n VM-ManagedID-Lab -g "$RG" --query identity.principalId -o tsv 2>/dev/null)
+KVID=$(az keyvault show -n kv-managedid-lab --query id -o tsv 2>/dev/null)
+ROLE=0
+if [ -n "$PID" ] && [ -n "$KVID" ]; then ROLE=$(az role assignment list --assignee "$PID" --scope "$KVID" --query "[?roleDefinitionName=='Key Vault Secrets User'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${ROLE:-0}" -gt 0 ]; then echo "[PASS] Task 4: Key Vault Secrets User assigned to VM MI"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: Key Vault Secrets User not assigned to VM MI"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -35,6 +35,36 @@ Your compliance team requires all resources to carry a `CostCenter` tag, but a l
 | 3   | Storage account exists in the RG                 | `az storage account list --resource-group RG-Policy-Exempt-Lab --query "[].{name:name, tags:tags}" -o json`                                                                                                                                         |
 | 4   | Policy exemption `exempt-legacy-storage` exists  | `az policy exemption show --name exempt-legacy-storage --scope /subscriptions/<SUB_ID>/resourceGroups/RG-Policy-Exempt-Lab/providers/Microsoft.Storage/storageAccounts/<STORAGE_NAME> --query "{name:name, category:exemptionCategory, assignment:policyAssignmentId}" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Policy-Exempt-Lab
+CC=$(az group show -n "$RG" --query "tags.CostCenter" -o tsv 2>/dev/null)
+if [ "$CC" = "Finance-001" ]; then echo "[PASS] Task 1: $RG has CostCenter=Finance-001"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing or wrong tag (CostCenter=$CC)"; FAIL=$((FAIL+1)); fi
+
+NAME=$(az policy assignment show -n require-costcenter-tag -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$NAME" = "require-costcenter-tag" ]; then echo "[PASS] Task 2: policy assignment require-costcenter-tag exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: policy assignment require-costcenter-tag missing"; FAIL=$((FAIL+1)); fi
+
+SA=$(az storage account list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+if [ -n "$SA" ]; then echo "[PASS] Task 3: storage account $SA exists in $RG"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no storage account in $RG"; FAIL=$((FAIL+1)); fi
+
+if [ -n "$SA" ]; then
+  SCOPE="$(az storage account show -n "$SA" -g "$RG" --query id -o tsv 2>/dev/null)"
+  EX=$(az policy exemption show -n exempt-legacy-storage --scope "$SCOPE" --query name -o tsv 2>/dev/null)
+  if [ "$EX" = "exempt-legacy-storage" ]; then echo "[PASS] Task 4: policy exemption exists at storage scope"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 4: policy exemption missing"; FAIL=$((FAIL+1)); fi
+else
+  echo "[FAIL] Task 4: cannot check exemption — storage missing"; FAIL=$((FAIL+1))
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (4/4)

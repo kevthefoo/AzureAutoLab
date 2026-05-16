@@ -33,6 +33,35 @@ Every resource in a given resource group should automatically inherit the resour
 | 3   | Policy assignment has system-assigned identity       | `az policy assignment show --name inherit-environment-tag --resource-group RG-TagInherit-Lab --query "{name:name, identity:identity.type, displayName:displayName}" -o json`             |
 | 4   | Storage account now has `Environment = Production` tag | `az storage account show --name <STORAGE_NAME> --resource-group RG-TagInherit-Lab --query "{name:name, tags:tags}" -o json`                                                            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-TagInherit-Lab
+E=$(az group show -n "$RG" --query "tags.Environment" -o tsv 2>/dev/null)
+if [ "$E" = "Production" ]; then echo "[PASS] Task 1: $RG has Environment=Production"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG Environment tag is '$E'"; FAIL=$((FAIL+1)); fi
+
+SA=$(az storage account list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+if [ -n "$SA" ]; then echo "[PASS] Task 2: storage account $SA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no storage account in $RG"; FAIL=$((FAIL+1)); fi
+
+IT=$(az policy assignment show -n inherit-environment-tag -g "$RG" --query "identity.type" -o tsv 2>/dev/null)
+case "$IT" in *SystemAssigned*) echo "[PASS] Task 3: policy assignment has system-assigned identity"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: policy assignment identity is '$IT'"; FAIL=$((FAIL+1));; esac
+
+if [ -n "$SA" ]; then
+  ET=$(az storage account show -n "$SA" -g "$RG" --query "tags.Environment" -o tsv 2>/dev/null)
+  if [ "$ET" = "Production" ]; then echo "[PASS] Task 4: $SA inherited Environment=Production"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 4: $SA Environment tag is '$ET'"; FAIL=$((FAIL+1)); fi
+else
+  echo "[FAIL] Task 4: cannot check tag — storage missing"; FAIL=$((FAIL+1))
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -33,6 +33,32 @@ Your CI/CD pipeline needs programmatic access to deploy Azure resources into a d
 | 3   | Client secret `pipeline-secret` exists           | `az ad app credential list --id <APP_ID> --query "[?displayName=='pipeline-secret'].{displayName:displayName, endDateTime:endDateTime}" -o json`                             |
 | 4   | Contributor role assigned at `RG-CICD-Lab` scope | `az role assignment list --assignee <APP_ID> --resource-group RG-CICD-Lab --query "[?roleDefinitionName=='Contributor'].{role:roleDefinitionName, scope:scope}" -o json`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+LOC=$(az group show -n RG-CICD-Lab --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: RG-CICD-Lab exists in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: RG-CICD-Lab missing"; FAIL=$((FAIL+1)); fi
+
+APPID=$(az ad sp list --display-name app-cicd-pipeline --query "[0].appId" -o tsv 2>/dev/null)
+if [ -n "$APPID" ]; then echo "[PASS] Task 2: app-cicd-pipeline SP exists ($APPID)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: app-cicd-pipeline SP missing"; FAIL=$((FAIL+1)); fi
+
+SECRET=0
+if [ -n "$APPID" ]; then SECRET=$(az ad app credential list --id "$APPID" --query "[?displayName=='pipeline-secret'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${SECRET:-0}" -gt 0 ]; then echo "[PASS] Task 3: client secret pipeline-secret exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: client secret pipeline-secret missing"; FAIL=$((FAIL+1)); fi
+
+ROLE=0
+if [ -n "$APPID" ]; then ROLE=$(az role assignment list --assignee "$APPID" --resource-group RG-CICD-Lab --query "[?roleDefinitionName=='Contributor'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${ROLE:-0}" -gt 0 ]; then echo "[PASS] Task 4: Contributor scoped to RG-CICD-Lab"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no Contributor assignment at RG-CICD-Lab"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
