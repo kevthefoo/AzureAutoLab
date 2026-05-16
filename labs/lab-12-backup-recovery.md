@@ -30,6 +30,27 @@ Your company requires disaster recovery for critical virtual machines. You must 
 | 2   | Backup policy `Policy-Daily` exists | `az backup policy show --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --name Policy-Daily --query "{name:name}" -o json`                          |
 | 3   | VM backup is enabled                | `az backup item list --vault-name RSV-Dev-Lab --resource-group RG-Dev-Lab --query "[].{name:name, protectionState:properties.protectionState}" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Dev-Lab
+EXISTS=$(az backup vault show -n RSV-Dev-Lab -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "RSV-Dev-Lab" ]; then echo "[PASS] Task 1: RSV-Dev-Lab exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: RSV-Dev-Lab missing"; FAIL=$((FAIL+1)); fi
+
+POL=$(az backup policy show --vault-name RSV-Dev-Lab -g "$RG" -n Policy-Daily --query name -o tsv 2>/dev/null)
+if [ "$POL" = "Policy-Daily" ]; then echo "[PASS] Task 2: Policy-Daily exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: Policy-Daily missing"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az backup item list --vault-name RSV-Dev-Lab -g "$RG" --query "[?properties.protectionState=='Protected' || properties.protectionState=='IRPending'] | length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: $CNT protected backup item(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no protected backup items in vault"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED

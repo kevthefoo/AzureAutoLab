@@ -30,6 +30,27 @@ Your company is expanding and has a second team that needs its own virtual netwo
 | 2   | Peering `Peer-Staging-to-Dev` exists | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Lab --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json`     |
 | 3   | Peering `Peer-Staging-to-Dev` exists | `az network vnet peering show --name Peer-Staging-to-Dev --vnet-name VNet-Staging --resource-group RG-Dev-Lab --query "{name:name, peeringState:peeringState}" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Dev-Lab
+P=$(az network vnet show -n VNet-Staging -g "$RG" --query "addressSpace.addressPrefixes[0]" -o tsv 2>/dev/null)
+if [ "$P" = "10.1.0.0/16" ]; then echo "[PASS] Task 1: VNet-Staging exists with 10.1.0.0/16"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: VNet-Staging missing or wrong prefix ($P)"; FAIL=$((FAIL+1)); fi
+
+S1=$(az network vnet peering show -n Peer-Staging-to-Dev --vnet-name VNet-Lab -g "$RG" --query peeringState -o tsv 2>/dev/null)
+if [ "$S1" = "Connected" ]; then echo "[PASS] Task 2: VNet-Lab peering is Connected"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VNet-Lab peering state is '$S1'"; FAIL=$((FAIL+1)); fi
+
+S2=$(az network vnet peering show -n Peer-Staging-to-Dev --vnet-name VNet-Staging -g "$RG" --query peeringState -o tsv 2>/dev/null)
+if [ "$S2" = "Connected" ]; then echo "[PASS] Task 3: VNet-Staging peering is Connected"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: VNet-Staging peering state is '$S2'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED

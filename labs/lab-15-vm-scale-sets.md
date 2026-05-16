@@ -30,6 +30,27 @@ Your web application is experiencing variable traffic. You need to deploy a VM S
 | 2   | Autoscale setting exists   | `az monitor autoscale list --resource-group RG-Dev-Lab --query "[].{name:name, enabled:enabled, profiles:profiles[0].capacity}" -o json` |
 | 3   | Tag `Role=WebTier` present | `az vmss show --name VMSS-Web --resource-group RG-Dev-Lab --query "{tags:tags}" -o json`                                                 |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Dev-Lab
+LOC=$(az vmss show -n VMSS-Web -g "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: VMSS-Web exists in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: VMSS-Web missing or wrong loc ($LOC)"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az monitor autoscale list -g "$RG" --query "length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: $CNT autoscale setting(s) in $RG"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no autoscale settings in $RG"; FAIL=$((FAIL+1)); fi
+
+TAG=$(az vmss show -n VMSS-Web -g "$RG" --query "tags.Role" -o tsv 2>/dev/null)
+if [ "$TAG" = "WebTier" ]; then echo "[PASS] Task 3: tag Role=WebTier on VMSS-Web"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: tag Role is '$TAG' (expected WebTier)"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED
