@@ -32,6 +32,32 @@ Your company is deploying a two-tier web application that requires high availabi
 | 3   | vm-web-01 is in the availability set | RG-AvailSet-Lab > vm-web-01 > Properties    | Availability set shows `avset-frontend`         |
 | 4   | vm-web-02 is in the availability set | RG-AvailSet-Lab > vm-web-02 > Properties    | Availability set shows `avset-frontend`         |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AvailSet-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+FD=$(az vm availability-set show -n avset-frontend -g "$RG" --query platformFaultDomainCount -o tsv 2>/dev/null)
+UD=$(az vm availability-set show -n avset-frontend -g "$RG" --query platformUpdateDomainCount -o tsv 2>/dev/null)
+if [ "$FD" = "3" ] && [ "$UD" = "5" ]; then echo "[PASS] Task 2: avset-frontend (3 FD, 5 UD)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: avset wrong (FD=$FD UD=$UD)"; FAIL=$((FAIL+1)); fi
+
+A1=$(az vm show -n vm-web-01 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null)
+case "$A1" in *avset-frontend*) echo "[PASS] Task 3: vm-web-01 in avset-frontend"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: vm-web-01 not in avset-frontend"; FAIL=$((FAIL+1));; esac
+
+A2=$(az vm show -n vm-web-02 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null)
+case "$A2" in *avset-frontend*) echo "[PASS] Task 4: vm-web-02 in avset-frontend"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 4: vm-web-02 not in avset-frontend"; FAIL=$((FAIL+1));; esac
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

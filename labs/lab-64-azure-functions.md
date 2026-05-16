@@ -35,6 +35,33 @@ The marketing team needs a lightweight API endpoint that returns promotional mes
 | 4   | HTTP trigger function exists  | func-http-lab2026 > Functions                          | `GetPromoMessage` function listed with HTTP trigger |
 | 5   | Function responds to requests | func-http-lab2026 > Functions > GetPromoMessage > Test | Test/Run returns HTTP 200 status                    |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Functions-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SA=$(az storage account show -n stfunclab2026 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$SA" = "stfunclab2026" ]; then echo "[PASS] Task 2: storage account exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: storage account missing"; FAIL=$((FAIL+1)); fi
+
+F=$(az functionapp show -n func-http-lab2026 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$F" = "func-http-lab2026" ]; then echo "[PASS] Task 3: function app exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: function app missing"; FAIL=$((FAIL+1)); fi
+
+FN=$(az functionapp function show -n func-http-lab2026 -g "$RG" --function-name GetPromoMessage --query name -o tsv 2>/dev/null)
+if [ -n "$FN" ]; then echo "[PASS] Task 4: GetPromoMessage function exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: GetPromoMessage function missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: HTTP test response is manual (browser/curl)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

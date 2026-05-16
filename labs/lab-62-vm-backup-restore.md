@@ -35,6 +35,35 @@ The compliance team requires that all production VMs have automated backups with
 | 4   | Custom backup policy exists    | rsv-backup-lab > Backup policies                      | `policy-daily-30d` shows daily schedule, 30-day retention        |
 | 5   | VM backup is configured        | rsv-backup-lab > Backup items > Azure Virtual Machine | `vm-prod-db` listed with backup status and last backup timestamp |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-VMBackup-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+VM=$(az vm show -n vm-prod-db -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$VM" = "vm-prod-db" ]; then echo "[PASS] Task 2: vm-prod-db exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: vm-prod-db missing"; FAIL=$((FAIL+1)); fi
+
+V=$(az backup vault show -n rsv-backup-lab -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$V" = "rsv-backup-lab" ]; then echo "[PASS] Task 3: rsv-backup-lab exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: rsv-backup-lab missing"; FAIL=$((FAIL+1)); fi
+
+P=$(az backup policy show --vault-name rsv-backup-lab -g "$RG" -n policy-daily-30d --query name -o tsv 2>/dev/null)
+if [ "$P" = "policy-daily-30d" ]; then echo "[PASS] Task 4: policy-daily-30d exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: policy-daily-30d missing"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az backup item list --vault-name rsv-backup-lab -g "$RG" --query "[?contains(properties.friendlyName, 'vm-prod-db')] | length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 5: vm-prod-db protected"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: vm-prod-db not protected"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

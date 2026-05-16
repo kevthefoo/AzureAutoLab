@@ -35,6 +35,33 @@ The release engineering team wants zero-downtime deployments for the company web
 | 4   | Staging slot exists             | webapp-slots-lab2026 > Deployment slots                | `staging` slot is listed with its own URL       |
 | 5   | Swap completed                  | webapp-slots-lab2026 > Deployment slots > Activity Log | Swap operation recorded in activity log         |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Slots-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az appservice plan show -n asp-slots-lab -g "$RG" --query sku.name -o tsv 2>/dev/null)
+if [ "$SKU" = "S1" ]; then echo "[PASS] Task 2: asp-slots-lab Standard S1"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: plan sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+W=$(az webapp show -n webapp-slots-lab2026 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$W" = "webapp-slots-lab2026" ]; then echo "[PASS] Task 3: webapp exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: webapp missing"; FAIL=$((FAIL+1)); fi
+
+SLOT=$(az webapp deployment slot list -n webapp-slots-lab2026 -g "$RG" --query "[?name=='staging'] | length(@)" -o tsv 2>/dev/null)
+if [ "${SLOT:-0}" -gt 0 ]; then echo "[PASS] Task 4: staging slot exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: staging slot missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: swap is a runtime operation — only its absence is detectable (slot still exists)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

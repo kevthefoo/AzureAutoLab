@@ -33,6 +33,31 @@ Your organization is adopting a container-based workflow and needs a private reg
 | 3   | Admin user is enabled     | acrcomputelab2026 > Access keys           | Admin user toggle is enabled, username and passwords visible |
 | 4   | Image is in the registry  | acrcomputelab2026 > Repositories          | `hello-world` repository exists with tag `v1`                |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ACR-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az acr show -n acrcomputelab2026 -g "$RG" --query sku.name -o tsv 2>/dev/null)
+if [ "$SKU" = "Basic" ]; then echo "[PASS] Task 2: acrcomputelab2026 Basic"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: ACR sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+AE=$(az acr show -n acrcomputelab2026 -g "$RG" --query adminUserEnabled -o tsv 2>/dev/null)
+if [ "$AE" = "true" ]; then echo "[PASS] Task 3: admin user enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: admin user is '$AE'"; FAIL=$((FAIL+1)); fi
+
+TAG=$(az acr repository show-tags -n acrcomputelab2026 --repository hello-world --query "[?@=='v1'] | [0]" -o tsv 2>/dev/null)
+if [ "$TAG" = "v1" ]; then echo "[PASS] Task 4: hello-world:v1 imported"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: hello-world:v1 missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

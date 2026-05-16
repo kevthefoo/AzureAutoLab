@@ -33,6 +33,33 @@ A database server requires network isolation with separate NICs for management a
 | 3   | VM has both NICs attached | RG-VMNet-Lab > vm-db-01 > Networking    | Both `nic-mgmt-01` (primary) and `nic-data-01` shown         |
 | 4   | Secondary IP configured   | nic-mgmt-01 > IP configurations         | Secondary IP config with static address `10.50.1.100` listed |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-VMNet-Lab
+M=$(az network vnet subnet show -n snet-mgmt --vnet-name vnet-vmnet-lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+D=$(az network vnet subnet show -n snet-data --vnet-name vnet-vmnet-lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$M" = "10.50.1.0/24" ] && [ "$D" = "10.50.2.0/24" ]; then echo "[PASS] Task 1: both subnets exist with correct ranges"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: subnets wrong (mgmt=$M data=$D)"; FAIL=$((FAIL+1)); fi
+
+N1=$(az network nic show -n nic-mgmt-01 -g "$RG" --query name -o tsv 2>/dev/null)
+N2=$(az network nic show -n nic-data-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$N1" = "nic-mgmt-01" ] && [ "$N2" = "nic-data-01" ]; then echo "[PASS] Task 2: both NICs exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: NICs missing"; FAIL=$((FAIL+1)); fi
+
+NIC_COUNT=$(az vm show -n vm-db-01 -g "$RG" --query "length(networkProfile.networkInterfaces)" -o tsv 2>/dev/null)
+if [ "${NIC_COUNT:-0}" = "2" ]; then echo "[PASS] Task 3: vm-db-01 has 2 NICs"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: vm-db-01 has $NIC_COUNT NICs"; FAIL=$((FAIL+1)); fi
+
+SEC=$(az network nic show -n nic-mgmt-01 -g "$RG" --query "ipConfigurations[?privateIPAddress=='10.50.1.100'] | length(@)" -o tsv 2>/dev/null)
+if [ "${SEC:-0}" -gt 0 ]; then echo "[PASS] Task 4: secondary IP 10.50.1.100 on nic-mgmt-01"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: secondary IP 10.50.1.100 not configured"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

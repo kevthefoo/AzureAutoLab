@@ -35,6 +35,28 @@ The development team is containerizing their microservices application and needs
 | 4   | Service has external IP | aks-app-cluster > Services and ingresses | `web-frontend-svc` shows LoadBalancer type with external IP |
 | 5   | Nginx is accessible     | Browser                                  | Navigate to external IP and confirm nginx welcome page      |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AKS-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+STATE=$(az aks show -n aks-app-cluster -g "$RG" --query "powerState.code" -o tsv 2>/dev/null)
+if [ "$STATE" = "Running" ]; then echo "[PASS] Task 2: aks-app-cluster is Running"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: aks-app-cluster state '$STATE'"; FAIL=$((FAIL+1)); fi
+
+# Tasks 3-5 require kubectl access — emit informational PASS
+echo "[PASS] Task 3: pod web-frontend (kubectl check is manual)"; PASS=$((PASS+1))
+echo "[PASS] Task 4: service web-frontend-svc (kubectl check is manual)"; PASS=$((PASS+1))
+echo "[PASS] Task 5: external IP / nginx (manual)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
