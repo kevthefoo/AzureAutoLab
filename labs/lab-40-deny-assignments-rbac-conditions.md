@@ -33,6 +33,39 @@ Your security team wants to restrict a Contributor from managing certain storage
 | 3   | Conditional role assignment exists             | strbaccondlab > Access Control (IAM) > Role assignments | Find the user with Storage Blob Data Contributor + Condition column   |
 | 4   | Condition restricts to `public-data` container | Role assignment > Condition tab                         | Confirm the condition expression references container = `public-data` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-RBACCondition-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SA=strbaccondlab
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then echo "[FAIL] Task 2: storage account $SA missing"; FAIL=$((FAIL+1));
+else
+  PD=$(az storage container show -n public-data --account-name "$SA" --account-key "$KEY" --query name -o tsv 2>/dev/null)
+  CD=$(az storage container show -n confidential-data --account-name "$SA" --account-key "$KEY" --query name -o tsv 2>/dev/null)
+  if [ "$PD" = "public-data" ] && [ "$CD" = "confidential-data" ]; then echo "[PASS] Task 2: both containers exist"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 2: containers missing (public-data=$PD confidential-data=$CD)"; FAIL=$((FAIL+1)); fi
+fi
+
+SCOPE=$(az storage account show -n "$SA" -g "$RG" --query id -o tsv 2>/dev/null)
+CCNT=0
+if [ -n "$SCOPE" ]; then CCNT=$(az role assignment list --scope "$SCOPE" --query "[?roleDefinitionName=='Storage Blob Data Contributor' && condition != null] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${CCNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: conditional Storage Blob Data Contributor assignment exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no conditional Storage Blob Data Contributor assignment"; FAIL=$((FAIL+1)); fi
+
+CTXT=$(az role assignment list --scope "$SCOPE" --query "[?roleDefinitionName=='Storage Blob Data Contributor'].condition | [0]" -o tsv 2>/dev/null)
+case "$CTXT" in *public-data*) echo "[PASS] Task 4: condition references public-data"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 4: no condition referencing public-data"; FAIL=$((FAIL+1));; esac
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

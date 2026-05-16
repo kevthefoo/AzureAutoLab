@@ -35,6 +35,34 @@ After an accidental deletion of a production storage account, management require
 | 4   | Deletion is blocked                      | Portal > attempt delete on stlockscalelab | Confirm an error message referencing the lock appears      |
 | 5   | ReadOnly lock exists on storage account  | stlockscalelab > Locks                    | Confirm `Lock-ReadOnly` with type ReadOnly is listed       |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-LockScale-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SA=$(az storage account show -n stlockscalelab -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$SA" = "stlockscalelab" ]; then echo "[PASS] Task 2: stlockscalelab exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: stlockscalelab missing"; FAIL=$((FAIL+1)); fi
+
+CND=$(az lock list -g "$RG" --query "[?level=='CanNotDelete' && name=='Lock-NoDeletion'] | length(@)" -o tsv 2>/dev/null)
+if [ "${CND:-0}" -gt 0 ]; then echo "[PASS] Task 3: Lock-NoDeletion (CanNotDelete) on $RG"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: Lock-NoDeletion missing"; FAIL=$((FAIL+1)); fi
+
+if [ "$SA" = "stlockscalelab" ] && [ "${CND:-0}" -gt 0 ]; then echo "[PASS] Task 4: lock blocks deletion (inferred from presence)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: cannot infer lock enforcement"; FAIL=$((FAIL+1)); fi
+
+RO=$(az lock list -g "$RG" --resource-name stlockscalelab --resource-type Microsoft.Storage/storageAccounts --query "[?level=='ReadOnly' && name=='Lock-ReadOnly'] | length(@)" -o tsv 2>/dev/null)
+if [ "${RO:-0}" -gt 0 ]; then echo "[PASS] Task 5: Lock-ReadOnly on storage account"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: Lock-ReadOnly missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

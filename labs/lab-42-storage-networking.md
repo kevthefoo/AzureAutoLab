@@ -35,6 +35,37 @@ Your company's security team has flagged that several storage accounts are publi
 | 4   | VNet rule added to storage account | Storage accounts > `stlabnetwork42` > Networking > Virtual networks  | `subnet-storage` is listed as an allowed network         |
 | 5   | Private endpoint exists            | Storage accounts > `stlabnetwork42` > Networking > Private endpoints | `pe-stlabnetwork42` is listed with status "Approved"     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-StorageNet-Lab
+SA=stlabnetwork42
+NAME=$(az storage account show -n "$SA" -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$NAME" = "$SA" ]; then echo "[PASS] Task 1: $SA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $SA missing"; FAIL=$((FAIL+1)); fi
+
+DA=$(az storage account show -n "$SA" -g "$RG" --query "networkRuleSet.defaultAction" -o tsv 2>/dev/null)
+IPS=$(az storage account show -n "$SA" -g "$RG" --query "length(networkRuleSet.ipRules)" -o tsv 2>/dev/null)
+if [ "$DA" = "Deny" ] && [ "${IPS:-0}" -gt 0 ]; then echo "[PASS] Task 2: firewall defaultAction=Deny with IP allowlist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: firewall wrong (default=$DA ipRules=$IPS)"; FAIL=$((FAIL+1)); fi
+
+SE=$(az network vnet subnet show -n subnet-storage --vnet-name VNet-Storage-Lab -g "$RG" --query "serviceEndpoints[?service=='Microsoft.Storage']" -o tsv 2>/dev/null)
+if [ -n "$SE" ]; then echo "[PASS] Task 3: Microsoft.Storage service endpoint on subnet-storage"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: service endpoint missing"; FAIL=$((FAIL+1)); fi
+
+VR=$(az storage account show -n "$SA" -g "$RG" --query "length(networkRuleSet.virtualNetworkRules)" -o tsv 2>/dev/null)
+if [ "${VR:-0}" -gt 0 ]; then echo "[PASS] Task 4: VNet rule added to storage account"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no VNet rule on storage account"; FAIL=$((FAIL+1)); fi
+
+PE=$(az network private-endpoint show -n pe-stlabnetwork42 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$PE" = "pe-stlabnetwork42" ]; then echo "[PASS] Task 5: private endpoint pe-stlabnetwork42 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: private endpoint missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

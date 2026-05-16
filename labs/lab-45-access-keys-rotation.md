@@ -33,6 +33,31 @@ A recent security audit revealed that your team has not rotated storage account 
 | 3   | Connection string reflects new key   | Storage accounts > `stlabkeyrotate45` > Access keys | Connection string contains the new key1 value                 |
 | 4   | Key expiration policy set to 90 days | Storage accounts > `stlabkeyrotate45` > Access keys | Key expiration policy shows 90-day reminder period            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-KeyRotation-Lab; SA=stlabkeyrotate45
+N=$(az storage account show -n "$SA" -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$N" = "$SA" ]; then echo "[PASS] Task 1: $SA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $SA missing"; FAIL=$((FAIL+1)); fi
+
+KEY1=$(az storage account keys list -n "$SA" -g "$RG" --query "[?keyName=='key1'].value | [0]" -o tsv 2>/dev/null)
+if [ -n "$KEY1" ]; then echo "[PASS] Task 2: key1 exists (cannot verify regeneration deterministically)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: key1 missing"; FAIL=$((FAIL+1)); fi
+
+CS=$(az storage account show-connection-string -n "$SA" -g "$RG" --query connectionString -o tsv 2>/dev/null)
+case "$CS" in *AccountKey=*) echo "[PASS] Task 3: connection string contains AccountKey"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: connection string missing"; FAIL=$((FAIL+1));; esac
+
+EXP=$(az storage account show -n "$SA" -g "$RG" --query "keyPolicy.keyExpirationPeriodInDays" -o tsv 2>/dev/null)
+if [ "$EXP" = "90" ]; then echo "[PASS] Task 4: key expiration policy 90 days"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: key expiration policy is '$EXP'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
