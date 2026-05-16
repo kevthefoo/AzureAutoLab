@@ -35,6 +35,35 @@ The platform engineering team wants to centralize application settings and featu
 | 4   | Feature flag exists            | appconfig-lab2026 > Feature manager                             | `BetaDashboard` flag listed, state is Off                      |
 | 5   | Labeled key exists             | appconfig-lab2026 > Configuration explorer (filter: production) | `App:Settings:Theme` with label `production` has value `light` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AppConfig-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az appconfig show -n appconfig-lab2026 -g "$RG" --query sku.name -o tsv 2>/dev/null)
+if [ "$SKU" = "Free" ]; then echo "[PASS] Task 2: appconfig-lab2026 (Free)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: appconfig sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az appconfig kv list -n appconfig-lab2026 --query "[?starts_with(key, 'App:Settings:')] | length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -ge 3 ]; then echo "[PASS] Task 3: $CNT App:Settings:* key(s) present"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: only $CNT App:Settings:* key(s)"; FAIL=$((FAIL+1)); fi
+
+FF=$(az appconfig feature list -n appconfig-lab2026 --query "[?name=='BetaDashboard'] | length(@)" -o tsv 2>/dev/null)
+if [ "${FF:-0}" -gt 0 ]; then echo "[PASS] Task 4: BetaDashboard feature flag exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: BetaDashboard missing"; FAIL=$((FAIL+1)); fi
+
+PROD=$(az appconfig kv list -n appconfig-lab2026 --label production --query "[?key=='App:Settings:Theme'].value | [0]" -o tsv 2>/dev/null)
+if [ "$PROD" = "light" ]; then echo "[PASS] Task 5: production-labeled Theme=light"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: production-labeled Theme is '$PROD'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

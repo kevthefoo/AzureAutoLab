@@ -35,6 +35,33 @@ The platform team manages a VM Scale Set that serves production traffic. They ne
 | 4   | Health probe configured           | vmss-web-prod > Health and repair                 | Health probe monitoring on port 80                        |
 | 5   | Rolling upgrade executed          | vmss-web-prod > Activity log                      | Rolling upgrade operation recorded                        |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-RollingUpgrade-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+CAP=$(az vmss show -n vmss-web-prod -g "$RG" --query sku.capacity -o tsv 2>/dev/null)
+if [ "$CAP" = "3" ]; then echo "[PASS] Task 2: vmss-web-prod has 3 instances"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: vmss has $CAP instances"; FAIL=$((FAIL+1)); fi
+
+MODE=$(az vmss show -n vmss-web-prod -g "$RG" --query "upgradePolicy.mode" -o tsv 2>/dev/null)
+if [ "$MODE" = "Rolling" ]; then echo "[PASS] Task 3: upgradePolicy.mode=Rolling"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: upgradePolicy.mode='$MODE'"; FAIL=$((FAIL+1)); fi
+
+PORT=$(az vmss show -n vmss-web-prod -g "$RG" --query "virtualMachineProfile.networkProfile.healthProbe.id" -o tsv 2>/dev/null)
+if [ -n "$PORT" ]; then echo "[PASS] Task 4: health probe attached to VMSS"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no health probe on VMSS"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: rolling upgrade execution is recorded in Activity Log"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

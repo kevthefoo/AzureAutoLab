@@ -33,6 +33,31 @@ The product team wants to deploy a containerized microservice that can automatic
 | 3   | Container app deployed with ingress | RG-ContainerApps-Lab > ca-web-api > Overview  | App shows Running, external ingress on port 80, application URL     |
 | 4   | Scaling rule configured             | ca-web-api > Scale and replicas               | Min 0, max 5 replicas; HTTP scaling rule at 100 concurrent requests |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ContainerApps-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+ENV=$(az containerapp env show -n cae-lab-env -g "$RG" --query "provisioningState" -o tsv 2>/dev/null)
+if [ "$ENV" = "Succeeded" ]; then echo "[PASS] Task 2: cae-lab-env (Succeeded)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: cae-lab-env state '$ENV'"; FAIL=$((FAIL+1)); fi
+
+ING=$(az containerapp show -n ca-web-api -g "$RG" --query "properties.configuration.ingress.external" -o tsv 2>/dev/null)
+if [ "$ING" = "true" ]; then echo "[PASS] Task 3: ca-web-api external ingress enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: ca-web-api ingress is '$ING'"; FAIL=$((FAIL+1)); fi
+
+MAX=$(az containerapp show -n ca-web-api -g "$RG" --query "properties.template.scale.maxReplicas" -o tsv 2>/dev/null)
+if [ "$MAX" = "5" ]; then echo "[PASS] Task 4: ca-web-api maxReplicas=5"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: maxReplicas is '$MAX'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

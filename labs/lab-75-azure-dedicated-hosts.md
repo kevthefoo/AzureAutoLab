@@ -33,6 +33,31 @@ The security team requires that certain regulated workloads run on physically is
 | 3   | Dedicated host provisioned    | hg-regulated-01 > Hosts > dh-host-01                | Host shows Succeeded status and available capacity |
 | 4   | VM deployed on dedicated host | RG-DedicatedHost-Lab > vm-regulated-01 > Properties | Host field shows `dh-host-01`                      |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-DedicatedHost-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+FD=$(az vm host group show -n hg-regulated-01 -g "$RG" --query platformFaultDomainCount -o tsv 2>/dev/null)
+if [ "$FD" = "2" ]; then echo "[PASS] Task 2: hg-regulated-01 has 2 fault domains"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: hg-regulated-01 FD=$FD"; FAIL=$((FAIL+1)); fi
+
+DH=$(az vm host show -n dh-host-01 --host-group hg-regulated-01 -g "$RG" --query "provisioningState" -o tsv 2>/dev/null)
+if [ "$DH" = "Succeeded" ]; then echo "[PASS] Task 3: dh-host-01 Succeeded"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: dh-host-01 state='$DH'"; FAIL=$((FAIL+1)); fi
+
+VMH=$(az vm show -n vm-regulated-01 -g "$RG" --query "host.id" -o tsv 2>/dev/null)
+case "$VMH" in *dh-host-01*) echo "[PASS] Task 4: vm-regulated-01 on dh-host-01"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 4: vm-regulated-01 host is '$VMH'"; FAIL=$((FAIL+1));; esac
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

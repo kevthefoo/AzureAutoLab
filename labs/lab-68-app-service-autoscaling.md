@@ -35,6 +35,35 @@ The e-commerce platform experiences traffic spikes during promotional events. Yo
 | 4   | Scale-out rule configured       | asp-autoscale-lab > Scale out (App Service Plan)  | Custom autoscale enabled; scale-out at CPU > 70%, max 4 instances |
 | 5   | Scale-in rule configured        | asp-autoscale-lab > Scale out (App Service Plan)  | Scale-in at CPU < 30%, min 1 instance                             |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AutoScale-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az appservice plan show -n asp-autoscale-lab -g "$RG" --query sku.name -o tsv 2>/dev/null)
+if [ "$SKU" = "S1" ]; then echo "[PASS] Task 2: asp-autoscale-lab S1"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: plan sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+W=$(az webapp show -n webapp-shop-lab2026 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ -n "$W" ]; then echo "[PASS] Task 3: webapp-shop-lab2026 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: webapp missing"; FAIL=$((FAIL+1)); fi
+
+OUTRULES=$(az monitor autoscale list -g "$RG" --query "[].profiles[].rules[?metricTrigger.operator=='GreaterThan' && metricTrigger.threshold>=\`70\`] | [] | length(@)" -o tsv 2>/dev/null)
+if [ "${OUTRULES:-0}" -gt 0 ]; then echo "[PASS] Task 4: scale-out rule (CPU > 70%) present"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no scale-out rule above 70%"; FAIL=$((FAIL+1)); fi
+
+INRULES=$(az monitor autoscale list -g "$RG" --query "[].profiles[].rules[?metricTrigger.operator=='LessThan' && metricTrigger.threshold<=\`30\`] | [] | length(@)" -o tsv 2>/dev/null)
+if [ "${INRULES:-0}" -gt 0 ]; then echo "[PASS] Task 5: scale-in rule (CPU < 30%) present"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: no scale-in rule below 30%"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
