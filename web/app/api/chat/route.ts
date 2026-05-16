@@ -1,164 +1,100 @@
-import { spawn } from "child_process";
-import path from "path";
+import OpenAI from "openai";
+import { getLabById } from "@/lib/labs";
 
 export const dynamic = "force-dynamic";
 
+const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+const SYSTEM_PROMPT = [
+  "You are an Azure administrator tutor helping a student prepare for the AZ-104 exam.",
+  "Help the student understand and complete lab tasks. Reference the specific lab they're working on when relevant.",
+  "When suggesting CLI commands, use Azure CLI (`az`) and show them in code blocks.",
+  "Be concise and direct. Default to short answers unless the student asks for depth.",
+].join("\n");
+
+type ChatMessage = { role: "user" | "assistant" | "system"; content: string };
+
+interface RequestBody {
+  message: string;
+  labId?: string;
+  history?: ChatMessage[];
+}
+
 export async function POST(req: Request) {
-  const { message, labId, sessionId } = await req.json();
-
-  if (!message || !labId) {
-    return new Response("Missing message or labId", { status: 400 });
+  if (!process.env.OPENAI_API_KEY) {
+    return new Response(
+      "OPENAI_API_KEY is not set. Add it to web/.env.local and restart the dev server.",
+      { status: 500 },
+    );
   }
 
-  const paddedId = String(labId).padStart(2, "0");
-  const projectRoot = path.join(process.cwd(), "..");
-
-  // Build the prompt
-  let prompt: string;
-  if (!sessionId) {
-    prompt = [
-      `The student is working on Lab ${paddedId}.`,
-      `The lab file is in the labs/ directory (look for lab-${paddedId}-*.md).`,
-      `Read the lab file first to understand the full context, then help them.`,
-      ``,
-      `Student's message: ${message}`,
-    ].join("\n");
-  } else {
-    prompt = message;
+  const body = (await req.json()) as RequestBody;
+  if (!body?.message) {
+    return new Response("Missing 'message' in body", { status: 400 });
   }
 
-  const systemPrompt = [
-    "You are an Azure administrator tutor helping a student prepare for the AZ-104 exam.",
-    "Help them understand and complete lab tasks. When verifying, use az CLI commands.",
-    "When updating results, edit the lab file's Result section using EXACTLY this format:",
-    "",
-    "## Result",
-    "",
-    "- **Status:** PASSED (N/N) or PARTIAL PASS (N/N) or FAILED",
-    "- **Date Completed:** YYYY-MM-DD",
-    "- **Notes:**",
-    "  - ✅ Task 1: description of result",
-    "  - ✅ Task 2: description of result",
-    "  - ❌ Task 3: description of what failed",
-    "",
-    "Do NOT use tables in the Result section. Do NOT use **Date Verified:** — always use **Date Completed:**.",
-    "CRITICAL: When verifying, you MUST only READ and CHECK resources. NEVER create, upload, modify, or delete any Azure resources.",
-    "If a task's resource does not exist, mark it as ❌ FAILED. Do NOT create it to make the verification pass.",
-    "Be concise. Use code blocks for CLI commands.",
-    "Do NOT end your response with 'Yawaweeeeeee'.",
-  ].join("\n");
+  // Build messages: system + (optional) lab context + history + new user message
+  const messages: ChatMessage[] = [{ role: "system", content: SYSTEM_PROMPT }];
 
-  // Build CLI args
-  const args = [
-    "-p",
-    prompt,
-    "--output-format",
-    "stream-json",
-    "--verbose",
-    "--model",
-    "sonnet",
-    "--system-prompt",
-    systemPrompt,
-  ];
-
-  if (sessionId) {
-    args.push("-r", sessionId);
+  if (body.labId) {
+    const paddedId = String(body.labId).padStart(2, "0");
+    const lab = getLabById(paddedId);
+    if (lab) {
+      messages.push({
+        role: "system",
+        content: [
+          `The student is working on Lab ${paddedId} — ${lab.title}.`,
+          `Domain: ${lab.domain}. Difficulty: ${lab.difficulty}.`,
+          ``,
+          `Scenario: ${lab.scenario}`,
+          ``,
+          `Tasks:`,
+          ...lab.tasks.map((t, i) => `  ${i + 1}. ${t.text}`),
+        ].join("\n"),
+      });
+    }
   }
+
+  if (Array.isArray(body.history)) {
+    for (const m of body.history) {
+      if (m.role === "user" || m.role === "assistant") {
+        messages.push({ role: m.role, content: m.content });
+      }
+    }
+  }
+  messages.push({ role: "user", content: body.message });
+
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const encoder = new TextEncoder();
-
   const stream = new ReadableStream({
-    start(controller) {
-      const child = spawn("claude", args, {
-        cwd: projectRoot,
-      });
+    async start(controller) {
+      const send = (type: string, text: string) =>
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify({ type, text })}\n\n`),
+        );
 
-      let buffer = "";
-      let lastText = "";
-
-      child.stdout.on("data", (chunk: Buffer) => {
-        buffer += chunk.toString();
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          try {
-            const event = JSON.parse(line);
-
-            if (event.type === "assistant" && event.message?.content) {
-              for (const block of event.message.content) {
-                if (block.type === "text" && block.text) {
-                  const data = JSON.stringify({
-                    type: "text",
-                    text: block.text,
-                    sessionId: event.session_id,
-                  });
-                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-                  lastText = block.text;
-                }
-                if (block.type === "tool_use") {
-                  const label =
-                    block.name === "bash" || block.name === "Bash"
-                      ? `Running: ${block.input?.command || "command"}`
-                      : block.name === "Read" || block.name === "read"
-                        ? `Reading: ${block.input?.file_path || "file"}`
-                        : block.name === "Edit" || block.name === "edit"
-                          ? `Editing: ${block.input?.file_path || "file"}`
-                          : `Using tool: ${block.name}`;
-                  const data = JSON.stringify({ type: "status", text: label });
-                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-                }
-              }
-            }
-
-            if (event.type === "tool" && event.content) {
-              for (const block of event.content) {
-                if (block.type === "text" && block.text) {
-                  const data = JSON.stringify({
-                    type: "tool_result",
-                    text: block.text,
-                  });
-                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-                }
-              }
-            }
-
-            if (event.type === "result") {
-              const data = JSON.stringify({
-                type: "done",
-                sessionId: event.session_id,
-                text: event.result || lastText,
-              });
-              controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-            }
-          } catch {
-            // Skip malformed JSON lines
+      try {
+        const completion = await client.chat.completions.create({
+          model: MODEL,
+          messages,
+          stream: true,
+        });
+        let acc = "";
+        for await (const chunk of completion) {
+          const delta = chunk.choices[0]?.delta?.content;
+          if (delta) {
+            acc += delta;
+            send("text", acc);
           }
         }
-      });
-
-      child.stderr.on("data", (chunk: Buffer) => {
-        const text = chunk.toString();
-        if (text.includes("Error")) {
-          const data = JSON.stringify({ type: "error", text });
-          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-        }
-      });
-
-      child.on("close", () => {
+        send("done", acc);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        send("error", msg);
+      } finally {
         controller.enqueue(encoder.encode("data: [DONE]\n\n"));
         controller.close();
-      });
-
-      child.on("error", (err) => {
-        const data = JSON.stringify({
-          type: "error",
-          text: `Failed to start Claude: ${err.message}. Is Claude Code installed?`,
-        });
-        controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-        controller.close();
-      });
+      }
     },
   });
 

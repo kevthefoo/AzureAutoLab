@@ -7,6 +7,7 @@ import DifficultyBadge from "@/components/difficulty-badge";
 import SectionCard from "@/components/section-card";
 import ChatPanel from "@/components/chat-panel";
 import TroubleshootPanel from "@/components/troubleshoot-panel";
+import VerifyButton from "@/components/verify-button";
 import { readLabState } from "@/lib/lab-state";
 
 export const dynamic = "force-dynamic";
@@ -50,7 +51,8 @@ export default async function LabDetailPage({
                   : lab.result.status
               }
             />
-            <ChatPanel labId={id} showVerify={!lab.isTroubleshooting} />
+            {!lab.isTroubleshooting && lab.verifyScript && <VerifyButton labId={id} />}
+            <ChatPanel labId={id} />
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 mt-3">

@@ -18,9 +18,6 @@ export async function POST(
 
   const lab = getLabById(paddedId);
   if (!lab) return new Response("Lab not found", { status: 404 });
-  if (!lab.isTroubleshooting) {
-    return new Response("Lab is not a troubleshooting lab", { status: 400 });
-  }
   if (!lab.verifyScript) {
     return new Response(
       "Lab has no ## Verify section — add one with a bash block emitting [PASS]/[FAIL] lines.",
@@ -28,13 +25,16 @@ export async function POST(
     );
   }
 
-  const current = readLabState(paddedId);
-  const transition = canTransition(current.phase, "verify");
-  if (!transition.ok) {
-    return new Response(transition.reason, { status: 409 });
+  // Troubleshooting labs use the sidecar state machine; build labs don't.
+  const useState = lab.isTroubleshooting;
+  if (useState) {
+    const current = readLabState(paddedId);
+    const transition = canTransition(current.phase, "verify");
+    if (!transition.ok) {
+      return new Response(transition.reason, { status: 409 });
+    }
+    writeLabState({ ...current, phase: "VERIFYING", lastError: null });
   }
-
-  writeLabState({ ...current, phase: "VERIFYING", lastError: null });
 
   const encoder = new TextEncoder();
   const verifyScript = lab.verifyScript;
@@ -78,15 +78,17 @@ export async function POST(
         clearTimeout(timer);
         const summary = parseVerifyOutput(stdoutBuf);
         const allPassed = summary.fail === 0 && summary.pass > 0;
-        const state = readLabState(paddedId);
-        writeLabState({
-          ...state,
-          phase: allPassed ? "VERIFIED" : "FAILED",
-          lastVerifiedAt: new Date().toISOString(),
-          lastError: allPassed ? null : (stderrTail || "Verification reported failures"),
-        });
 
-        // Write Result section to the lab markdown file
+        if (useState) {
+          const state = readLabState(paddedId);
+          writeLabState({
+            ...state,
+            phase: allPassed ? "VERIFIED" : "FAILED",
+            lastVerifiedAt: new Date().toISOString(),
+            lastError: allPassed ? null : (stderrTail || "Verification reported failures"),
+          });
+        }
+
         try {
           writeResultSection(labFilename, summary, allPassed, code ?? -1);
         } catch (err) {
@@ -99,8 +101,10 @@ export async function POST(
       });
       child.on("error", (err) => {
         clearTimeout(timer);
-        const state = readLabState(paddedId);
-        writeLabState({ ...state, phase: "FAILED", lastError: err.message });
+        if (useState) {
+          const state = readLabState(paddedId);
+          writeLabState({ ...state, phase: "FAILED", lastError: err.message });
+        }
         send("error", err.message);
         controller.enqueue(encoder.encode("data: [DONE]\n\n"));
         controller.close();
