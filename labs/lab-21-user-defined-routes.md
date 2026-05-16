@@ -31,6 +31,30 @@ Your security team requires all outbound traffic from the development subnet to 
 | 2   | Route `Route-To-NVA` exists        | `az network route-table route show --route-table-name RT-Dev-Lab --resource-group RG-Dev-Lab --name Route-To-NVA --query "{name:name, addressPrefix:addressPrefix, nextHopType:nextHopType, nextHopIpAddress:nextHopIpAddress}" -o json` |
 | 3   | Route table associated with subnet | `az network route-table show --name RT-Dev-Lab --resource-group RG-Dev-Lab --query "{subnets:subnets[].id}" -o json`                                                                                                                     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Dev-Lab
+N=$(az network route-table show -n RT-Dev-Lab -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$N" = "RT-Dev-Lab" ]; then echo "[PASS] Task 1: RT-Dev-Lab exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: RT-Dev-Lab missing"; FAIL=$((FAIL+1)); fi
+
+P=$(az network route-table route show --route-table-name RT-Dev-Lab -g "$RG" -n Route-To-NVA --query addressPrefix -o tsv 2>/dev/null)
+HT=$(az network route-table route show --route-table-name RT-Dev-Lab -g "$RG" -n Route-To-NVA --query nextHopType -o tsv 2>/dev/null)
+HIP=$(az network route-table route show --route-table-name RT-Dev-Lab -g "$RG" -n Route-To-NVA --query nextHopIpAddress -o tsv 2>/dev/null)
+if [ "$P" = "0.0.0.0/0" ] && [ "$HT" = "VirtualAppliance" ] && [ "$HIP" = "10.0.2.4" ]; then
+  echo "[PASS] Task 2: Route-To-NVA 0.0.0.0/0 -> 10.0.2.4 (VirtualAppliance)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: route wrong (prefix=$P hop=$HT ip=$HIP)"; FAIL=$((FAIL+1)); fi
+
+SUB_CNT=$(az network route-table show -n RT-Dev-Lab -g "$RG" --query "length(subnets)" -o tsv 2>/dev/null)
+if [ "${SUB_CNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: route table associated with $SUB_CNT subnet(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: route table not associated with any subnet"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (3/3)

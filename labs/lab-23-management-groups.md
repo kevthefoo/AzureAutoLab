@@ -33,6 +33,31 @@ Your company is expanding and needs a management group hierarchy to organize sub
 | 3   | `MG-CorpIT-Development` is a child of `MG-CorpIT` | Portal > Management Groups > MG-CorpIT             | Confirm `MG-CorpIT-Development` appears as a child group  |
 | 4   | Subscription is under `MG-CorpIT-Development`     | Portal > Management Groups > MG-CorpIT-Development | Confirm your subscription appears listed under this group |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+MG=$(az account management-group show -n MG-CorpIT --query name -o tsv 2>/dev/null)
+if [ "$MG" = "MG-CorpIT" ]; then echo "[PASS] Task 1: MG-CorpIT exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: MG-CorpIT missing"; FAIL=$((FAIL+1)); fi
+
+PARENT_P=$(az account management-group show -n MG-CorpIT-Production --query "properties.details.parent.name" -o tsv 2>/dev/null)
+if [ "$PARENT_P" = "MG-CorpIT" ]; then echo "[PASS] Task 2: MG-CorpIT-Production parent is MG-CorpIT"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: MG-CorpIT-Production parent is '$PARENT_P'"; FAIL=$((FAIL+1)); fi
+
+PARENT_D=$(az account management-group show -n MG-CorpIT-Development --query "properties.details.parent.name" -o tsv 2>/dev/null)
+if [ "$PARENT_D" = "MG-CorpIT" ]; then echo "[PASS] Task 3: MG-CorpIT-Development parent is MG-CorpIT"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: MG-CorpIT-Development parent is '$PARENT_D'"; FAIL=$((FAIL+1)); fi
+
+SUB=$(az account show --query id -o tsv)
+COUNT=$(az account management-group show -n MG-CorpIT-Development --expand --query "children[?name=='$SUB' || name=='\"$SUB\"'] | length(@)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 4: current subscription is under MG-CorpIT-Development"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: current subscription not under MG-CorpIT-Development"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (4/4)

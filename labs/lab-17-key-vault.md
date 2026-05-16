@@ -30,6 +30,28 @@ Your application needs to securely store database connection strings and API key
 | 2   | Secret `DbConnectionString` exists | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name DbConnectionString --query "{name:name, enabled:attributes.enabled}" -o json`             |
 | 3   | Secret `ApiKey` with expiry exists | `az keyvault secret show --vault-name KV-Dev-Lab-104 --name ApiKey --query "{name:name, expires:attributes.expires}" -o json`                         |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+KV=KV-Dev-Lab-104
+LOC=$(az keyvault show -n "$KV" --query location -o tsv 2>/dev/null)
+RBAC=$(az keyvault show -n "$KV" --query "properties.enableRbacAuthorization" -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ] && [ "$RBAC" = "true" ]; then echo "[PASS] Task 1: $KV in eastus with RBAC"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $KV missing or wrong (loc=$LOC rbac=$RBAC)"; FAIL=$((FAIL+1)); fi
+
+S1=$(az keyvault secret show --vault-name "$KV" -n DbConnectionString --query "attributes.enabled" -o tsv 2>/dev/null)
+if [ "$S1" = "true" ]; then echo "[PASS] Task 2: secret DbConnectionString exists and enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: secret DbConnectionString missing"; FAIL=$((FAIL+1)); fi
+
+EXP=$(az keyvault secret show --vault-name "$KV" -n ApiKey --query "attributes.expires" -o tsv 2>/dev/null)
+if [ -n "$EXP" ]; then echo "[PASS] Task 3: secret ApiKey has expiry $EXP"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: secret ApiKey has no expiry"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (3/3)

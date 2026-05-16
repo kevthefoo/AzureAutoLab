@@ -30,6 +30,26 @@ Your network team needs tools to diagnose connectivity issues and monitor networ
 | 2   | VNet flow log exists    | `az network watcher flow-log list --location eastus --query "[].{name:name, enabled:enabled, retentionDays:retentionPolicy.days}" -o json`        |
 | 3   | Connection Monitor exists | `az network watcher connection-monitor list --location eastus --query "[?name=='cm-web-check'].{name:name, status:testGroups[0].destinations}" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+NW=$(az network watcher list --query "[?location=='eastus'] | length(@)" -o tsv 2>/dev/null)
+if [ "${NW:-0}" -gt 0 ]; then echo "[PASS] Task 1: Network Watcher enabled in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Network Watcher not enabled in eastus"; FAIL=$((FAIL+1)); fi
+
+FL=$(az network watcher flow-log list --location eastus --query "[?enabled==\`true\`] | length(@)" -o tsv 2>/dev/null)
+if [ "${FL:-0}" -gt 0 ]; then echo "[PASS] Task 2: $FL flow log(s) enabled in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no enabled flow logs in eastus"; FAIL=$((FAIL+1)); fi
+
+CM=$(az network watcher connection-monitor list --location eastus --query "[?name=='cm-web-check'] | length(@)" -o tsv 2>/dev/null)
+if [ "${CM:-0}" -gt 0 ]; then echo "[PASS] Task 3: connection monitor cm-web-check exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: connection monitor cm-web-check not found"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PARTIAL PASS (2/3)

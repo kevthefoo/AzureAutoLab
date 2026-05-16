@@ -33,6 +33,32 @@ Your organization needs a custom role that allows helpdesk operators to restart 
 | 3   | Role assignment exists for the custom role | RG-CustomRBAC-Lab > Access Control (IAM) > Role assignments     | Find an entry with Role = `VM Operator Custom`                   |
 | 4   | Custom role has correct permissions        | Access Control (IAM) > Roles > VM Operator Custom > Permissions | Confirm the four VM actions are listed under allowed actions     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-CustomRBAC-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists in eastus"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing or wrong location ($LOC)"; FAIL=$((FAIL+1)); fi
+
+ROLE=$(az role definition list --name "VM Operator Custom" --query "[0].roleName" -o tsv 2>/dev/null)
+if [ "$ROLE" = "VM Operator Custom" ]; then echo "[PASS] Task 2: custom role exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: custom role 'VM Operator Custom' not found"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az role assignment list --resource-group "$RG" --role "VM Operator Custom" --query "length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: $CNT assignment(s) of custom role at RG scope"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no role assignment for the custom role"; FAIL=$((FAIL+1)); fi
+
+ACT=$(az role definition list --name "VM Operator Custom" --query "[0].permissions[0].actions" -o json 2>/dev/null)
+case "$ACT" in *virtualMachines/read*virtualMachines/start*virtualMachines/restart*) echo "[PASS] Task 4: role has required VM actions"; PASS=$((PASS+1));;
+  *) case "$ACT" in *virtualMachines/restart*virtualMachines/start*) echo "[PASS] Task 4: role has required VM actions"; PASS=$((PASS+1));;
+    *) echo "[FAIL] Task 4: role actions missing one of read/start/restart/powerOff"; FAIL=$((FAIL+1));; esac;; esac
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (4/4)

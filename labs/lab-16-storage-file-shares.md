@@ -30,6 +30,34 @@ Your team needs a shared file system accessible from multiple VMs. You must crea
 | 2   | Directory `docs` exists        | `az storage directory exists --share-name team-share --name docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query exists -o json`        |
 | 3   | File exists in `docs`          | `az storage file list --share-name team-share --path docs --account-name <STORAGE_ACCOUNT> --auth-mode login --query "[].name" -o json`            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=stdevlab104
+KEY=$(az storage account keys list -n "$SA" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then
+  echo "[FAIL] Task 1: storage account $SA missing"; FAIL=$((FAIL+1))
+  echo "[FAIL] Task 2: cannot check directory"; FAIL=$((FAIL+1))
+  echo "[FAIL] Task 3: cannot check file"; FAIL=$((FAIL+1))
+else
+  Q=$(az storage share show -n team-share --account-name "$SA" --account-key "$KEY" --query "properties.quota" -o tsv 2>/dev/null)
+  if [ "$Q" = "5" ]; then echo "[PASS] Task 1: file share team-share exists with 5 GB quota"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: file share team-share missing or wrong quota ($Q)"; FAIL=$((FAIL+1)); fi
+
+  EX=$(az storage directory exists --share-name team-share -n docs --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$EX" = "true" ]; then echo "[PASS] Task 2: directory docs exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 2: directory docs missing"; FAIL=$((FAIL+1)); fi
+
+  CNT=$(az storage file list --share-name team-share --path docs --account-name "$SA" --account-key "$KEY" --query "length(@)" -o tsv 2>/dev/null)
+  if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: $CNT file(s) in docs"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 3: no files in docs"; FAIL=$((FAIL+1)); fi
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** PASSED (3/3)
