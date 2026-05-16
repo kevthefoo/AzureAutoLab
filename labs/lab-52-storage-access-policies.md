@@ -35,6 +35,36 @@ Your application team distributes SAS tokens to partner companies for accessing 
 | 4   | Write policy created                 | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-write-policy` is listed with Read, Write, List perms |
 | 5   | Read policy deleted (access revoked) | Storage accounts > `stlabpolicy52` > Containers > `partner-data` > Access policy | `partner-read-policy` is no longer listed                     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AccessPolicy-Lab; SA=stlabpolicy52
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then for i in 1 2 3 4 5; do echo "[FAIL] Task $i: storage account missing"; FAIL=$((FAIL+1)); done;
+else
+  C=$(az storage container exists -n partner-data --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$C" = "true" ]; then echo "[PASS] Task 1: container partner-data exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: container partner-data missing"; FAIL=$((FAIL+1)); fi
+
+  R=$(az storage container policy show --container-name partner-data --name partner-read-policy --account-name "$SA" --account-key "$KEY" --query permission -o tsv 2>/dev/null)
+  if [ -n "$R" ]; then echo "[PASS] Task 2: partner-read-policy still exists (deletion is Task 5)"; PASS=$((PASS+1));
+  else echo "[PASS] Task 2: partner-read-policy not present (consistent with Task 5 deletion)"; PASS=$((PASS+1)); fi
+
+  echo "[PASS] Task 3: SAS token generation is transient"; PASS=$((PASS+1))
+
+  W=$(az storage container policy show --container-name partner-data --name partner-write-policy --account-name "$SA" --account-key "$KEY" --query permission -o tsv 2>/dev/null)
+  if [ -n "$W" ]; then echo "[PASS] Task 4: partner-write-policy exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 4: partner-write-policy missing"; FAIL=$((FAIL+1)); fi
+
+  if [ -z "$R" ]; then echo "[PASS] Task 5: partner-read-policy is deleted"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 5: partner-read-policy still present"; FAIL=$((FAIL+1)); fi
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

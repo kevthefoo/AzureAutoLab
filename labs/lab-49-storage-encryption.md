@@ -35,6 +35,39 @@ Your organization handles regulated financial data and requires encryption with 
 | 4   | Managed identity with correct role | Storage accounts > `stlabencrypt49` > Identity   | System-assigned identity is On; role assignment visible on Key Vault |
 | 5   | CMK encryption configured          | Storage accounts > `stlabencrypt49` > Encryption | Encryption type shows "Customer-managed keys" with Key Vault ref     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Encryption-Lab; SA=stlabencrypt49
+N=$(az storage account show -n "$SA" -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$N" = "$SA" ]; then echo "[PASS] Task 1: $SA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $SA missing"; FAIL=$((FAIL+1)); fi
+
+SD=$(az keyvault show -n kv-labencrypt49 --query "properties.enableSoftDelete" -o tsv 2>/dev/null)
+PP=$(az keyvault show -n kv-labencrypt49 --query "properties.enablePurgeProtection" -o tsv 2>/dev/null)
+if [ "$SD" = "true" ] && [ "$PP" = "true" ]; then echo "[PASS] Task 2: Key Vault has soft-delete + purge protection"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: KV missing or protection off (soft=$SD purge=$PP)"; FAIL=$((FAIL+1)); fi
+
+KT=$(az keyvault key show --vault-name kv-labencrypt49 -n storage-cmk --query "key.kty" -o tsv 2>/dev/null)
+if [ "$KT" = "RSA" ]; then echo "[PASS] Task 3: storage-cmk RSA key exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: storage-cmk missing or wrong type ($KT)"; FAIL=$((FAIL+1)); fi
+
+PID=$(az storage account show -n "$SA" -g "$RG" --query "identity.principalId" -o tsv 2>/dev/null)
+KVID=$(az keyvault show -n kv-labencrypt49 --query id -o tsv 2>/dev/null)
+ROLE=0
+if [ -n "$PID" ] && [ -n "$KVID" ]; then ROLE=$(az role assignment list --assignee "$PID" --scope "$KVID" --query "[?contains(roleDefinitionName, 'Crypto Service Encryption')] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${ROLE:-0}" -gt 0 ]; then echo "[PASS] Task 4: MI has Crypto Service Encryption role on KV"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: role assignment missing"; FAIL=$((FAIL+1)); fi
+
+KS=$(az storage account show -n "$SA" -g "$RG" --query "encryption.keySource" -o tsv 2>/dev/null)
+if [ "$KS" = "Microsoft.Keyvault" ]; then echo "[PASS] Task 5: storage uses customer-managed key"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: encryption.keySource is '$KS'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

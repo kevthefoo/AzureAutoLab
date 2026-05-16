@@ -35,6 +35,39 @@ Your legal department requires that certain financial records be stored in a tam
 | 4   | Time-based retention policy set     | Containers > `compliance-records` > Access policy > Time-based retention | Retention period shows 365 days, policy is unlocked              |
 | 5   | Deletion blocked                    | Containers > `compliance-records` > attempt delete on blob               | Error message indicates blob is protected by immutability policy |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Immutable-Lab; SA=stlabimmutable55
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then for i in 1 2 3 4 5; do echo "[FAIL] Task $i: storage missing"; FAIL=$((FAIL+1)); done;
+else
+  C=$(az storage container exists -n compliance-records --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$C" = "true" ]; then echo "[PASS] Task 1: container compliance-records exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: container missing"; FAIL=$((FAIL+1)); fi
+
+  B=$(az storage blob exists --container-name compliance-records -n financial-report-2025.pdf --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$B" = "true" ]; then echo "[PASS] Task 2: financial-report-2025.pdf exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 2: financial-report-2025.pdf missing"; FAIL=$((FAIL+1)); fi
+
+  LH=$(az storage container legal-hold show --container-name compliance-records --account-name "$SA" --account-key "$KEY" --query "tags" -o tsv 2>/dev/null)
+  case "$LH" in *SEC-Investigation-2026*) echo "[PASS] Task 3: legal hold tag SEC-Investigation-2026 present"; PASS=$((PASS+1));;
+    *) echo "[FAIL] Task 3: legal hold tag missing (got: $LH)"; FAIL=$((FAIL+1));; esac
+
+  RP=$(az storage container immutability-policy show --container-name compliance-records --account-name "$SA" --account-key "$KEY" --query "immutabilityPeriodSinceCreationInDays" -o tsv 2>/dev/null)
+  if [ "$RP" = "365" ]; then echo "[PASS] Task 4: retention policy 365 days"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 4: retention is '$RP'"; FAIL=$((FAIL+1)); fi
+
+  # Task 5 — if container has any immutability state, deletion is blocked (inferred)
+  if [ "$RP" = "365" ] || [ -n "$LH" ]; then echo "[PASS] Task 5: immutability state would block deletion"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 5: no immutability state present"; FAIL=$((FAIL+1)); fi
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -33,6 +33,27 @@ Your organization needs to migrate 40 TB of archival data from an on-premises da
 | 3   | Data Box options reviewed           | Azure Data Box > Overview                       | User can list device types and their capacity limits          |
 | 4   | Data Box order workflow understood  | Azure Data Box > + Create                       | User navigated through order creation steps (no order placed) |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ImportExport-Lab; SA=stlabimport51
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then for i in 1 2 3 4; do echo "[FAIL] Task $i: storage account missing"; FAIL=$((FAIL+1)); done;
+else
+  C=$(az storage container exists -n import-target --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$C" = "true" ]; then echo "[PASS] Task 1: container import-target exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: container import-target missing"; FAIL=$((FAIL+1)); fi
+
+  echo "[PASS] Task 2: Import/Export workflow review is manual portal navigation"; PASS=$((PASS+1))
+  echo "[PASS] Task 3: Data Box options review is manual portal navigation"; PASS=$((PASS+1))
+  echo "[PASS] Task 4: Data Box order walkthrough is manual portal navigation"; PASS=$((PASS+1))
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

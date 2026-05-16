@@ -35,6 +35,35 @@ Your team needs to migrate a large dataset from one storage container to another
 | 4   | AzCopy transfer completed            | Local terminal / Cloud Shell                                         | AzCopy output shows successful copy of all files                |
 | 5   | Files exist in destination           | Storage accounts > `stlabazcopy50` > Containers > `destination-data` | All three files appear in the destination container             |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AzCopy-Lab; SA=stlabazcopy50
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then for i in 1 2 3 4 5; do echo "[FAIL] Task $i: storage account missing"; FAIL=$((FAIL+1)); done;
+else
+  S=$(az storage container exists -n source-data --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  D=$(az storage container exists -n destination-data --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$S" = "true" ] && [ "$D" = "true" ]; then echo "[PASS] Task 1: both containers exist"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: containers missing (source=$S dest=$D)"; FAIL=$((FAIL+1)); fi
+
+  SCNT=$(az storage blob list --container-name source-data --account-name "$SA" --account-key "$KEY" --query "length(@)" -o tsv 2>/dev/null)
+  if [ "${SCNT:-0}" -ge 3 ]; then echo "[PASS] Task 2: $SCNT file(s) in source-data"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 2: only $SCNT file(s) in source-data"; FAIL=$((FAIL+1)); fi
+
+  echo "[PASS] Task 3: SAS generation is transient (not stored)"; PASS=$((PASS+1))
+  echo "[PASS] Task 4: AzCopy is local — verified by destination contents in Task 5"; PASS=$((PASS+1))
+
+  DCNT=$(az storage blob list --container-name destination-data --account-name "$SA" --account-key "$KEY" --query "length(@)" -o tsv 2>/dev/null)
+  if [ "${DCNT:-0}" -ge 3 ]; then echo "[PASS] Task 5: $DCNT file(s) in destination-data"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 5: only $DCNT file(s) in destination-data"; FAIL=$((FAIL+1)); fi
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

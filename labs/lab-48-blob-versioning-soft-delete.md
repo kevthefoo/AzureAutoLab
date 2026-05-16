@@ -35,6 +35,38 @@ Your compliance team requires that critical business documents stored in blob st
 | 4   | Multiple versions exist      | Storage accounts > `stlabversioning48` > Containers > `documents` > `report.txt` | Previous versions tab shows at least 2 versions                    |
 | 5   | Blob restored after deletion | Storage accounts > `stlabversioning48` > Containers > `documents`                | `report.txt` is present after restore                              |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-BlobProtect-Lab; SA=stlabversioning48
+N=$(az storage account show -n "$SA" -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$N" = "$SA" ]; then echo "[PASS] Task 1: $SA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $SA missing"; FAIL=$((FAIL+1)); fi
+
+BR=$(az storage account blob-service-properties show --account-name "$SA" -g "$RG" --query "deleteRetentionPolicy.days" -o tsv 2>/dev/null)
+CR=$(az storage account blob-service-properties show --account-name "$SA" -g "$RG" --query "containerDeleteRetentionPolicy.days" -o tsv 2>/dev/null)
+if [ "$BR" = "14" ] && [ "$CR" = "7" ]; then echo "[PASS] Task 2: soft delete 14d blob / 7d container"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: soft delete wrong (blob=$BR container=$CR)"; FAIL=$((FAIL+1)); fi
+
+V=$(az storage account blob-service-properties show --account-name "$SA" -g "$RG" --query "isVersioningEnabled" -o tsv 2>/dev/null)
+if [ "$V" = "true" ]; then echo "[PASS] Task 3: versioning enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: versioning is '$V'"; FAIL=$((FAIL+1)); fi
+
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+VC=0
+if [ -n "$KEY" ]; then VC=$(az storage blob list --container-name documents --account-name "$SA" --account-key "$KEY" --include v --query "[?name=='report.txt'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${VC:-0}" -ge 1 ]; then echo "[PASS] Task 4: report.txt versions found ($VC)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no versions of report.txt"; FAIL=$((FAIL+1)); fi
+
+EXIST=$(az storage blob exists --container-name documents -n report.txt --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+if [ "$EXIST" = "true" ]; then echo "[PASS] Task 5: report.txt restored (exists)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: report.txt not present"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

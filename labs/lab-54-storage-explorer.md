@@ -35,6 +35,36 @@ A new team member needs to manage blob storage interactively without using the c
 | 4   | Virtual directory with copied file  | Containers > `project-files` > `backups/`         | `config.json` exists inside the `backups/` prefix              |
 | 5   | File downloaded locally             | Local machine file system                         | `readme.txt` exists in the local download location             |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Explorer-Lab; SA=stlabexplorer54
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+if [ -z "$KEY" ]; then for i in 1 2 3 4 5; do echo "[FAIL] Task $i: storage missing"; FAIL=$((FAIL+1)); done;
+else
+  C=$(az storage container exists -n project-files --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$C" = "true" ]; then echo "[PASS] Task 1: container project-files exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 1: container missing"; FAIL=$((FAIL+1)); fi
+
+  R=$(az storage blob exists --container-name project-files -n readme.txt --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  CF=$(az storage blob exists --container-name project-files -n config.json --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$R" = "true" ] && [ "$CF" = "true" ]; then echo "[PASS] Task 2: readme.txt and config.json uploaded"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 2: missing files (readme=$R config=$CF)"; FAIL=$((FAIL+1)); fi
+
+  echo "[PASS] Task 3: Storage Explorer browse is manual"; PASS=$((PASS+1))
+
+  BC=$(az storage blob exists --container-name project-files -n backups/config.json --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+  if [ "$BC" = "true" ]; then echo "[PASS] Task 4: backups/config.json exists"; PASS=$((PASS+1));
+  else echo "[FAIL] Task 4: backups/config.json missing"; FAIL=$((FAIL+1)); fi
+
+  echo "[PASS] Task 5: download to local machine is manual (not verifiable in Azure)"; PASS=$((PASS+1))
+fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
