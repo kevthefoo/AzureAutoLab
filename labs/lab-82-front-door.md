@@ -35,6 +35,36 @@ Litware Inc. is launching a global e-commerce platform and needs a content deliv
 | 4   | Origin group with health probes | Front Door > `fd-litware-01` > Origin groups           | `og-web-backends` has two origins, probe path `/`, interval 30s      |
 | 5   | WAF policy in Prevention mode   | Web Application Firewall policies > `wafpolicyLitware` | Mode is Prevention, DefaultRuleSet enabled, associated with endpoint |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-FrontDoor-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+E=$(az webapp list --query "[?name=='app-fd-eastus-2026'] | length(@)" -o tsv 2>/dev/null)
+W=$(az webapp list --query "[?name=='app-fd-westus-2026'] | length(@)" -o tsv 2>/dev/null)
+if [ "${E:-0}" -gt 0 ] && [ "${W:-0}" -gt 0 ]; then echo "[PASS] Task 2: both backend webapps exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: backend webapps missing"; FAIL=$((FAIL+1)); fi
+
+FD=$(az afd profile show -n fd-litware-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$FD" = "fd-litware-01" ]; then echo "[PASS] Task 3: Front Door profile exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: Front Door profile missing"; FAIL=$((FAIL+1)); fi
+
+OG=$(az afd origin-group show -n og-web-backends --profile-name fd-litware-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$OG" = "og-web-backends" ]; then echo "[PASS] Task 4: og-web-backends origin group exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: origin group missing"; FAIL=$((FAIL+1)); fi
+
+WAF=$(az network front-door waf-policy show -n wafpolicyLitware -g "$RG" --query "policySettings.mode" -o tsv 2>/dev/null)
+if [ "$WAF" = "Prevention" ]; then echo "[PASS] Task 5: WAF policy in Prevention mode"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: WAF mode is '$WAF'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

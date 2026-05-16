@@ -35,6 +35,37 @@ Adventure Works operates web applications in multiple Azure regions and needs DN
 | 4   | Endpoints with correct priorities | Traffic Manager profiles > `tm-adventureworks-01` > Endpoints     | Primary has priority 1, secondary has priority 2                        |
 | 5   | Health check configured           | Traffic Manager profiles > `tm-adventureworks-01` > Configuration | Path `/`, protocol HTTP, port 80, interval 10s                          |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-TrafficMgr-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+E=$(az webapp list --query "[?name=='app-tm-primary-2026'].location | [0]" -o tsv 2>/dev/null)
+W=$(az webapp list --query "[?name=='app-tm-secondary-2026'].location | [0]" -o tsv 2>/dev/null)
+if [ "$E" = "eastus" ] && [ "$W" = "westus" ]; then echo "[PASS] Task 2: both webapps in correct regions"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: webapps wrong (primary=$E secondary=$W)"; FAIL=$((FAIL+1)); fi
+
+RM=$(az network traffic-manager profile show -n tm-adventureworks-01 -g "$RG" --query "trafficRoutingMethod" -o tsv 2>/dev/null)
+TTL=$(az network traffic-manager profile show -n tm-adventureworks-01 -g "$RG" --query "dnsConfig.ttl" -o tsv 2>/dev/null)
+if [ "$RM" = "Priority" ] && [ "$TTL" = "30" ]; then echo "[PASS] Task 3: TM Priority + TTL=30"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: TM wrong (method=$RM ttl=$TTL)"; FAIL=$((FAIL+1)); fi
+
+EP=$(az network traffic-manager endpoint list --profile-name tm-adventureworks-01 -g "$RG" --query "[?priority>=\`1\` && priority<=\`2\`] | length(@)" -o tsv 2>/dev/null)
+if [ "${EP:-0}" -ge 2 ]; then echo "[PASS] Task 4: $EP endpoints with priorities 1/2"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: only $EP endpoints"; FAIL=$((FAIL+1)); fi
+
+HP=$(az network traffic-manager profile show -n tm-adventureworks-01 -g "$RG" --query "monitorConfig.path" -o tsv 2>/dev/null)
+if [ "$HP" = "/" ]; then echo "[PASS] Task 5: health probe path '/'"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: health probe path '$HP'"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

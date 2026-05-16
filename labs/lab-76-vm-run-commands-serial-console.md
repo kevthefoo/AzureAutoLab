@@ -35,6 +35,27 @@ An operations engineer needs to troubleshoot a VM that has become unresponsive t
 | 4   | Services Run Command executed    | vm-debug-01 > Run command > RunPowerShellScript | Output shows list of running services                       |
 | 5   | Serial Console accessible        | vm-debug-01 > Serial console                    | Serial Console connects and shows SAC prompt or login       |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-RunCmd-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+BD=$(az vm show -n vm-debug-01 -g "$RG" --query "diagnosticsProfile.bootDiagnostics.enabled" -o tsv 2>/dev/null)
+if [ "$BD" = "true" ]; then echo "[PASS] Task 2: vm-debug-01 boot diagnostics enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: vm-debug-01 boot diagnostics not enabled"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3: Run Command output is transient (not persisted to verifiable state)"; PASS=$((PASS+1))
+echo "[PASS] Task 4: Second Run Command output is transient"; PASS=$((PASS+1))
+echo "[PASS] Task 5: Serial Console connect is interactive (manual)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -33,6 +33,33 @@ Tailwind Traders needs to enable remote employees to securely connect to Azure r
 | 3   | P2S configuration set     | Virtual network gateways > `vpngw-p2s-01` > Point-to-site | Address pool is `172.16.0.0/24`, tunnel type is OpenVPN |
 | 4   | Root certificate uploaded | Virtual network gateways > `vpngw-p2s-01` > Point-to-site | `P2SRootCert` listed under root certificates            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-VPN-Lab
+GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-vpn-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$GS" = "10.60.255.0/27" ]; then echo "[PASS] Task 1: GatewaySubnet exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: GatewaySubnet wrong ($GS)"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az network vnet-gateway show -n vpngw-p2s-01 -g "$RG" --query "sku.name" -o tsv 2>/dev/null)
+VT=$(az network vnet-gateway show -n vpngw-p2s-01 -g "$RG" --query "vpnType" -o tsv 2>/dev/null)
+if [ "$SKU" = "VpnGw1" ] && [ "$VT" = "RouteBased" ]; then echo "[PASS] Task 2: vpngw-p2s-01 VpnGw1 RouteBased"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VPN gateway wrong (sku=$SKU type=$VT)"; FAIL=$((FAIL+1)); fi
+
+POOL=$(az network vnet-gateway show -n vpngw-p2s-01 -g "$RG" --query "vpnClientConfiguration.vpnClientAddressPool.addressPrefixes[0]" -o tsv 2>/dev/null)
+PROTO=$(az network vnet-gateway show -n vpngw-p2s-01 -g "$RG" --query "vpnClientConfiguration.vpnClientProtocols[0]" -o tsv 2>/dev/null)
+if [ "$POOL" = "172.16.0.0/24" ] && [ "$PROTO" = "OpenVPN" ]; then echo "[PASS] Task 3: P2S address pool + OpenVPN"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: P2S config wrong (pool=$POOL proto=$PROTO)"; FAIL=$((FAIL+1)); fi
+
+ROOT=$(az network vnet-gateway show -n vpngw-p2s-01 -g "$RG" --query "vpnClientConfiguration.vpnClientRootCertificates[?name=='P2SRootCert'] | length(@)" -o tsv 2>/dev/null)
+if [ "${ROOT:-0}" -gt 0 ]; then echo "[PASS] Task 4: P2SRootCert uploaded"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: P2SRootCert missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

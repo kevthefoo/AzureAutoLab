@@ -35,6 +35,35 @@ Fabrikam's security team requires that all access to Azure Storage accounts occu
 | 4   | Private DNS zone linked to VNet        | Private DNS zones > `privatelink.blob.core.windows.net`              | Virtual network link to `vnet-privlink-01` is listed         |
 | 5   | DNS record resolves to private IP      | Private DNS zones > `privatelink.blob.core.windows.net` > Recordsets | A record for `stprivlinklab2026` points to IP in `10.70.1.x` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-PrivLink-Lab
+P=$(az network vnet subnet show -n snet-endpoints --vnet-name vnet-privlink-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$P" = "10.70.1.0/24" ]; then echo "[PASS] Task 1: snet-endpoints exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: snet-endpoints wrong"; FAIL=$((FAIL+1)); fi
+
+PNA=$(az storage account show -n stprivlinklab2026 -g "$RG" --query "publicNetworkAccess" -o tsv 2>/dev/null)
+if [ "$PNA" = "Disabled" ]; then echo "[PASS] Task 2: storage public access disabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: storage publicNetworkAccess='$PNA'"; FAIL=$((FAIL+1)); fi
+
+PE=$(az network private-endpoint show -n pe-storage-blob -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$PE" = "pe-storage-blob" ]; then echo "[PASS] Task 3: pe-storage-blob exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: pe-storage-blob missing"; FAIL=$((FAIL+1)); fi
+
+LINK=$(az network private-dns link vnet list -g "$RG" -z privatelink.blob.core.windows.net --query "length(@)" -o tsv 2>/dev/null)
+if [ "${LINK:-0}" -gt 0 ]; then echo "[PASS] Task 4: private DNS zone linked to a VNet"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no VNet link on privatelink.blob.core.windows.net"; FAIL=$((FAIL+1)); fi
+
+REC=$(az network private-dns record-set a list -g "$RG" -z privatelink.blob.core.windows.net --query "[?aRecords[?starts_with(ipv4Address, '10.70.1.')]] | length(@)" -o tsv 2>/dev/null)
+if [ "${REC:-0}" -gt 0 ]; then echo "[PASS] Task 5: A record resolves to 10.70.1.x"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: no A record in 10.70.1.0/24"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

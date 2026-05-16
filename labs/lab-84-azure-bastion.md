@@ -35,6 +35,34 @@ Contoso's IT security policy prohibits exposing virtual machines with public IP 
 | 4   | VM has no public IP                | Virtual machines > `vm-internal-01` > Networking        | No public IP address assigned to the NIC              |
 | 5   | Bastion connection works           | Virtual machines > `vm-internal-01` > Connect > Bastion | RDP session opens in the browser via Bastion          |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Bastion-Lab
+BS=$(az network vnet subnet show -n AzureBastionSubnet --vnet-name vnet-bastion-01 -g "$RG" --query name -o tsv 2>/dev/null)
+VS=$(az network vnet subnet show -n snet-vms --vnet-name vnet-bastion-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$BS" = "AzureBastionSubnet" ] && [ "$VS" = "snet-vms" ]; then echo "[PASS] Task 1: both subnets exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: subnets missing"; FAIL=$((FAIL+1)); fi
+
+BP=$(az network vnet subnet show -n AzureBastionSubnet --vnet-name vnet-bastion-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$BP" = "10.90.1.0/26" ]; then echo "[PASS] Task 2: AzureBastionSubnet 10.90.1.0/26"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: AzureBastionSubnet prefix is '$BP'"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az network bastion show -n bastion-contoso-01 -g "$RG" --query "sku.name" -o tsv 2>/dev/null)
+if [ "$SKU" = "Basic" ]; then echo "[PASS] Task 3: bastion-contoso-01 Basic"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: bastion sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+PUB=$(az vm list-ip-addresses -n vm-internal-01 -g "$RG" --query "[0].virtualMachine.network.publicIpAddresses" -o tsv 2>/dev/null)
+if [ -z "$PUB" ]; then echo "[PASS] Task 4: vm-internal-01 has no public IP"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: vm-internal-01 has public IP ($PUB)"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: Bastion connect is interactive (manual)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

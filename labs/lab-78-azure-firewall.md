@@ -35,6 +35,35 @@ Woodgrove Bank requires centralized network security for its hub-spoke architect
 | 4   | Application rule collection exists | Firewalls > `fw-hub-01` > Rules (classic) > Application rules | `appcol-allow-web` with priority 300, allows `*.microsoft.com`  |
 | 5   | DNAT rule collection exists        | Firewalls > `fw-hub-01` > Rules (classic) > NAT rules         | `natcol-rdp-inbound` translates port 4000 to `10.50.2.4:3389`   |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Firewall-Lab
+P=$(az network vnet subnet show -n AzureFirewallSubnet --vnet-name vnet-hub-fw-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$P" = "10.50.1.0/26" ]; then echo "[PASS] Task 1: AzureFirewallSubnet exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: AzureFirewallSubnet wrong ($P)"; FAIL=$((FAIL+1)); fi
+
+SKU=$(az network firewall show -n fw-hub-01 -g "$RG" --query "sku.tier" -o tsv 2>/dev/null)
+if [ "$SKU" = "Standard" ]; then echo "[PASS] Task 2: fw-hub-01 Standard"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: firewall sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+
+NRC=$(az network firewall network-rule collection list -f fw-hub-01 -g "$RG" --query "[?name=='netcol-allow-dns'] | length(@)" -o tsv 2>/dev/null)
+if [ "${NRC:-0}" -gt 0 ]; then echo "[PASS] Task 3: netcol-allow-dns exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: network rule collection missing"; FAIL=$((FAIL+1)); fi
+
+ARC=$(az network firewall application-rule collection list -f fw-hub-01 -g "$RG" --query "[?name=='appcol-allow-web'] | length(@)" -o tsv 2>/dev/null)
+if [ "${ARC:-0}" -gt 0 ]; then echo "[PASS] Task 4: appcol-allow-web exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: app rule collection missing"; FAIL=$((FAIL+1)); fi
+
+NAT=$(az network firewall nat-rule collection list -f fw-hub-01 -g "$RG" --query "[?name=='natcol-rdp-inbound'] | length(@)" -o tsv 2>/dev/null)
+if [ "${NAT:-0}" -gt 0 ]; then echo "[PASS] Task 5: natcol-rdp-inbound exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: NAT rule collection missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
