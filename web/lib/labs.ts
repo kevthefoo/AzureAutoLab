@@ -25,6 +25,7 @@ export interface Lab {
   };
   setupScript: string | null;
   cleanupScript: string | null;
+  verifyScript: string | null;
   isTroubleshooting: boolean;
 }
 
@@ -122,6 +123,7 @@ export function parseLabFile(filename: string): Lab {
 
   const setupScript = extractBashBlock(raw, "Setup");
   const cleanupScript = extractBashBlock(raw, "Cleanup");
+  const verifyScript = extractBashBlock(raw, "Verify");
   const isTroubleshooting = setupScript !== null;
 
   return {
@@ -139,6 +141,7 @@ export function parseLabFile(filename: string): Lab {
     result,
     setupScript,
     cleanupScript,
+    verifyScript,
     isTroubleshooting,
   };
 }

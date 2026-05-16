@@ -62,6 +62,46 @@ echo "Setup complete. Inspect NSG-Web in RG-TS-101."
 | 2   | A rule allowing 3389 exists, scoped to an IP                                           | `az network nsg rule list -g RG-TS-101 --nsg-name NSG-Web --query "[?destinationPortRange=='3389' && access=='Allow']" -o json`   |
 | 3   | The original `Deny-RDP` rule is either removed or below the new Allow rule by priority | `az network nsg rule list -g RG-TS-101 --nsg-name NSG-Web --query "[].{name:name, priority:priority, access:access}" -o json`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+RG=RG-TS-101
+PASS=0; FAIL=0
+
+check() {
+  local desc="$1"; local cond="$2"
+  if [ "$cond" = "1" ]; then echo "[PASS] $desc"; PASS=$((PASS+1)); else echo "[FAIL] $desc"; FAIL=$((FAIL+1)); fi
+}
+
+# Task 1: NSG-Web exists
+EXISTS=$(az network nsg show -g "$RG" -n NSG-Web --query name -o tsv 2>/dev/null)
+[ "$EXISTS" = "NSG-Web" ] && check "Task 1: NSG-Web exists in $RG" 1 || check "Task 1: NSG-Web is missing from $RG" 0
+
+# Task 2: at least one Allow rule for 3389 with a non-wildcard source
+NARROW=$(az network nsg rule list -g "$RG" --nsg-name NSG-Web \
+  --query "[?access=='Allow' && destinationPortRange=='3389' && sourceAddressPrefix!='*'] | length(@)" -o tsv 2>/dev/null)
+[ "${NARROW:-0}" -gt 0 ] \
+  && check "Task 2: Allow rule for 3389 exists scoped to a non-wildcard source" 1 \
+  || check "Task 2: no Allow rule for 3389 scoped to a specific source IP/range" 0
+
+# Task 3: Deny-RDP is gone, OR a 3389 Allow rule has lower priority number (higher precedence) than any 3389 Deny rule
+DENY_PRI=$(az network nsg rule list -g "$RG" --nsg-name NSG-Web \
+  --query "[?access=='Deny' && destinationPortRange=='3389'].priority | min(@)" -o tsv 2>/dev/null)
+ALLOW_PRI=$(az network nsg rule list -g "$RG" --nsg-name NSG-Web \
+  --query "[?access=='Allow' && destinationPortRange=='3389'].priority | min(@)" -o tsv 2>/dev/null)
+DENY_PRI=${DENY_PRI:-}; ALLOW_PRI=${ALLOW_PRI:-}
+if [ -z "$DENY_PRI" ] || { [ -n "$ALLOW_PRI" ] && [ "$ALLOW_PRI" -lt "$DENY_PRI" ]; }; then
+  check "Task 3: Deny-RDP is removed or has lower precedence than the Allow rule" 1
+else
+  check "Task 3: Deny-RDP (priority $DENY_PRI) still beats the Allow rule (priority ${ALLOW_PRI:-none})" 0
+fi
+
+echo
+echo "Summary: $PASS passed, $FAIL failed"
+[ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash
