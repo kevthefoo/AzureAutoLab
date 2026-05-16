@@ -51,6 +51,21 @@ echo "Setup complete. Policy ts114-allowed-locations is assigned to $OTHER_RG in
 | 1   | An `ts114-allowed-locations` assignment exists scoped to `RG-TS-114`         | `az policy assignment list -g RG-TS-114 --query "[?name=='ts114-allowed-locations'].scope" -o tsv`                                    |
 | 2   | No `ts114-allowed-locations` assignment remains scoped to `RG-TS-114-Wrong`  | `az policy assignment list -g RG-TS-114-Wrong --query "[?name=='ts114-allowed-locations']" -o json`                                  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+GOOD=$(az policy assignment list -g RG-TS-114 --query "[?name=='ts114-allowed-locations'] | length(@)" -o tsv 2>/dev/null)
+if [ "${GOOD:-0}" -gt 0 ]; then echo "[PASS] Task 1: assignment ts114-allowed-locations scoped to RG-TS-114"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: assignment is not scoped to RG-TS-114"; FAIL=$((FAIL+1)); fi
+
+BAD=$(az policy assignment list -g RG-TS-114-Wrong --query "[?name=='ts114-allowed-locations'] | length(@)" -o tsv 2>/dev/null)
+if [ "${BAD:-0}" = "0" ]; then echo "[PASS] Task 2: assignment no longer scoped to RG-TS-114-Wrong"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: assignment still present on RG-TS-114-Wrong"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

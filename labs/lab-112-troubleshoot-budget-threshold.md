@@ -55,6 +55,21 @@ echo "Setup complete. Budget threshold is 99% (too late)."
 | 1   | Budget `budget-ts112` exists on `RG-TS-112`  | `az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query name -o tsv`                                        |
 | 2   | At least one notification threshold ≤ 50     | `az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query "notifications.*.threshold" -o json`                |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+NAME=$(az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query name -o tsv 2>/dev/null)
+if [ "$NAME" = "budget-ts112" ]; then echo "[PASS] Task 1: budget budget-ts112 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: budget budget-ts112 not found"; FAIL=$((FAIL+1)); fi
+
+MIN=$(az consumption budget show --budget-name budget-ts112 --resource-group RG-TS-112 --query "notifications.*.threshold | min(@)" -o tsv 2>/dev/null)
+if [ -n "$MIN" ] && [ "${MIN%.*}" -le 50 ]; then echo "[PASS] Task 2: lowest notification threshold is $MIN (<= 50)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: lowest notification threshold is '$MIN' (expected <= 50)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

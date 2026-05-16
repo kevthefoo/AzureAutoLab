@@ -42,6 +42,21 @@ echo "Setup complete. $SA has blob versioning DISABLED."
 | 1   | Lab storage account still exists                               | `az storage account list --query "[?tags.AutoLabId=='123'].name" -o tsv`                                                                |
 | 2   | Blob versioning is enabled                                     | `sa=$(az storage account list --query "[?tags.AutoLabId=='123'].name" -o tsv); az storage account blob-service-properties show --account-name "$sa" --resource-group RG-TS-123 --query "isVersioningEnabled" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='123'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=123"; FAIL=$((FAIL+1)); fi
+
+V=$(az storage account blob-service-properties show --account-name "$SA" --resource-group RG-TS-123 --query "isVersioningEnabled" -o tsv 2>/dev/null)
+if [ "$V" = "true" ]; then echo "[PASS] Task 2: blob versioning is enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: blob versioning is '$V' (expected true)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

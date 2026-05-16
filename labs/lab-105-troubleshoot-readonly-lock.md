@@ -45,6 +45,27 @@ echo "Setup complete. Storage account $SA has a ReadOnly lock."
 | 2   | No `ReadOnly` lock remains on that storage account     | `sa=$(az storage account list --query "[?tags.AutoLabId=='105'].name" -o tsv); az lock list -g RG-TS-105 --resource "$sa" --resource-type Microsoft.Storage/storageAccounts --query "[?level=='ReadOnly']" -o json` |
 | 3   | A `CanNotDelete` lock exists on the storage account    | `sa=$(az storage account list --query "[?tags.AutoLabId=='105'].name" -o tsv); az lock list -g RG-TS-105 --resource "$sa" --resource-type Microsoft.Storage/storageAccounts --query "[?level=='CanNotDelete']" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='105'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account tagged AutoLabId=105 exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=105 found"; FAIL=$((FAIL+1)); fi
+
+RO=0; CND=0
+if [ -n "$SA" ]; then
+  RO=$(az lock list -g RG-TS-105 --resource "$SA" --resource-type Microsoft.Storage/storageAccounts --query "[?level=='ReadOnly'] | length(@)" -o tsv 2>/dev/null)
+  CND=$(az lock list -g RG-TS-105 --resource "$SA" --resource-type Microsoft.Storage/storageAccounts --query "[?level=='CanNotDelete'] | length(@)" -o tsv 2>/dev/null)
+fi
+if [ "${RO:-0}" = "0" ]; then echo "[PASS] Task 2: no ReadOnly lock remains on the storage account"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: ReadOnly lock still present"; FAIL=$((FAIL+1)); fi
+if [ "${CND:-0}" -gt 0 ]; then echo "[PASS] Task 3: a CanNotDelete lock exists on the storage account"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no CanNotDelete lock on the storage account"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

@@ -38,6 +38,21 @@ echo "Setup complete. ag-ts147 has zero receivers."
 | 1   | Action group `ag-ts147` still exists       | `az monitor action-group show -g RG-TS-147 -n ag-ts147 --query name -o tsv`                              |
 | 2   | At least one email receiver is configured  | `az monitor action-group show -g RG-TS-147 -n ag-ts147 --query "emailReceivers" -o json`                  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az monitor action-group show -g RG-TS-147 -n ag-ts147 --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "ag-ts147" ]; then echo "[PASS] Task 1: action group ag-ts147 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: ag-ts147 not found"; FAIL=$((FAIL+1)); fi
+
+COUNT=$(az monitor action-group show -g RG-TS-147 -n ag-ts147 --query "length(emailReceivers)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: at least one email receiver"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: action group has no email receivers"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

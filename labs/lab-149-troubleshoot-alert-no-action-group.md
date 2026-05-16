@@ -43,6 +43,21 @@ echo "Setup complete. alert-ts149-tx has no action groups attached."
 | 1   | Alert still exists                         | `az monitor metrics alert show -g RG-TS-149 -n alert-ts149-tx --query name -o tsv`                    |
 | 2   | Alert has at least one action group        | `az monitor metrics alert show -g RG-TS-149 -n alert-ts149-tx --query "actions" -o json`              |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az monitor metrics alert show -g RG-TS-149 -n alert-ts149-tx --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: alert alert-ts149-tx exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: alert not found"; FAIL=$((FAIL+1)); fi
+
+COUNT=$(az monitor metrics alert show -g RG-TS-149 -n alert-ts149-tx --query "length(actions)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: alert has at least one action group"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: alert has no action groups attached"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

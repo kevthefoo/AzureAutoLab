@@ -43,6 +43,21 @@ echo "Setup complete. SUB-App has no service endpoints; storage account denies i
 | 1   | `SUB-App` exists                           | `az network vnet subnet show -g RG-TS-142 --vnet-name VNET-TS-142 -n SUB-App --query name -o tsv`                           |
 | 2   | Subnet has `Microsoft.Storage` service endpoint | `az network vnet subnet show -g RG-TS-142 --vnet-name VNET-TS-142 -n SUB-App --query "serviceEndpoints[?service=='Microsoft.Storage']" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SUB=$(az network vnet subnet show -g RG-TS-142 --vnet-name VNET-TS-142 -n SUB-App --query name -o tsv 2>/dev/null)
+if [ "$SUB" = "SUB-App" ]; then echo "[PASS] Task 1: SUB-App exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: SUB-App not found"; FAIL=$((FAIL+1)); fi
+
+COUNT=$(az network vnet subnet show -g RG-TS-142 --vnet-name VNET-TS-142 -n SUB-App --query "serviceEndpoints[?service=='Microsoft.Storage'] | length(@)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: SUB-App has Microsoft.Storage service endpoint"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: SUB-App is missing Microsoft.Storage service endpoint"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

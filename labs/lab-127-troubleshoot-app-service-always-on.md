@@ -46,6 +46,22 @@ echo "Setup complete. $FUNC FUNCTIONS_EXTENSION_VERSION=~3."
 | 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-127 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-127 --query name -o tsv`            |
 | 2   | `FUNCTIONS_EXTENSION_VERSION` is `~4`      | `f=$(az group show -n RG-TS-127 --query tags.FuncName -o tsv); az functionapp config appsettings list -n "$f" -g RG-TS-127 --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+F=$(az group show -n RG-TS-127 --query tags.FuncName -o tsv 2>/dev/null)
+EXISTS=$(az functionapp show -n "$F" -g RG-TS-127 --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: Function App $F exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az functionapp config appsettings list -n "$F" -g RG-TS-127 --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value | [0]" -o tsv 2>/dev/null)
+if [ "$V" = "~4" ]; then echo "[PASS] Task 2: FUNCTIONS_EXTENSION_VERSION is ~4"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: FUNCTIONS_EXTENSION_VERSION is '$V' (expected ~4)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

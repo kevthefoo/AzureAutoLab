@@ -44,6 +44,23 @@ echo "Setup complete. Lifecycle rule 'deletes-after-1-day' active."
 
 A correct fix returns an empty array (`[]`) for #2.
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='124'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=124"; FAIL=$((FAIL+1)); fi
+
+# Look for rules with short delete-after-modification windows
+COUNT=$(az storage account management-policy show --account-name "$SA" --resource-group RG-TS-124 \
+  --query "policy.rules[?definition.actions.baseBlob.delete.daysAfterModificationGreaterThan <= \`30\`] | length(@)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" = "0" ]; then echo "[PASS] Task 2: no aggressive delete rules remain (<=30 days)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: $COUNT rule(s) still delete blobs within 30 days of modification"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

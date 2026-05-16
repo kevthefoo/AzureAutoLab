@@ -44,6 +44,22 @@ echo "Setup complete. App $APP_NAME has signInAudience=AzureADMultipleOrgs."
 | 1   | The lab's app registration still exists    | `app=$(az group show -n RG-TS-111 --query tags.AppName -o tsv); az ad app list --display-name "$app" --query "[0].displayName" -o tsv`      |
 | 2   | `signInAudience` is `AzureADMyOrg`         | `app=$(az group show -n RG-TS-111 --query tags.AppName -o tsv); az ad app list --display-name "$app" --query "[0].signInAudience" -o tsv`   |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+APP=$(az group show -n RG-TS-111 --query tags.AppName -o tsv 2>/dev/null)
+APPID=$(az ad app list --display-name "$APP" --query "[0].appId" -o tsv 2>/dev/null)
+if [ -n "$APPID" ]; then echo "[PASS] Task 1: app registration $APP exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: app registration $APP not found"; FAIL=$((FAIL+1)); fi
+
+AUD=$(az ad app list --display-name "$APP" --query "[0].signInAudience" -o tsv 2>/dev/null)
+if [ "$AUD" = "AzureADMyOrg" ]; then echo "[PASS] Task 2: signInAudience is AzureADMyOrg (single-tenant)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: signInAudience is '$AUD' (expected AzureADMyOrg)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

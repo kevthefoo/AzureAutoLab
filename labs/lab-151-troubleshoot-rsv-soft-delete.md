@@ -39,6 +39,21 @@ echo "Setup complete. rsv-ts151 created with default immutability state (Disable
 | 1   | Vault `rsv-ts151` exists                   | `az backup vault show -g RG-TS-151 -n rsv-ts151 --query name -o tsv`                                                  |
 | 2   | Immutability state is `Unlocked` or `Locked` | `az backup vault show -g RG-TS-151 -n rsv-ts151 --query "properties.securitySettings.immutabilitySettings.state" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az backup vault show -g RG-TS-151 -n rsv-ts151 --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "rsv-ts151" ]; then echo "[PASS] Task 1: vault rsv-ts151 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: vault not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az backup vault show -g RG-TS-151 -n rsv-ts151 --query "properties.securitySettings.immutabilitySettings.state" -o tsv 2>/dev/null)
+case "$V" in Unlocked|Locked) echo "[PASS] Task 2: immutability state is $V"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: immutability state is '$V' (expected Unlocked or Locked)"; FAIL=$((FAIL+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

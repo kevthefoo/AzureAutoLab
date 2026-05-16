@@ -51,6 +51,22 @@ echo "Setup complete. Policy ts107-require-costcenter assigned to $RG with enfor
 | 1   | Policy assignment still scoped to `RG-TS-107`            | `az policy assignment list -g RG-TS-107 --query "[?name=='ts107-require-costcenter'].name" -o tsv`                                          |
 | 2   | Assignment `enforcementMode` is `Default` (not `DoNotEnforce`) | `az policy assignment show --name ts107-require-costcenter --scope $(az group show -n RG-TS-107 --query id -o tsv) --query "enforcementMode" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SCOPE=$(az group show -n RG-TS-107 --query id -o tsv 2>/dev/null)
+NAME=$(az policy assignment list -g RG-TS-107 --query "[?name=='ts107-require-costcenter'].name | [0]" -o tsv 2>/dev/null)
+if [ "$NAME" = "ts107-require-costcenter" ]; then echo "[PASS] Task 1: policy assignment exists at RG scope"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: policy assignment missing at RG scope"; FAIL=$((FAIL+1)); fi
+
+MODE=$(az policy assignment show --name ts107-require-costcenter --scope "$SCOPE" --query "enforcementMode" -o tsv 2>/dev/null)
+if [ "$MODE" = "Default" ]; then echo "[PASS] Task 2: enforcementMode is Default (deny in effect)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: enforcementMode is '$MODE' (expected Default)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

@@ -40,6 +40,21 @@ echo "Setup complete. $SA has shared-key auth disabled."
 | 1   | Lab storage account still exists             | `az storage account list --query "[?tags.AutoLabId=='119'].name" -o tsv`                  |
 | 2   | `allowSharedKeyAccess` is `true`             | `az storage account list --query "[?tags.AutoLabId=='119'].allowSharedKeyAccess" -o tsv`  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='119'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=119"; FAIL=$((FAIL+1)); fi
+
+V=$(az storage account list --query "[?tags.AutoLabId=='119'].allowSharedKeyAccess | [0]" -o tsv)
+if [ "$V" = "true" ]; then echo "[PASS] Task 2: allowSharedKeyAccess is true"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: allowSharedKeyAccess is '$V' (expected true)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

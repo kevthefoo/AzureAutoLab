@@ -40,6 +40,21 @@ echo "Setup complete. $SA default access tier is Cool."
 | 1   | Lab storage account still exists           | `az storage account list --query "[?tags.AutoLabId=='121'].name" -o tsv`              |
 | 2   | Default access tier is `Hot`               | `az storage account list --query "[?tags.AutoLabId=='121'].accessTier" -o tsv`        |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='121'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=121"; FAIL=$((FAIL+1)); fi
+
+V=$(az storage account list --query "[?tags.AutoLabId=='121'].accessTier | [0]" -o tsv)
+if [ "$V" = "Hot" ]; then echo "[PASS] Task 2: accessTier is Hot"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: accessTier is '$V' (expected Hot)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

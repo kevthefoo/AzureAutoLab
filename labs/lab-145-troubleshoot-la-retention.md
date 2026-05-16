@@ -41,6 +41,22 @@ echo "Setup complete. Workspace $LA retentionInDays=30."
 | 1   | Lab workspace still exists                 | `la=$(az group show -n RG-TS-145 --query tags.LaName -o tsv); az monitor log-analytics workspace show -g RG-TS-145 -n "$la" --query name -o tsv` |
 | 2   | Retention is ≥ 90 days                     | `la=$(az group show -n RG-TS-145 --query tags.LaName -o tsv); az monitor log-analytics workspace show -g RG-TS-145 -n "$la" --query retentionInDays -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+LA=$(az group show -n RG-TS-145 --query tags.LaName -o tsv 2>/dev/null)
+EXISTS=$(az monitor log-analytics workspace show -g RG-TS-145 -n "$LA" --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: workspace $LA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: workspace not found"; FAIL=$((FAIL+1)); fi
+
+R=$(az monitor log-analytics workspace show -g RG-TS-145 -n "$LA" --query retentionInDays -o tsv 2>/dev/null)
+if [ -n "$R" ] && [ "$R" -ge 90 ]; then echo "[PASS] Task 2: retention is $R days (>=90)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: retention is '$R' days (expected >=90)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

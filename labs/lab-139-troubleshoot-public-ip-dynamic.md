@@ -39,6 +39,21 @@ echo "Setup complete. PIP-VPN idleTimeoutInMinutes=4."
 | 1   | `PIP-VPN` still exists in `RG-TS-139`      | `az network public-ip show -g RG-TS-139 -n PIP-VPN --query name -o tsv`                     |
 | 2   | `idleTimeoutInMinutes` is ≥ 15             | `az network public-ip show -g RG-TS-139 -n PIP-VPN --query idleTimeoutInMinutes -o tsv`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az network public-ip show -g RG-TS-139 -n PIP-VPN --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "PIP-VPN" ]; then echo "[PASS] Task 1: PIP-VPN exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: PIP-VPN not found"; FAIL=$((FAIL+1)); fi
+
+T=$(az network public-ip show -g RG-TS-139 -n PIP-VPN --query idleTimeoutInMinutes -o tsv 2>/dev/null)
+if [ -n "$T" ] && [ "$T" -ge 15 ]; then echo "[PASS] Task 2: idleTimeoutInMinutes is $T (>=15)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: idleTimeoutInMinutes is '$T' (expected >=15)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

@@ -45,6 +45,22 @@ echo "Setup complete. $FUNC minTlsVersion=1.0."
 | 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-126 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-126 --query name -o tsv` |
 | 2   | `minTlsVersion` is `1.2`                   | `f=$(az group show -n RG-TS-126 --query tags.FuncName -o tsv); az functionapp config show -n "$f" -g RG-TS-126 --query minTlsVersion -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+F=$(az group show -n RG-TS-126 --query tags.FuncName -o tsv 2>/dev/null)
+EXISTS=$(az functionapp show -n "$F" -g RG-TS-126 --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: Function App $F exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az functionapp config show -n "$F" -g RG-TS-126 --query minTlsVersion -o tsv 2>/dev/null)
+if [ "$V" = "1.2" ]; then echo "[PASS] Task 2: minTlsVersion is 1.2"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: minTlsVersion is '$V' (expected 1.2)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

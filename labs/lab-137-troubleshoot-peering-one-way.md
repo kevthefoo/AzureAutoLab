@@ -42,6 +42,25 @@ echo "Setup complete. Only VNET-A -> VNET-B peering exists."
 | 2   | `VNET-B` now has a peering pointing back to `VNET-A`   | `az network vnet peering list -g RG-TS-137 --vnet-name VNET-B --query "[].{name:name, state:peeringState}" -o json`                          |
 | 3   | Both peerings show `peeringState == Connected`         | `az network vnet peering list -g RG-TS-137 --vnet-name VNET-A --query "[].peeringState" -o json; az network vnet peering list -g RG-TS-137 --vnet-name VNET-B --query "[].peeringState" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+A=$(az network vnet peering list -g RG-TS-137 --vnet-name VNET-A --query "length(@)" -o tsv 2>/dev/null)
+B=$(az network vnet peering list -g RG-TS-137 --vnet-name VNET-B --query "length(@)" -o tsv 2>/dev/null)
+if [ "${A:-0}" -gt 0 ]; then echo "[PASS] Task 1: VNET-A has at least one peering"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: VNET-A has no peerings"; FAIL=$((FAIL+1)); fi
+if [ "${B:-0}" -gt 0 ]; then echo "[PASS] Task 2: VNET-B has a reverse peering"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VNET-B has no peerings"; FAIL=$((FAIL+1)); fi
+
+CA=$(az network vnet peering list -g RG-TS-137 --vnet-name VNET-A --query "[?peeringState=='Connected'] | length(@)" -o tsv 2>/dev/null)
+CB=$(az network vnet peering list -g RG-TS-137 --vnet-name VNET-B --query "[?peeringState=='Connected'] | length(@)" -o tsv 2>/dev/null)
+if [ "${CA:-0}" -gt 0 ] && [ "${CB:-0}" -gt 0 ]; then echo "[PASS] Task 3: both peerings are Connected"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: peerings not Connected (A=$CA, B=$CB)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

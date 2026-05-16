@@ -45,6 +45,23 @@ echo "Setup complete. Container internal-docs has public-access=container (anony
 | 1   | Lab storage account still exists             | `az storage account list --query "[?tags.AutoLabId=='118'].name" -o tsv`                                                                    |
 | 2   | Container `internal-docs` is private (`off`/`none`) | `sa=$(az storage account list --query "[?tags.AutoLabId=='118'].name" -o tsv); key=$(az storage account keys list -n "$sa" -g RG-TS-118 --query "[0].value" -o tsv); az storage container show --name internal-docs --account-name "$sa" --account-key "$key" --query "properties.publicAccess" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='118'].name | [0]" -o tsv)
+KEY=""
+if [ -n "$SA" ]; then KEY=$(az storage account keys list -n "$SA" -g RG-TS-118 --query "[0].value" -o tsv 2>/dev/null); fi
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=118"; FAIL=$((FAIL+1)); fi
+
+ACC=$(az storage container show --name internal-docs --account-name "$SA" --account-key "$KEY" --query "properties.publicAccess" -o tsv 2>/dev/null)
+case "$ACC" in off|""|None|none) echo "[PASS] Task 2: container internal-docs publicAccess is private"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: container publicAccess is '$ACC' (expected off/none)"; FAIL=$((FAIL+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

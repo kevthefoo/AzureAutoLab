@@ -59,6 +59,25 @@ echo "Firewall: default-action=Deny, bypass=None, no IP rules"
 
 A correct fix sets `defaultAction == "Deny"` AND `bypass` includes `AzureServices`.
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='102'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account tagged AutoLabId=102 exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=102 found"; FAIL=$((FAIL+1)); fi
+
+DA=$(az storage account list --query "[?tags.AutoLabId=='102'].networkRuleSet.defaultAction | [0]" -o tsv)
+if [ "$DA" = "Deny" ]; then echo "[PASS] Task 2: firewall defaultAction is still Deny"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: defaultAction is $DA (expected Deny)"; FAIL=$((FAIL+1)); fi
+
+BP=$(az storage account list --query "[?tags.AutoLabId=='102'].networkRuleSet.bypass | [0]" -o tsv)
+case "$BP" in *AzureServices*) echo "[PASS] Task 3: bypass includes AzureServices ($BP)"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: bypass is '$BP' (must include AzureServices)"; FAIL=$((FAIL+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

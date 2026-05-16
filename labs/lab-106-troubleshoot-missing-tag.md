@@ -42,6 +42,26 @@ echo "Setup complete. $RG has Environment + AutoLabId but no CostCenter tag."
 | 2   | RG has `CostCenter=Finance`                  | `az group show -n RG-TS-106 --query "tags.CostCenter" -o tsv`                                                         |
 | 3   | Existing tags (`AutoLabId`, `Environment`) preserved | `az group show -n RG-TS-106 --query "tags" -o json`                                                                  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+NAME=$(az group show -n RG-TS-106 --query name -o tsv 2>/dev/null)
+if [ "$NAME" = "RG-TS-106" ]; then echo "[PASS] Task 1: RG-TS-106 still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: RG-TS-106 is missing"; FAIL=$((FAIL+1)); fi
+
+CC=$(az group show -n RG-TS-106 --query "tags.CostCenter" -o tsv 2>/dev/null)
+if [ "$CC" = "Finance" ]; then echo "[PASS] Task 2: tag CostCenter=Finance is applied"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: tag CostCenter is '$CC' (expected Finance)"; FAIL=$((FAIL+1)); fi
+
+AL=$(az group show -n RG-TS-106 --query "tags.AutoLabId" -o tsv 2>/dev/null)
+EN=$(az group show -n RG-TS-106 --query "tags.Environment" -o tsv 2>/dev/null)
+if [ "$AL" = "106" ] && [ "$EN" = "Production" ]; then echo "[PASS] Task 3: original tags AutoLabId+Environment preserved"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: original tags lost (AutoLabId=$AL, Environment=$EN)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

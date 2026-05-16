@@ -46,6 +46,22 @@ echo "Setup complete. $FUNC is missing AzureWebJobsStorage setting."
 | 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-128 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-128 --query name -o tsv`            |
 | 2   | `AzureWebJobsStorage` setting exists       | `f=$(az group show -n RG-TS-128 --query tags.FuncName -o tsv); az functionapp config appsettings list -n "$f" -g RG-TS-128 --query "[?name=='AzureWebJobsStorage'].name" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+F=$(az group show -n RG-TS-128 --query tags.FuncName -o tsv 2>/dev/null)
+EXISTS=$(az functionapp show -n "$F" -g RG-TS-128 --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: Function App $F exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az functionapp config appsettings list -n "$F" -g RG-TS-128 --query "[?name=='AzureWebJobsStorage'].name | [0]" -o tsv 2>/dev/null)
+if [ "$V" = "AzureWebJobsStorage" ]; then echo "[PASS] Task 2: AzureWebJobsStorage app setting is present"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: AzureWebJobsStorage app setting is missing"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

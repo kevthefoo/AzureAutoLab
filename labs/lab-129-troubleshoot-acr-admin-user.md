@@ -40,6 +40,21 @@ echo "Setup complete. ACR $ACR has admin-enabled=true."
 | 1   | Lab ACR still exists                       | `az acr list -g RG-TS-129 --query "[?tags.AutoLabId=='129'].name" -o tsv`                 |
 | 2   | `adminUserEnabled` is `false`              | `az acr list -g RG-TS-129 --query "[?tags.AutoLabId=='129'].adminUserEnabled" -o tsv`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+ACR=$(az acr list -g RG-TS-129 --query "[?tags.AutoLabId=='129'].name | [0]" -o tsv)
+if [ -n "$ACR" ]; then echo "[PASS] Task 1: ACR $ACR exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no ACR tagged AutoLabId=129"; FAIL=$((FAIL+1)); fi
+
+V=$(az acr list -g RG-TS-129 --query "[?tags.AutoLabId=='129'].adminUserEnabled | [0]" -o tsv)
+if [ "$V" = "false" ]; then echo "[PASS] Task 2: adminUserEnabled is false"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: adminUserEnabled is '$V' (expected false)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

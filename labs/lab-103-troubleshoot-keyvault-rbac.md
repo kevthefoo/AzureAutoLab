@@ -59,6 +59,29 @@ echo "Key Vault created: $KV (RBAC mode, no role assignments for current user)"
 
 A correct fix retains `enableRbacAuthorization == true` AND adds at least one Key Vault role assignment scoped to the vault.
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+KV=$(az keyvault list --query "[?tags.AutoLabId=='103'].name | [0]" -o tsv)
+if [ -n "$KV" ]; then echo "[PASS] Task 1: Key Vault tagged AutoLabId=103 exists ($KV)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no Key Vault tagged AutoLabId=103 found"; FAIL=$((FAIL+1)); fi
+
+RBAC=$(az keyvault list --query "[?tags.AutoLabId=='103'].properties.enableRbacAuthorization | [0]" -o tsv)
+if [ "$RBAC" = "true" ]; then echo "[PASS] Task 2: vault is still RBAC-authorization mode"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: vault is not RBAC mode (got: $RBAC)"; FAIL=$((FAIL+1)); fi
+
+VID=$(az keyvault list --query "[?tags.AutoLabId=='103'].id | [0]" -o tsv)
+COUNT=0
+if [ -n "$VID" ]; then
+  COUNT=$(az role assignment list --scope "$VID" --query "[?contains(roleDefinitionName, 'Key Vault')] | length(@)" -o tsv 2>/dev/null)
+fi
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: at least one Key Vault role assignment exists at vault scope"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no Key Vault role assignment at vault scope"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

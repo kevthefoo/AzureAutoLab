@@ -44,6 +44,22 @@ echo "Setup complete. App registration $APP_NAME created with NO redirect URIs."
 | 1   | The lab's app registration still exists                  | `app=$(az group show -n RG-TS-110 --query tags.AppName -o tsv); az ad app list --display-name "$app" --query "[0].displayName" -o tsv`                    |
 | 2   | The app has the required redirect URI on Web platform    | `app=$(az group show -n RG-TS-110 --query tags.AppName -o tsv); az ad app list --display-name "$app" --query "[0].web.redirectUris" -o json`              |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+APP=$(az group show -n RG-TS-110 --query tags.AppName -o tsv 2>/dev/null)
+APPID=$(az ad app list --display-name "$APP" --query "[0].appId" -o tsv 2>/dev/null)
+if [ -n "$APPID" ]; then echo "[PASS] Task 1: app registration $APP exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: app registration $APP not found"; FAIL=$((FAIL+1)); fi
+
+URIS=$(az ad app list --display-name "$APP" --query "[0].web.redirectUris" -o tsv 2>/dev/null)
+case "$URIS" in *https://ts110.contoso.local/auth/callback*) echo "[PASS] Task 2: redirect URI present"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: redirect URI 'https://ts110.contoso.local/auth/callback' not configured"; FAIL=$((FAIL+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

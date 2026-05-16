@@ -46,6 +46,24 @@ echo "Setup complete. $FUNC WEBSITE_NODE_DEFAULT_VERSION=~14."
 | 1   | Lab function app still exists              | `f=$(az group show -n RG-TS-132 --query tags.FuncName -o tsv); az functionapp show -n "$f" -g RG-TS-132 --query name -o tsv`            |
 | 2   | `WEBSITE_NODE_DEFAULT_VERSION` is `~20` or newer | `f=$(az group show -n RG-TS-132 --query tags.FuncName -o tsv); az functionapp config appsettings list -n "$f" -g RG-TS-132 --query "[?name=='WEBSITE_NODE_DEFAULT_VERSION'].value" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+F=$(az group show -n RG-TS-132 --query tags.FuncName -o tsv 2>/dev/null)
+EXISTS=$(az functionapp show -n "$F" -g RG-TS-132 --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: Function App $F exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az functionapp config appsettings list -n "$F" -g RG-TS-132 --query "[?name=='WEBSITE_NODE_DEFAULT_VERSION'].value | [0]" -o tsv 2>/dev/null)
+# Accept ~20 and above (numeric compare on the major)
+MAJOR="${V#~}"; MAJOR="${MAJOR%%.*}"
+if [ -n "$MAJOR" ] && [ "$MAJOR" -ge 20 ] 2>/dev/null; then echo "[PASS] Task 2: WEBSITE_NODE_DEFAULT_VERSION is $V (>= ~20)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: WEBSITE_NODE_DEFAULT_VERSION is '$V' (expected ~20 or newer)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

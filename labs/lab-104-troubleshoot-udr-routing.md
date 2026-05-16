@@ -70,6 +70,25 @@ echo "Setup complete. RT-App is attached to SUB-App with BadRoute."
 
 A correct fix returns route table id in #3, empty array in #2, and the route table object in #1.
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RT=$(az network route-table show -g RG-TS-104 -n RT-App --query name -o tsv 2>/dev/null)
+if [ "$RT" = "RT-App" ]; then echo "[PASS] Task 1: route table RT-App still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: route table RT-App is missing"; FAIL=$((FAIL+1)); fi
+
+BAD=$(az network route-table route list -g RG-TS-104 --route-table-name RT-App --query "[?nextHopType=='VirtualAppliance'] | length(@)" -o tsv 2>/dev/null)
+if [ "${BAD:-0}" = "0" ]; then echo "[PASS] Task 2: no VirtualAppliance routes remain"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: $BAD VirtualAppliance route(s) still present"; FAIL=$((FAIL+1)); fi
+
+ASSOC=$(az network vnet subnet show -g RG-TS-104 --vnet-name VNET-TS-104 -n SUB-App --query "routeTable.id" -o tsv 2>/dev/null)
+if [ -n "$ASSOC" ]; then echo "[PASS] Task 3: SUB-App is still associated with a route table"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: SUB-App no longer references any route table"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

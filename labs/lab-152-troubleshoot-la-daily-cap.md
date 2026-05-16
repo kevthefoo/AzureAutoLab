@@ -41,6 +41,24 @@ echo "Setup complete. $LA daily cap = 0.5 GB."
 | 1   | Lab workspace still exists                 | `la=$(az group show -n RG-TS-152 --query tags.LaName -o tsv); az monitor log-analytics workspace show -g RG-TS-152 -n "$la" --query name -o tsv` |
 | 2   | Daily cap ≥ 10 GB                          | `la=$(az group show -n RG-TS-152 --query tags.LaName -o tsv); az monitor log-analytics workspace show -g RG-TS-152 -n "$la" --query "workspaceCapping.dailyQuotaGb" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+LA=$(az group show -n RG-TS-152 --query tags.LaName -o tsv 2>/dev/null)
+EXISTS=$(az monitor log-analytics workspace show -g RG-TS-152 -n "$LA" --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: workspace $LA exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: workspace not found"; FAIL=$((FAIL+1)); fi
+
+Q=$(az monitor log-analytics workspace show -g RG-TS-152 -n "$LA" --query "workspaceCapping.dailyQuotaGb" -o tsv 2>/dev/null)
+# Quota is a float; compare with awk
+OK=$(awk -v q="${Q:-0}" 'BEGIN{print (q+0 >= 10) ? 1 : 0}')
+if [ "$OK" = "1" ]; then echo "[PASS] Task 2: daily cap is $Q GB (>=10)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: daily cap is '$Q' (expected >=10)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

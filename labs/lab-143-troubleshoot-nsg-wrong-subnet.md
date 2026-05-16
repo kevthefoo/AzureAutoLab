@@ -43,6 +43,24 @@ echo "Setup complete. NSG-Web is attached to SUB-App (should be SUB-Web)."
 | 2   | `SUB-Web` references NSG-Web               | `az network vnet subnet show -g RG-TS-143 --vnet-name VNET-TS-143 -n SUB-Web --query "networkSecurityGroup.id" -o tsv`     |
 | 3   | `SUB-App` no longer references NSG-Web     | `az network vnet subnet show -g RG-TS-143 --vnet-name VNET-TS-143 -n SUB-App --query "networkSecurityGroup" -o json`       |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+N=$(az network nsg show -g RG-TS-143 -n NSG-Web --query name -o tsv 2>/dev/null)
+if [ "$N" = "NSG-Web" ]; then echo "[PASS] Task 1: NSG-Web still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: NSG-Web not found"; FAIL=$((FAIL+1)); fi
+
+WEB=$(az network vnet subnet show -g RG-TS-143 --vnet-name VNET-TS-143 -n SUB-Web --query "networkSecurityGroup.id" -o tsv 2>/dev/null)
+APP=$(az network vnet subnet show -g RG-TS-143 --vnet-name VNET-TS-143 -n SUB-App --query "networkSecurityGroup.id" -o tsv 2>/dev/null)
+case "$WEB" in *NSG-Web*) echo "[PASS] Task 2: SUB-Web references NSG-Web"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: SUB-Web does NOT reference NSG-Web (got: $WEB)"; FAIL=$((FAIL+1));; esac
+case "$APP" in *NSG-Web*) echo "[FAIL] Task 3: SUB-App still references NSG-Web"; FAIL=$((FAIL+1));;
+  *) echo "[PASS] Task 3: SUB-App no longer references NSG-Web"; PASS=$((PASS+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

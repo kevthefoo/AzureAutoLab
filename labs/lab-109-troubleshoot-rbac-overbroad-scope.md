@@ -54,6 +54,27 @@ echo "Setup complete. SP $SP_NAME granted Reader at subscription scope."
 | 2   | The SP has NO Reader assignment at subscription scope              | `sp=$(az group show -n RG-TS-109 --query tags.SpName -o tsv); appid=$(az ad sp list --display-name "$sp" --query "[0].appId" -o tsv); az role assignment list --assignee "$appid" --scope "/subscriptions/$(az account show --query id -o tsv)" --query "[?roleDefinitionName=='Reader']" -o json` |
 | 3   | The SP has Reader scoped to `RG-TS-109`                            | `sp=$(az group show -n RG-TS-109 --query tags.SpName -o tsv); appid=$(az ad sp list --display-name "$sp" --query "[0].appId" -o tsv); az role assignment list --assignee "$appid" --resource-group RG-TS-109 --query "[?roleDefinitionName=='Reader']" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SP=$(az group show -n RG-TS-109 --query tags.SpName -o tsv 2>/dev/null)
+APPID=$(az ad sp list --display-name "$SP" --query "[0].appId" -o tsv 2>/dev/null)
+if [ -n "$APPID" ]; then echo "[PASS] Task 1: SP $SP still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: SP $SP not found"; FAIL=$((FAIL+1)); fi
+
+SUB=$(az account show --query id -o tsv)
+SUB_R=$(az role assignment list --assignee "$APPID" --scope "/subscriptions/$SUB" --query "[?roleDefinitionName=='Reader'] | length(@)" -o tsv 2>/dev/null)
+if [ "${SUB_R:-0}" = "0" ]; then echo "[PASS] Task 2: SP has no Reader assignment at subscription scope"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: SP still has Reader at subscription scope"; FAIL=$((FAIL+1)); fi
+
+RG_R=$(az role assignment list --assignee "$APPID" --resource-group RG-TS-109 --query "[?roleDefinitionName=='Reader'] | length(@)" -o tsv 2>/dev/null)
+if [ "${RG_R:-0}" -gt 0 ]; then echo "[PASS] Task 3: SP has Reader scoped to RG-TS-109"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: SP has no Reader scoped to RG-TS-109"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

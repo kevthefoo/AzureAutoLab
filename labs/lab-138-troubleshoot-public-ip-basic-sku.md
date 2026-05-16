@@ -38,6 +38,21 @@ echo "Setup complete. PIP-Web has no DNS name label."
 | 1   | `PIP-Web` still exists in `RG-TS-138`               | `az network public-ip show -g RG-TS-138 -n PIP-Web --query name -o tsv`                   |
 | 2   | The PIP has a non-null `dnsSettings.domainNameLabel` | `az network public-ip show -g RG-TS-138 -n PIP-Web --query "dnsSettings.domainNameLabel" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az network public-ip show -g RG-TS-138 -n PIP-Web --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "PIP-Web" ]; then echo "[PASS] Task 1: PIP-Web exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: PIP-Web not found"; FAIL=$((FAIL+1)); fi
+
+L=$(az network public-ip show -g RG-TS-138 -n PIP-Web --query "dnsSettings.domainNameLabel" -o tsv 2>/dev/null)
+if [ -n "$L" ]; then echo "[PASS] Task 2: domainNameLabel is set ($L)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: domainNameLabel is empty"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

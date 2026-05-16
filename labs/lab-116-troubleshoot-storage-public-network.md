@@ -40,6 +40,21 @@ echo "Setup complete. $SA has publicNetworkAccess=Disabled."
 | 1   | Lab storage account still exists             | `az storage account list --query "[?tags.AutoLabId=='116'].name" -o tsv`                    |
 | 2   | `publicNetworkAccess` is `Enabled`           | `az storage account list --query "[?tags.AutoLabId=='116'].publicNetworkAccess" -o tsv`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='116'].name | [0]" -o tsv)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=116"; FAIL=$((FAIL+1)); fi
+
+PNA=$(az storage account list --query "[?tags.AutoLabId=='116'].publicNetworkAccess | [0]" -o tsv)
+if [ "$PNA" = "Enabled" ]; then echo "[PASS] Task 2: publicNetworkAccess is Enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: publicNetworkAccess is '$PNA' (expected Enabled)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

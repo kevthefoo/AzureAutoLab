@@ -43,6 +43,21 @@ echo "Setup complete. alert-ts148-cpu severity=3."
 | 1   | Alert `alert-ts148-cpu` still exists       | `az monitor metrics alert show -g RG-TS-148 -n alert-ts148-cpu --query name -o tsv`                       |
 | 2   | Alert severity is ≤ 1                      | `az monitor metrics alert show -g RG-TS-148 -n alert-ts148-cpu --query severity -o tsv`                   |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az monitor metrics alert show -g RG-TS-148 -n alert-ts148-cpu --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: alert alert-ts148-cpu exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: alert not found"; FAIL=$((FAIL+1)); fi
+
+S=$(az monitor metrics alert show -g RG-TS-148 -n alert-ts148-cpu --query severity -o tsv 2>/dev/null)
+if [ -n "$S" ] && [ "$S" -le 1 ]; then echo "[PASS] Task 2: severity is $S (<=1)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: severity is '$S' (expected <=1)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

@@ -43,6 +43,21 @@ echo "Setup complete. ACR $ACR has anonymousPullEnabled=true."
 | 1   | Lab ACR still exists                       | `az acr list -g RG-TS-130 --query "[?tags.AutoLabId=='130'].name" -o tsv`                     |
 | 2   | `anonymousPullEnabled` is `false`          | `az acr list -g RG-TS-130 --query "[?tags.AutoLabId=='130'].anonymousPullEnabled" -o tsv`     |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+ACR=$(az acr list -g RG-TS-130 --query "[?tags.AutoLabId=='130'].name | [0]" -o tsv)
+if [ -n "$ACR" ]; then echo "[PASS] Task 1: ACR $ACR exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no ACR tagged AutoLabId=130"; FAIL=$((FAIL+1)); fi
+
+V=$(az acr list -g RG-TS-130 --query "[?tags.AutoLabId=='130'].anonymousPullEnabled | [0]" -o tsv)
+if [ "$V" = "false" ]; then echo "[PASS] Task 2: anonymousPullEnabled is false"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: anonymousPullEnabled is '$V' (expected false)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

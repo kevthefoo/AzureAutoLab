@@ -50,6 +50,23 @@ echo "Setup complete. Alert scope is RG-TS-153-Other (wrong)."
 | 1   | The alert still exists                                       | `az monitor activity-log alert show -n alert-ts153-rgdelete -g RG-TS-153 --query name -o tsv`                            |
 | 2   | The alert scope includes `RG-TS-153-Protected` (and not `Other`) | `az monitor activity-log alert show -n alert-ts153-rgdelete -g RG-TS-153 --query "scopes" -o json`                       |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+EXISTS=$(az monitor activity-log alert show -n alert-ts153-rgdelete -g RG-TS-153 --query name -o tsv 2>/dev/null)
+if [ "$EXISTS" = "alert-ts153-rgdelete" ]; then echo "[PASS] Task 1: alert exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: alert not found"; FAIL=$((FAIL+1)); fi
+
+SCOPES=$(az monitor activity-log alert show -n alert-ts153-rgdelete -g RG-TS-153 --query "scopes" -o tsv 2>/dev/null)
+case "$SCOPES" in *RG-TS-153-Protected*) ;; *) BAD=1;; esac
+case "$SCOPES" in *RG-TS-153-Other*) WRONG=1;; esac
+if [ -z "${BAD:-}" ] && [ -z "${WRONG:-}" ]; then echo "[PASS] Task 2: scope includes RG-TS-153-Protected and not -Other"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: scopes are '$SCOPES' (must include -Protected, must not include -Other)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

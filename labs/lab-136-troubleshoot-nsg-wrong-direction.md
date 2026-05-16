@@ -41,6 +41,21 @@ echo "Setup complete. Allow-SSH is Outbound instead of Inbound."
 | 1   | NSG-Linux still has an Allow-SSH-style rule for port 22 | `az network nsg rule list -g RG-TS-136 --nsg-name NSG-Linux --query "[?destinationPortRange=='22']" -o json` |
 | 2   | A rule for port 22 has direction `Inbound` | `az network nsg rule list -g RG-TS-136 --nsg-name NSG-Linux --query "[?destinationPortRange=='22' && direction=='Inbound']" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+COUNT=$(az network nsg rule list -g RG-TS-136 --nsg-name NSG-Linux --query "[?destinationPortRange=='22'] | length(@)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 1: NSG-Linux still has a port-22 rule"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no port-22 rule found"; FAIL=$((FAIL+1)); fi
+
+INB=$(az network nsg rule list -g RG-TS-136 --nsg-name NSG-Linux --query "[?destinationPortRange=='22' && direction=='Inbound'] | length(@)" -o tsv 2>/dev/null)
+if [ "${INB:-0}" -gt 0 ]; then echo "[PASS] Task 2: an Inbound port-22 rule exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no Inbound port-22 rule"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

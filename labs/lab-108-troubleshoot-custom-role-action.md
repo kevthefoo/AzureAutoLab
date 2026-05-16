@@ -55,6 +55,22 @@ echo "Setup complete. Custom role $ROLE created without listKeys action."
 | 1   | The lab's custom role still exists                         | `role=$(az group show -n RG-TS-108 --query tags.RoleName -o tsv); az role definition list --name "$role" --query "[0].roleName" -o tsv`   |
 | 2   | The role's `actions` includes `Microsoft.Storage/storageAccounts/listKeys/action` | `role=$(az group show -n RG-TS-108 --query tags.RoleName -o tsv); az role definition list --name "$role" --query "[0].permissions[0].actions" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+ROLE=$(az group show -n RG-TS-108 --query tags.RoleName -o tsv 2>/dev/null)
+EXISTS=$(az role definition list --name "$ROLE" --query "[0].roleName" -o tsv 2>/dev/null)
+if [ "$EXISTS" = "$ROLE" ]; then echo "[PASS] Task 1: custom role $ROLE still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: custom role $ROLE is missing"; FAIL=$((FAIL+1)); fi
+
+HAS=$(az role definition list --name "$ROLE" --query "[0].permissions[0].actions[?contains(@, 'listKeys')] | length(@)" -o tsv 2>/dev/null)
+if [ "${HAS:-0}" -gt 0 ]; then echo "[PASS] Task 2: role actions include listKeys"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: role actions are missing the listKeys permission"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

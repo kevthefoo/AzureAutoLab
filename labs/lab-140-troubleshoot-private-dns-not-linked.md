@@ -40,6 +40,21 @@ echo "Setup complete. Zone corp.internal has an 'api' A record but no VNet link.
 | 1   | Private DNS zone `corp.internal` exists    | `az network private-dns zone show -g RG-TS-140 -n corp.internal --query name -o tsv`                          |
 | 2   | A VNet link to `VNET-Corp` exists           | `az network private-dns link vnet list -g RG-TS-140 -z corp.internal --query "[?contains(virtualNetwork.id, 'VNET-Corp')]" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+ZONE=$(az network private-dns zone show -g RG-TS-140 -n corp.internal --query name -o tsv 2>/dev/null)
+if [ "$ZONE" = "corp.internal" ]; then echo "[PASS] Task 1: zone corp.internal exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: zone corp.internal not found"; FAIL=$((FAIL+1)); fi
+
+COUNT=$(az network private-dns link vnet list -g RG-TS-140 -z corp.internal --query "[?contains(virtualNetwork.id, 'VNET-Corp')] | length(@)" -o tsv 2>/dev/null)
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: a VNet link to VNET-Corp exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: no VNet link to VNET-Corp on corp.internal"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

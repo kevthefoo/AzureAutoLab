@@ -42,6 +42,23 @@ echo "Setup complete. Deny-Custom-Ports (pri 100) beats Allow-App-8080 (pri 200)
 | 1   | Both rules still exist on `NSG-App`                                          | `az network nsg rule list -g RG-TS-135 --nsg-name NSG-App --query "[].name" -o json`                                          |
 | 2   | `Allow-App-8080` has a lower priority number than `Deny-Custom-Ports`        | `az network nsg rule list -g RG-TS-135 --nsg-name NSG-App --query "[].{name:name, priority:priority}" -o json`                |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+A=$(az network nsg rule show -g RG-TS-135 --nsg-name NSG-App -n Allow-App-8080 --query name -o tsv 2>/dev/null)
+D=$(az network nsg rule show -g RG-TS-135 --nsg-name NSG-App -n Deny-Custom-Ports --query name -o tsv 2>/dev/null)
+if [ "$A" = "Allow-App-8080" ] && [ "$D" = "Deny-Custom-Ports" ]; then echo "[PASS] Task 1: both rules still exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: missing rule (Allow=$A Deny=$D)"; FAIL=$((FAIL+1)); fi
+
+AP=$(az network nsg rule show -g RG-TS-135 --nsg-name NSG-App -n Allow-App-8080 --query priority -o tsv 2>/dev/null)
+DP=$(az network nsg rule show -g RG-TS-135 --nsg-name NSG-App -n Deny-Custom-Ports --query priority -o tsv 2>/dev/null)
+if [ -n "$AP" ] && [ -n "$DP" ] && [ "$AP" -lt "$DP" ]; then echo "[PASS] Task 2: Allow ($AP) has higher precedence than Deny ($DP)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: Allow priority $AP is not lower than Deny priority $DP"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

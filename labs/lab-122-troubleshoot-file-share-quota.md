@@ -40,6 +40,23 @@ echo "Setup complete. Share cad-shared quota=5 GiB."
 | 1   | Lab storage account still exists           | `az storage account list --query "[?tags.AutoLabId=='122'].name" -o tsv`                                                                                                           |
 | 2   | File share `cad-shared` quota ≥ 500        | `sa=$(az storage account list --query "[?tags.AutoLabId=='122'].name" -o tsv); key=$(az storage account keys list -n "$sa" -g RG-TS-122 --query "[0].value" -o tsv); az storage share show --name cad-shared --account-name "$sa" --account-key "$key" --query "properties.quota" -o tsv` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SA=$(az storage account list --query "[?tags.AutoLabId=='122'].name | [0]" -o tsv)
+KEY=""
+if [ -n "$SA" ]; then KEY=$(az storage account keys list -n "$SA" -g RG-TS-122 --query "[0].value" -o tsv 2>/dev/null); fi
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account exists ($SA)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account tagged AutoLabId=122"; FAIL=$((FAIL+1)); fi
+
+Q=$(az storage share show --name cad-shared --account-name "$SA" --account-key "$KEY" --query "properties.quota" -o tsv 2>/dev/null)
+if [ -n "$Q" ] && [ "$Q" -ge 500 ]; then echo "[PASS] Task 2: share quota is $Q GiB (>=500)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: share quota is '$Q' (expected >=500)"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

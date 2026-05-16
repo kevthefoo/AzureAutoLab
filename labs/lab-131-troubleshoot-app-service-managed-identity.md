@@ -46,6 +46,22 @@ echo "Setup complete. Function App $FUNC has no managed identity."
 
 A correct fix returns `SystemAssigned` (or `SystemAssigned, UserAssigned`).
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+F=$(az group show -n RG-TS-131 --query tags.FuncName -o tsv 2>/dev/null)
+EXISTS=$(az functionapp show -n "$F" -g RG-TS-131 --query name -o tsv 2>/dev/null)
+if [ -n "$EXISTS" ]; then echo "[PASS] Task 1: Function App $F exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
+
+V=$(az functionapp show -n "$F" -g RG-TS-131 --query identity.type -o tsv 2>/dev/null)
+case "$V" in *SystemAssigned*) echo "[PASS] Task 2: identity.type includes SystemAssigned ($V)"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: identity.type is '$V' (expected SystemAssigned)"; FAIL=$((FAIL+1));; esac
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

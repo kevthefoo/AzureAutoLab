@@ -43,6 +43,21 @@ echo "Setup complete. NAT-GW exists but is not associated with SUB-Private."
 | 1   | `NAT-GW` still exists in `RG-TS-141`                       | `az network nat gateway show -g RG-TS-141 -n NAT-GW --query name -o tsv`                                                    |
 | 2   | `SUB-Private` references the NAT Gateway                   | `az network vnet subnet show -g RG-TS-141 --vnet-name VNET-TS-141 -n SUB-Private --query "natGateway.id" -o tsv`            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+NAT=$(az network nat gateway show -g RG-TS-141 -n NAT-GW --query name -o tsv 2>/dev/null)
+if [ "$NAT" = "NAT-GW" ]; then echo "[PASS] Task 1: NAT-GW exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: NAT-GW not found"; FAIL=$((FAIL+1)); fi
+
+ID=$(az network vnet subnet show -g RG-TS-141 --vnet-name VNET-TS-141 -n SUB-Private --query "natGateway.id" -o tsv 2>/dev/null)
+if [ -n "$ID" ]; then echo "[PASS] Task 2: SUB-Private references the NAT Gateway"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: SUB-Private has no NAT Gateway association"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash

@@ -48,6 +48,25 @@ echo "Setup complete. SP $SP_NAME exists with NO passwordCredentials/keyCredenti
 | 1   | The lab SP still exists                      | `sp=$(az group show -n RG-TS-113 --query tags.SpName -o tsv); az ad sp list --display-name "$sp" --query "[0].displayName" -o tsv`        |
 | 2   | The underlying app has at least one credential | `sp=$(az group show -n RG-TS-113 --query tags.SpName -o tsv); appid=$(az ad app list --display-name "$sp" --query "[0].appId" -o tsv); az ad app credential list --id "$appid" -o json` |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+SP=$(az group show -n RG-TS-113 --query tags.SpName -o tsv 2>/dev/null)
+APPID=$(az ad app list --display-name "$SP" --query "[0].appId" -o tsv 2>/dev/null)
+if [ -n "$APPID" ]; then echo "[PASS] Task 1: SP $SP still exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: SP $SP not found"; FAIL=$((FAIL+1)); fi
+
+COUNT=0
+if [ -n "$APPID" ]; then
+  COUNT=$(az ad app credential list --id "$APPID" --query "length(@)" -o tsv 2>/dev/null)
+fi
+if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: app has $COUNT credential(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: app has no credentials"; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Cleanup
 
 ```bash
