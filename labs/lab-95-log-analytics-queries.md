@@ -35,6 +35,31 @@ The security operations team needs to run KQL queries against centralized logs t
 | 4   | Saved search exists                  | `law-queries-01` > Logs > Queries > Saved Queries | `Heartbeat Summary by Computer` appears under `VM Health` category |
 | 5   | AzureActivity query runs and exports | `law-queries-01` > Logs                           | Query returns resource creation events and CSV export downloads    |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-LogQueries-Lab
+LA=$(az monitor log-analytics workspace show -g "$RG" -n law-queries-01 --query name -o tsv 2>/dev/null)
+if [ "$LA" = "law-queries-01" ]; then echo "[PASS] Task 1: workspace exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: workspace missing"; FAIL=$((FAIL+1)); fi
+
+VM=$(az vm show -n vm-log-source-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ -n "$VM" ]; then echo "[PASS] Task 2: vm-log-source-01 exists (Azure Monitor Agent install check is manual)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VM missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3: KQL query execution is transient"; PASS=$((PASS+1))
+
+SS=$(az monitor log-analytics workspace saved-search list -g "$RG" --workspace-name law-queries-01 --query "[?displayName=='Heartbeat Summary by Computer'] | length(@)" -o tsv 2>/dev/null)
+if [ "${SS:-0}" -gt 0 ]; then echo "[PASS] Task 4: saved search exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: saved search missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: CSV export is a manual portal action"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

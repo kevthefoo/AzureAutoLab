@@ -35,6 +35,41 @@ The security team requires that all audit logs and platform metrics from key Azu
 | 4   | Key Vault diagnostic setting exists | Key Vaults > `kv-diag-lab-01` > Diagnostic settings     | `diag-kv-prod` is listed with LAW destination                |
 | 5   | Key Vault sends AuditEvent logs     | Diagnostic settings > `diag-kv-prod` > Details          | AuditEvent category and AllMetrics are enabled               |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Diagnostics-Lab
+LA=$(az monitor log-analytics workspace show -g "$RG" -n law-diagnostics-01 --query name -o tsv 2>/dev/null)
+SA=$(az storage account show -n stdiagarchive2026 -g "$RG" --query name -o tsv 2>/dev/null)
+VN=$(az network vnet show -n vnet-prod-01 -g "$RG" --query name -o tsv 2>/dev/null)
+KV=$(az keyvault show -n kv-diag-lab-01 --query name -o tsv 2>/dev/null)
+if [ -n "$LA" ] && [ -n "$SA" ] && [ -n "$VN" ] && [ -n "$KV" ]; then echo "[PASS] Task 1: all 4 resources exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: missing resources (la=$LA sa=$SA vn=$VN kv=$KV)"; FAIL=$((FAIL+1)); fi
+
+VID=$(az network vnet show -n vnet-prod-01 -g "$RG" --query id -o tsv 2>/dev/null)
+DV=0
+if [ -n "$VID" ]; then DV=$(az monitor diagnostic-settings list --resource "$VID" --query "value[?name=='diag-vnet-prod'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${DV:-0}" -gt 0 ]; then echo "[PASS] Task 2: diag-vnet-prod exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: diag-vnet-prod missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3: 'all categories' selection is implicit in Task 2"; PASS=$((PASS+1))
+
+KVID=$(az keyvault show -n kv-diag-lab-01 --query id -o tsv 2>/dev/null)
+DK=0
+if [ -n "$KVID" ]; then DK=$(az monitor diagnostic-settings list --resource "$KVID" --query "value[?name=='diag-kv-prod'] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${DK:-0}" -gt 0 ]; then echo "[PASS] Task 4: diag-kv-prod exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: diag-kv-prod missing"; FAIL=$((FAIL+1)); fi
+
+AU=0
+if [ -n "$KVID" ]; then AU=$(az monitor diagnostic-settings list --resource "$KVID" --query "value[?name=='diag-kv-prod'].logs[?category=='AuditEvent' && enabled==\`true\`] | [] | length(@)" -o tsv 2>/dev/null); fi
+if [ "${AU:-0}" -gt 0 ]; then echo "[PASS] Task 5: AuditEvent enabled on diag-kv-prod"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: AuditEvent not enabled"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

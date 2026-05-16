@@ -35,6 +35,37 @@ Your organization manages multiple VMs across several resource groups and needs 
 | 4   | Suppression rule exists             | Monitor > Alerts > Alert processing rules             | `apr-maintenance-suppress` shows Saturday 22:00–Sunday 06:00 UTC schedule   |
 | 5   | Action group addition rule exists   | Monitor > Alerts > Alert processing rules             | `apr-add-devops-ag` targets Severity 0 alerts at subscription scope         |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AlertsAdv-Lab
+V1=$(az vm show -n vm-alerts-web-01 -g "$RG" --query name -o tsv 2>/dev/null)
+V2=$(az vm show -n vm-alerts-web-02 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ -n "$V1" ] && [ -n "$V2" ]; then echo "[PASS] Task 1: both VMs exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: VMs missing"; FAIL=$((FAIL+1)); fi
+
+A=$(az monitor metrics alert show -n alert-multi-vm-cpu -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$A" = "alert-multi-vm-cpu" ]; then echo "[PASS] Task 2: alert-multi-vm-cpu exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: alert missing"; FAIL=$((FAIL+1)); fi
+
+SEV=$(az monitor metrics alert show -n alert-multi-vm-cpu -g "$RG" --query severity -o tsv 2>/dev/null)
+AGC=$(az monitor metrics alert show -n alert-multi-vm-cpu -g "$RG" --query "length(actions)" -o tsv 2>/dev/null)
+if [ "$SEV" = "1" ] && [ "${AGC:-0}" -gt 0 ]; then echo "[PASS] Task 3: severity 1 + action group attached"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: severity=$SEV actions=$AGC"; FAIL=$((FAIL+1)); fi
+
+APR=$(az monitor alert-processing-rule show -n apr-maintenance-suppress -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$APR" = "apr-maintenance-suppress" ]; then echo "[PASS] Task 4: suppression APR exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: suppression APR missing"; FAIL=$((FAIL+1)); fi
+
+APR2=$(az monitor alert-processing-rule list --query "[?name=='apr-add-devops-ag'] | length(@)" -o tsv 2>/dev/null)
+if [ "${APR2:-0}" -gt 0 ]; then echo "[PASS] Task 5: subscription-scope APR exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: apr-add-devops-ag missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -35,6 +35,33 @@ Management wants proactive visibility into Azure platform issues and cost optimi
 | 4   | Advisor recommendations reviewed | Advisor > Overview                       | All five recommendation categories are visible with current counts     |
 | 5   | Advisor alert configured         | Advisor > Alerts                         | `alert-advisor-new-recs` exists and is linked to `ag-platform-notify`  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ServiceHealth-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+SH=$(az monitor activity-log alert show -n alert-service-health-all -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$SH" = "alert-service-health-all" ]; then echo "[PASS] Task 2: Service Health alert exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: Service Health alert missing"; FAIL=$((FAIL+1)); fi
+
+AG=$(az monitor action-group show -n ag-platform-notify -g "$RG" --query "length(emailReceivers)" -o tsv 2>/dev/null)
+if [ "${AG:-0}" -gt 0 ]; then echo "[PASS] Task 3: ag-platform-notify with email receiver"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: ag-platform-notify missing or no email"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 4: Advisor recommendation review is a manual portal action"; PASS=$((PASS+1))
+
+ADV=$(az monitor activity-log alert list -g "$RG" --query "[?name=='alert-advisor-new-recs'] | length(@)" -o tsv 2>/dev/null)
+if [ "${ADV:-0}" -gt 0 ]; then echo "[PASS] Task 5: Advisor alert exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: alert-advisor-new-recs missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

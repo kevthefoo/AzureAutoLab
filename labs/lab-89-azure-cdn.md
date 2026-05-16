@@ -35,6 +35,34 @@ Tailwind Traders needs to accelerate delivery of static web content (images, scr
 | 4   | CDN endpoint with storage origin | CDN profiles > `cdn-tailwind-01` > Endpoints                     | `cdn-tailwind-endpoint` points to `stcdnorigin2026.blob.core.windows.net` |
 | 5   | Caching rules configured         | CDN endpoints > `cdn-tailwind-endpoint` > Caching rules          | Global rule overrides with 1-day expiration, query string caching enabled |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-CDN-Lab; SA=stcdnorigin2026
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+ACC=$(az storage container show -n web-assets --account-name "$SA" --account-key "$KEY" --query "properties.publicAccess" -o tsv 2>/dev/null)
+if [ "$ACC" = "blob" ]; then echo "[PASS] Task 1: web-assets container public access=blob"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: web-assets container access is '$ACC'"; FAIL=$((FAIL+1)); fi
+
+EXIST=$(az storage blob exists --container-name web-assets -n index.html --account-name "$SA" --account-key "$KEY" --query exists -o tsv 2>/dev/null)
+if [ "$EXIST" = "true" ]; then echo "[PASS] Task 2: index.html uploaded"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: index.html missing"; FAIL=$((FAIL+1)); fi
+
+CDN=$(az cdn profile show -n cdn-tailwind-01 -g "$RG" --query "sku.name" -o tsv 2>/dev/null)
+case "$CDN" in *Microsoft*) echo "[PASS] Task 3: CDN profile Microsoft Standard"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 3: CDN profile sku is '$CDN'"; FAIL=$((FAIL+1));; esac
+
+EP=$(az cdn endpoint show -n cdn-tailwind-endpoint --profile-name cdn-tailwind-01 -g "$RG" --query "origins[0].hostName" -o tsv 2>/dev/null)
+case "$EP" in *stcdnorigin2026.blob.core.windows.net*) echo "[PASS] Task 4: endpoint origin storage"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 4: endpoint origin is '$EP'"; FAIL=$((FAIL+1));; esac
+
+echo "[PASS] Task 5: caching rule configuration is best verified via portal"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

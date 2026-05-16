@@ -33,6 +33,31 @@ Contoso is planning a hybrid connectivity strategy and needs to understand Expre
 | 3   | ExpressRoute gateway deployed | Virtual network gateways > `ergw-contoso-01`               | Gateway type is ExpressRoute, SKU is ErGw1AZ                   |
 | 4   | Private peering configured    | ExpressRoute circuits > `er-circuit-contoso-01` > Peerings | Azure private peering shows subnets and VLAN ID 100            |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ExpRoute-Lab
+GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-er-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$GS" = "10.120.255.0/27" ]; then echo "[PASS] Task 1: GatewaySubnet exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: GatewaySubnet missing"; FAIL=$((FAIL+1)); fi
+
+PROV=$(az network express-route show -n er-circuit-contoso-01 -g "$RG" --query "serviceProviderProperties.serviceProviderName" -o tsv 2>/dev/null)
+if [ "$PROV" = "Equinix" ]; then echo "[PASS] Task 2: ExpressRoute circuit with Equinix"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: ER circuit missing or wrong provider ($PROV)"; FAIL=$((FAIL+1)); fi
+
+GWT=$(az network vnet-gateway show -n ergw-contoso-01 -g "$RG" --query "gatewayType" -o tsv 2>/dev/null)
+if [ "$GWT" = "ExpressRoute" ]; then echo "[PASS] Task 3: ER gateway type=ExpressRoute"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: ER gateway missing or wrong type ($GWT)"; FAIL=$((FAIL+1)); fi
+
+PEER=$(az network express-route peering list --circuit-name er-circuit-contoso-01 -g "$RG" --query "[?peeringType=='AzurePrivatePeering'] | length(@)" -o tsv 2>/dev/null)
+if [ "${PEER:-0}" -gt 0 ]; then echo "[PASS] Task 4: Azure private peering configured"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no Azure private peering"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

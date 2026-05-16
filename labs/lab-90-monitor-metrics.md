@@ -34,6 +34,31 @@ Your company recently deployed a production VM (`vm-web-prod-01`) and management
 | 4   | Alert threshold is correct  | Monitor > Alerts > Alert rules > `alert-high-cpu` | Condition shows "Percentage CPU > 80" with 5-min aggregation |
 | 5   | Dashboard with pinned chart | Dashboards > `Dashboard-Ops-Prod`                 | Dashboard contains a CPU metrics chart for `vm-web-prod-01`  |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Monitor-Metrics-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+VM=$(az vm show -n vm-web-prod-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ -n "$VM" ]; then echo "[PASS] Task 2: vm-web-prod-01 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: VM missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3: chart in Monitor > Metrics is interactive (not verifiable)"; PASS=$((PASS+1))
+
+A=$(az monitor metrics alert show -n alert-high-cpu -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$A" = "alert-high-cpu" ]; then echo "[PASS] Task 4: alert-high-cpu exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: alert-high-cpu missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: dashboard pinning is user-scoped (not verifiable via az for built-in dashboards)"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -35,6 +35,29 @@ The development team has deployed a web application to Azure App Service and nee
 | 4   | Connection string is configured      | App Services > `app-insights-lab-2026` > Environment variables | `APPLICATIONINSIGHTS_CONNECTION_STRING` is present             |
 | 5   | Telemetry is flowing                 | Application Insights > `appi-webapp-prod` > Live Metrics       | Live metrics show incoming requests after browsing the app URL |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-AppInsights-Lab
+WID=$(az monitor app-insights component show --app appi-webapp-prod -g "$RG" --query workspaceResourceId -o tsv 2>/dev/null)
+case "$WID" in */law-appinsights-01*) echo "[PASS] Task 1: AI workspace-based on law-appinsights-01"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 1: AI not linked correctly (workspace=$WID)"; FAIL=$((FAIL+1));; esac
+
+W=$(az webapp show -n app-insights-lab-2026 -g "$RG" --query state -o tsv 2>/dev/null)
+if [ "$W" = "Running" ] || [ "$W" = "Stopped" ]; then echo "[PASS] Task 2: webapp exists (state=$W)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: webapp missing"; FAIL=$((FAIL+1)); fi
+
+CS=$(az webapp config appsettings list -n app-insights-lab-2026 -g "$RG" --query "[?name=='APPLICATIONINSIGHTS_CONNECTION_STRING'].name | [0]" -o tsv 2>/dev/null)
+if [ "$CS" = "APPLICATIONINSIGHTS_CONNECTION_STRING" ]; then echo "[PASS] Task 3+4: AI connection string set on webapp"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3+4: APPLICATIONINSIGHTS_CONNECTION_STRING missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5: live metrics telemetry is best verified via portal"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

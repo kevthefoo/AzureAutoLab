@@ -35,6 +35,38 @@ Your company stores shared departmental documents in Azure File Shares. The comp
 | 4   | Backup policy is correct             | `rsv-fileshare-01` > Backup policies > `policy-daily-30d`           | Policy shows daily schedule with 30-day retention       |
 | 5   | Restore completed                    | Storage accounts > `stfilesharebackup2026` > `share-restore-target` | `report-q1.txt` exists in the restored file share       |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-FileBackup-Lab; SA=stfilesharebackup2026
+KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
+Q=""
+if [ -n "$KEY" ]; then Q=$(az storage share show -n share-dept-docs --account-name "$SA" --account-key "$KEY" --query "properties.quota" -o tsv 2>/dev/null); fi
+if [ -n "$Q" ]; then echo "[PASS] Task 1: storage account + share-dept-docs exist"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: storage/share missing"; FAIL=$((FAIL+1)); fi
+
+V=$(az backup vault show -n rsv-fileshare-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$V" = "rsv-fileshare-01" ]; then echo "[PASS] Task 2: rsv-fileshare-01 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: vault missing"; FAIL=$((FAIL+1)); fi
+
+CNT=$(az backup item list --vault-name rsv-fileshare-01 -g "$RG" --backup-management-type AzureStorage --query "length(@)" -o tsv 2>/dev/null)
+if [ "${CNT:-0}" -gt 0 ]; then echo "[PASS] Task 3: $CNT protected file share(s)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: no protected file shares"; FAIL=$((FAIL+1)); fi
+
+POL=$(az backup policy show --vault-name rsv-fileshare-01 -g "$RG" -n policy-daily-30d --query name -o tsv 2>/dev/null)
+if [ "$POL" = "policy-daily-30d" ]; then echo "[PASS] Task 4: policy-daily-30d exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: policy-daily-30d missing"; FAIL=$((FAIL+1)); fi
+
+RES=""
+if [ -n "$KEY" ]; then RES=$(az storage share show -n share-restore-target --account-name "$SA" --account-key "$KEY" --query name -o tsv 2>/dev/null); fi
+if [ "$RES" = "share-restore-target" ]; then echo "[PASS] Task 5: share-restore-target exists (restore destination)"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: share-restore-target missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

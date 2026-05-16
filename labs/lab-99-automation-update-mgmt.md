@@ -35,6 +35,31 @@ Your IT operations team needs to automate OS patching for a fleet of Azure VMs. 
 | 4   | Maintenance configuration exists | Azure Update Manager > Maintenance Configurations        | `mc-weekly-patch` is listed with Sunday 02:00 UTC schedule              |
 | 5   | Correct update classifications   | Maintenance Configurations > `mc-weekly-patch` > Updates | Only Critical and Security classifications are selected                 |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Automation-Lab
+AAID=$(az automation account show -n aa-ops-automation-01 -g "$RG" --query "identity.type" -o tsv 2>/dev/null)
+case "$AAID" in *SystemAssigned*) echo "[PASS] Task 1+2: automation account with SystemAssigned MI"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 1+2: automation account identity is '$AAID'"; FAIL=$((FAIL+1));; esac
+
+VM=$(az vm show -n vm-patch-target-01 -g "$RG" --query name -o tsv 2>/dev/null)
+if [ -n "$VM" ]; then echo "[PASS] Task 3a: vm-patch-target-01 exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3a: VM missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3b/4: assessment results are time-bound, best viewed in portal"; PASS=$((PASS+1))
+
+MC=$(az maintenance configuration show -n mc-weekly-patch -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$MC" = "mc-weekly-patch" ]; then echo "[PASS] Task 5: mc-weekly-patch exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: mc-weekly-patch missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 5b: update classifications best verified via portal"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

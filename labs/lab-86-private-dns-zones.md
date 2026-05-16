@@ -33,6 +33,31 @@ Woodgrove Bank is deploying multiple VMs in Azure and needs an internal DNS solu
 | 3   | VNet link with auto-registration | Private DNS zones > `woodgrove.internal` > Virtual network links | `link-vnet-privdns` linked to `vnet-privdns-01`, auto-registration enabled |
 | 4   | VM A record auto-registered      | Private DNS zones > `woodgrove.internal` > Recordsets            | A record for `vm-dns-test-01` exists pointing to VM's private IP           |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-PrivDNS-Lab
+P=$(az network vnet subnet show -n snet-servers --vnet-name vnet-privdns-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+if [ "$P" = "10.110.1.0/24" ]; then echo "[PASS] Task 1: snet-servers 10.110.1.0/24"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: subnet missing or wrong"; FAIL=$((FAIL+1)); fi
+
+Z=$(az network private-dns zone show -n woodgrove.internal -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$Z" = "woodgrove.internal" ]; then echo "[PASS] Task 2: private DNS zone exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: private DNS zone missing"; FAIL=$((FAIL+1)); fi
+
+AR=$(az network private-dns link vnet show -g "$RG" -z woodgrove.internal -n link-vnet-privdns --query "registrationEnabled" -o tsv 2>/dev/null)
+if [ "$AR" = "true" ]; then echo "[PASS] Task 3: VNet link with auto-registration"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: VNet link missing or auto-reg off"; FAIL=$((FAIL+1)); fi
+
+A=$(az network private-dns record-set a list -g "$RG" -z woodgrove.internal --query "[?name=='vm-dns-test-01'] | length(@)" -o tsv 2>/dev/null)
+if [ "${A:-0}" -gt 0 ]; then echo "[PASS] Task 4: vm-dns-test-01 A record auto-registered"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: vm-dns-test-01 A record missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

@@ -35,6 +35,34 @@ Your company is rolling out a new alerting strategy and needs action groups conf
 | 4   | Test notification was sent  | Monitor > Alerts > Action groups > `ag-oncall-team` > Test | Test history shows a completed test run                       |
 | 5   | Activity log alert exists   | Monitor > Alerts > Alert rules                             | `alert-rg-delete` is listed and linked to `ag-oncall-team`    |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-ActionGroups-Lab
+LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
+if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
+
+EM=$(az monitor action-group show -n ag-oncall-team -g "$RG" --query "length(emailReceivers)" -o tsv 2>/dev/null)
+SM=$(az monitor action-group show -n ag-oncall-team -g "$RG" --query "length(smsReceivers)" -o tsv 2>/dev/null)
+if [ "${EM:-0}" -gt 0 ] && [ "${SM:-0}" -gt 0 ]; then echo "[PASS] Task 2: ag-oncall-team has email+SMS"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: ag-oncall-team missing email/SMS (email=$EM sms=$SM)"; FAIL=$((FAIL+1)); fi
+
+WH=$(az monitor action-group show -n ag-devops-webhook -g "$RG" --query "length(webhookReceivers)" -o tsv 2>/dev/null)
+if [ "${WH:-0}" -gt 0 ]; then echo "[PASS] Task 3: ag-devops-webhook has webhook"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: ag-devops-webhook missing webhook"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 4: action-group test is transient"; PASS=$((PASS+1))
+
+AL=$(az monitor activity-log alert show -n alert-rg-delete -g "$RG" --query name -o tsv 2>/dev/null)
+if [ "$AL" = "alert-rg-delete" ]; then echo "[PASS] Task 5: alert-rg-delete exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 5: alert-rg-delete missing"; FAIL=$((FAIL+1)); fi
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED

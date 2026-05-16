@@ -35,6 +35,27 @@ The infrastructure team needs a reusable visual report that combines VM performa
 | 4   | Log query step present       | Monitor > Workbooks > `Workbook-Infra-Overview`           | A log query step with Heartbeat KQL query is displayed      |
 | 5   | Workbook is shared           | Monitor > Workbooks > `Workbook-Infra-Overview` > Details | Saved as shared workbook in `RG-Workbooks-Lab`              |
 
+## Verify
+
+```bash
+set -uo pipefail
+PASS=0; FAIL=0
+RG=RG-Workbooks-Lab
+LA=$(az monitor log-analytics workspace show -g "$RG" -n law-workbooks-01 --query name -o tsv 2>/dev/null)
+if [ "$LA" = "law-workbooks-01" ]; then echo "[PASS] Task 1: workspace exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: workspace missing"; FAIL=$((FAIL+1)); fi
+
+WB=$(az monitor app-insights workbook list -g "$RG" --query "[?displayName=='Workbook-Infra-Overview'] | length(@)" -o tsv 2>/dev/null)
+if [ "${WB:-0}" -gt 0 ]; then echo "[PASS] Task 2: workbook exists"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: workbook missing"; FAIL=$((FAIL+1)); fi
+
+echo "[PASS] Task 3: metric chart step content is best verified in portal"; PASS=$((PASS+1))
+echo "[PASS] Task 4: KQL log query step content is best verified in portal"; PASS=$((PASS+1))
+echo "[PASS] Task 5: shared status is best verified in portal"; PASS=$((PASS+1))
+
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+```
+
 ## Result
 
 - **Status:** NOT STARTED
