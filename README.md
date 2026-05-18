@@ -91,7 +91,7 @@ middleware.ts                       # gates the app behind /setup
 Everything stays local:
 
 - Your subscription ID, signed-in user, and lab results never leave your machine
-- Results are written to `labs/.state/` which is `.gitignore`d
+- Results are written to `labs/.state/` which is in `.gitignore`
 - OpenAI keys (if you provide one) are written to `.env.local` (also gitignored) and only used for the chat panel
 - The app talks to Azure via the CLI you're already signed into — no service principals, no stored credentials
 
