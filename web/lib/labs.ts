@@ -142,12 +142,25 @@ export function parseLabFile(filename: string): Lab {
   };
 }
 
+const DIFFICULTY_RANK: Record<string, number> = {
+  Beginner: 0,
+  Intermediate: 1,
+  Advanced: 2,
+};
+
+function compareLabs(a: Lab, b: Lab): number {
+  const da = DIFFICULTY_RANK[a.difficulty] ?? 99;
+  const db = DIFFICULTY_RANK[b.difficulty] ?? 99;
+  if (da !== db) return da - db;
+  return a.title.localeCompare(b.title);
+}
+
 export function getAllLabs(): Lab[] {
   const files = fs
     .readdirSync(LABS_DIR)
     .filter((f) => f.startsWith("lab-") && f.endsWith(".md"));
   const labs = files.map(parseLabFile);
-  labs.sort((a, b) => a.number - b.number);
+  labs.sort(compareLabs);
   return labs;
 }
 

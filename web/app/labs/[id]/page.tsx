@@ -42,7 +42,9 @@ export default async function LabDetailPage({
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-start justify-between gap-4">
-          <h1 className="text-2xl font-bold">{lab.title}</h1>
+          <h1 className="text-2xl font-bold">
+            {lab.title.replace(/^Lab \d+\s*[—–-]\s*/, "")}
+          </h1>
           <div className="flex items-center gap-2 shrink-0">
             <StatusBadge
               status={
