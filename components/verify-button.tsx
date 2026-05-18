@@ -61,7 +61,7 @@ export default function VerifyButton({ labId }: { labId: string }) {
       <button
         onClick={verify}
         disabled={running}
-        className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+        className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         {running ? "Verifying..." : "Verify"}
       </button>

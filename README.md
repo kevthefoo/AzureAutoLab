@@ -2,95 +2,107 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Hands-on labs for the Microsoft Azure Administrator (AZ-104) certification exam. Each lab presents a realistic scenario, a set of tasks to complete in the Azure portal, and Azure CLI commands to verify your work.
+**Hands-on AZ-104 exam prep that grades itself.** Open a lab, do the work in the Azure portal, click **Verify** — a deterministic bash script runs `az` CLI checks against your real subscription and reports `[PASS]` / `[FAIL]` per task.
 
-## Progress
+No mocks. No simulators. No LLM scoring. Just `az` against your tenant.
 
-**13 / 21 labs completed** | Covers all 5 AZ-104 domains
+---
 
-| Domain                | Labs | Passed |
-| --------------------- | ---- | ------ |
-| Identity & Governance | 4    | 3      |
-| Storage               | 3    | 2      |
-| Compute               | 4    | 3      |
-| Networking            | 6    | 5      |
-| Monitoring & Backup   | 3    | 2      |
+## What's in the box
 
-See [LAB.md](LAB.md) for the full tracker with links to each lab.
+- **154 labs** spanning all 5 AZ-104 domains (Identity & Governance, Storage, Compute, Networking, Monitoring)
+- **100 "build" labs** — given a scenario, create the resources from scratch
+- **54 "troubleshoot" labs** — the app pre-provisions broken Azure resources for you, you fix them, then verify and clean up with one click
+- **Local web dashboard** (Next.js 16, App Router) that lists every lab, runs the verify script, and stores per-user results in a gitignored sidecar
+- **Setup wizard** that gates the app until your environment is ready (Azure CLI installed, signed in, has create/update permissions on a subscription)
+- **Optional AI chat** (bring your own OpenAI key) for asking questions while you work
 
-## Labs
-
-| #   | Topic                      | Domain                | Status      |
-| --- | -------------------------- | --------------------- | ----------- |
-| 1   | Resource Groups & RBAC     | Identity & Governance | PASSED      |
-| 2   | Storage Account & Blobs    | Storage               | PASSED      |
-| 3   | Virtual Network & Subnets  | Networking            | PASSED      |
-| 4   | Virtual Machine Deployment | Compute               | PASSED      |
-| 5   | DNS Zones & Records        | Networking            | PASSED      |
-| 6   | Log Analytics & Alerts     | Monitoring & Backup   | PASSED      |
-| 7   | Azure Policy & Locks       | Identity & Governance | PASSED      |
-| 8   | VNet Peering               | Networking            | PASSED      |
-| 9   | Load Balancer              | Networking            | PASSED      |
-| 10  | App Service & Web App      | Compute               | SKIPPED     |
-| 11  | Storage SAS & Access Tiers | Storage               | PASSED      |
-| 12  | Backup & Recovery Vault    | Monitoring & Backup   | PASSED      |
-| 13  | NSG Rules & ASGs           | Networking            | PASSED      |
-| 14  | Entra ID Users & Groups    | Identity & Governance | PASSED      |
-| 15  | VM Scale Sets              | Compute               | PASSED      |
-| 16  | Azure File Shares          | Storage               | NOT STARTED |
-| 17  | Azure Key Vault            | Identity & Governance | NOT STARTED |
-| 18  | Network Watcher            | Monitoring & Backup   | NOT STARTED |
-| 19  | Container Instances        | Compute               | NOT STARTED |
-| 20  | Disk Snapshots & Images    | Compute               | NOT STARTED |
-| 21  | User Defined Routes        | Networking            | NOT STARTED |
-
-## Getting Started
-
-1. **Fork** this repository
-2. **Clone** your fork locally
-3. Make sure you have an Azure subscription and the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed
-4. Log in: `az login`
-5. Open a lab file from the `labs/` directory and complete the tasks in the Azure portal
-6. Run the verification CLI commands from the lab's **Verification Criteria** table to check your work
-7. Update the lab's **Result** section with your status
-
-## Web Dashboard
-
-View your progress in a local web dashboard:
+## Quick start
 
 ```bash
-cd web
+git clone https://github.com/<you>/AzureAutoLab.git
+cd AzureAutoLab
 npm install
-npm run dev
+npm run build
+npm start
 ```
 
-Open http://localhost:3000 to see the dashboard. It reads your lab files in real-time — as you update lab statuses, the dashboard reflects your progress.
+> Use `npm run dev` instead if you're hacking on the app itself — it adds hot reload at the cost of slower per-request rendering.
 
-**Requires:** [Node.js](https://nodejs.org/) 18+
+Open http://localhost:3000. You'll be redirected to `/setup`, which checks:
 
-## Structure
+1. **Azure CLI** is installed (`az --version`)
+2. **You're signed in** (`az account show`) — if not, the wizard shows you the exact `az login` command
+3. **You have write permissions** on the active subscription (Owner / Contributor / User Access Administrator) — if you have multiple subs, a dropdown lets you switch
+4. **OpenAI API key** (optional — only needed if you want the chat panel)
+
+Once steps 1–3 are green, click **Continue to the app** and pick a lab.
+
+**Requires:** Node.js 20+, [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli), and an Azure subscription where you can create and delete resources.
+
+## How a lab works
+
+### Build lab (labs 1–100)
+
+1. Read the **Scenario** and **Tasks**
+2. Go to the Azure portal and create the requested resources
+3. Click **Verify** in the dashboard — the server runs the lab's bash `## Verify` block against your subscription
+4. The dashboard shows `[PASS] Task 1: …` / `[FAIL] Task N: …` per task, and saves the result locally
+5. Clean up the resource group yourself when done
+
+### Troubleshoot lab (labs 101–154)
+
+1. Click **Start** — the app provisions a deliberately misconfigured Azure environment (everything tagged `AutoLabId=<NN>` for traceability)
+2. Read the scenario, find the misconfiguration, fix it in the portal
+3. Click **Verify** — same deterministic bash check as build labs
+4. Click **Cleanup** — deletes the dedicated `RG-TS-<NN>` resource group plus any stray tagged resources
+
+> Troubleshoot labs **will cost real money** while they're provisioned (typically a few cents per hour). Always click **Cleanup** when you finish a lab.
+
+## How verification works
+
+Each lab markdown file ends with a fenced `bash` `## Verify` block that runs `az` CLI commands and emits one line per task:
 
 ```
-LAB.md                  # Progress tracker with links to each lab
+[PASS] Task 1: storage account exists in eastus
+[FAIL] Task 2: blob container is not set to private
+[PASS] Task 3: lifecycle policy archives blobs after 90 days
+```
+
+The web app spawns that block with `child_process`, streams stdout over SSE to your browser, parses the `[PASS]` / `[FAIL]` lines, and writes the result to `labs/.state/lab-NN.json` (gitignored, per-user).
+
+**No LLM is involved in grading.** The chat panel uses an LLM, but pass/fail is pure `az`.
+
+## Repository layout
+
+```
 labs/
-  lab-01-*.md           # Individual lab files with scenario, tasks, and results
-  lab-02-*.md
-  ...
-web/                    # Next.js dashboard app
+  lab-001-resource-groups-rbac.md   # build lab — scenario, tasks, ## Verify
+  lab-101-troubleshoot-rdp.md       # troubleshoot lab — adds ## Setup + ## Cleanup
+  .state/                           # per-user results (gitignored)
+app/                                # Next.js 16 App Router routes
+components/                         # React UI
+lib/                                # lab loading, bash spawn, setup checks
+middleware.ts                       # gates the app behind /setup
 ```
 
-## AZ-104 Domains Covered
+## Privacy
 
-- Identity & Governance
-- Storage
-- Compute
-- Networking
-- Monitoring & Backup
+Everything stays local:
 
-## Contributing
+- Your subscription ID, signed-in user, and lab results never leave your machine
+- Results are written to `labs/.state/` which is `.gitignore`d
+- OpenAI keys (if you provide one) are written to `.env.local` (also gitignored) and only used for the chat panel
+- The app talks to Azure via the CLI you're already signed into — no service principals, no stored credentials
 
-New labs and improvements are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+## Roadmap
+
+Not built yet, in roughly the order I'd like to ship them:
+
+- **Finish the quiz mode.** A 100-question bank lives in `data/quiz-questions.json` and `/quiz` is wired up, but the flow needs polish — score tracking, review wrong answers, per-domain filtering, retry-missed mode.
+- **Grow the question bank.** Bring it to 300+ questions covering every AZ-104 sub-objective, with citations back to Microsoft Learn so you can dig into what you missed.
+- **Tutorial section.** Short walkthroughs that introduce each Azure service before you hit the first lab on it — Azure CLI basics, RBAC mental model, VNet/subnet, storage tiers, etc. Aimed at people new to Azure, not just new to AZ-104.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE).

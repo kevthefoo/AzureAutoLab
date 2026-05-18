@@ -1,10 +1,36 @@
 .claude/
-.env*
-web/.next/
-web/node_modules/
+CLAUDE.md
 .superpowers/
 .playwright-mcp/
 docs/
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# env files
+.env*
+!.env.example
+
+# next.js
+.next/
+out/
+
+# build
+build/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# testing
+coverage/
+
+# misc
+.DS_Store
+*.pem
+.vercel
+
+# per-user lab results
 labs/.state/
-web/test-results/
-web/playwright-report/

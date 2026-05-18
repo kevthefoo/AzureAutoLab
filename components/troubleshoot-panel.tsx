@@ -107,21 +107,21 @@ export default function TroubleshootPanel({ labId }: { labId: string }) {
           <button
             onClick={() => run("start")}
             disabled={!canStart}
-            className="bg-accent hover:bg-accent-hover disabled:opacity-40 text-white text-sm px-3 py-1.5 rounded-lg transition-colors"
+            className="bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-white text-sm px-3 py-1.5 rounded-lg transition-colors"
           >
             {activeAction === "start" ? "Provisioning..." : "Start"}
           </button>
           <button
             onClick={() => run("verify")}
             disabled={!canVerify}
-            className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 disabled:opacity-40 text-sm px-3 py-1.5 rounded-lg transition-colors"
+            className="bg-status-passed/20 hover:bg-status-passed/30 text-status-passed border border-status-passed/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm px-3 py-1.5 rounded-lg transition-colors"
           >
             {activeAction === "verify" ? "Verifying..." : "Verify"}
           </button>
           <button
             onClick={() => run("cleanup")}
             disabled={!canCleanup}
-            className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 disabled:opacity-40 text-sm px-3 py-1.5 rounded-lg transition-colors"
+            className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm px-3 py-1.5 rounded-lg transition-colors"
           >
             {activeAction === "cleanup" ? "Cleaning up..." : "Cleanup"}
           </button>

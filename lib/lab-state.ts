@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { LabPhase, LabState } from "./lab-state-types";
 
-const DEFAULT_STATE_DIR = path.join(process.cwd(), "..", "labs", ".state");
+const DEFAULT_STATE_DIR = path.join(process.cwd(), "labs", ".state");
 
 export const STATE_DIR = DEFAULT_STATE_DIR;
 

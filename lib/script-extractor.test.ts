@@ -5,7 +5,6 @@ import { extractBashBlock } from "./script-extractor";
 
 const fixturePath = path.join(
   process.cwd(),
-  "..",
   "labs",
   "fixtures",
   "lab-fixture-troubleshoot.md",

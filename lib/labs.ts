@@ -4,7 +4,7 @@ import { marked } from "marked";
 import { extractBashBlock } from "./script-extractor";
 import { readLabState } from "./lab-state";
 
-const LABS_DIR = path.join(process.cwd(), "..", "labs");
+const LABS_DIR = path.join(process.cwd(), "labs");
 
 export interface Lab {
   id: string;
