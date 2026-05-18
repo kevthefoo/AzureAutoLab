@@ -2,7 +2,6 @@
 
 **Domain:** Monitoring & Backup  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -49,12 +48,3 @@ else echo "[FAIL] Task 3: connection monitor cm-web-check not found"; FAIL=$((FA
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PARTIAL PASS (2/3)
-- **Date Completed:** 2026-04-15
-- **Notes:**
-  - ✅ Task 1: Network Watcher `NetworkWatcher_eastus` is enabled in East US (provisioningState: Succeeded)
-  - ✅ Task 2: VNet Flow Log `vnet-eastus-rg-dev-lab-flowlog` exists, enabled, with 7-day retention
-  - ❌ Task 3: Connection Monitor `cm-web-check` not found — query returned empty in East US

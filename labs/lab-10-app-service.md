@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-06
 
 ---
 
@@ -51,9 +50,3 @@ case "$LL" in Information|Verbose|Warning|Error) echo "[PASS] Task 3: applicatio
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** SKIPPED
-- **Date:** 2026-04-06
-- **Notes:** Tagging policy on RG-Dev-Lab blocked creation. Resources ended up in wrong resource group with wrong SKU. Skipped for now.

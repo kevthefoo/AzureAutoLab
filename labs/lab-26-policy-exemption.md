@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-21
 
 ---
 
@@ -64,13 +63,3 @@ fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-23
-- **Notes:**
-  - ✅ Task 1: Resource group `RG-Policy-Exempt-Lab` exists in East US with tag `CostCenter: Finance-001`
-  - ✅ Task 2: Policy assignment `require-costcenter-tag` exists with `tagName=CostCenter` parameter correctly set
-  - ✅ Task 3: Storage account `stpolexempt` exists in `RG-Policy-Exempt-Lab` with no `CostCenter` tag (correctly untagged, flagged by policy)
-  - ✅ Task 4: Policy exemption `exempt-legacy-storage` exists at storage account scope with category `Waiver`, linked to `require-costcenter-tag` assignment

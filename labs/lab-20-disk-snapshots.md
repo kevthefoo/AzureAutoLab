@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -51,12 +50,3 @@ case "$D" in Copy|copy) echo "[PASS] Task 3: Disk-From-Snap created from snapsho
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-16
-- **Notes:**
-  - ✅ Task 1: Snapshot `Snap-OSDisk-01` exists in `RG-Dev-Lab` (created 2026-04-16)
-  - ✅ Task 2: Tags confirmed — `Purpose=Backup` and `Source=VM-Dev-Lab`
-  - ✅ Task 3: Managed disk `Disk-From-Snap` exists, created via `Copy` (from snapshot)

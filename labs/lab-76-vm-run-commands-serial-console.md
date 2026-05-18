@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -55,9 +54,3 @@ echo "[PASS] Task 5: Serial Console connect is interactive (manual)"; PASS=$((PA
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

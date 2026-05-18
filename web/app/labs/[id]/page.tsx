@@ -58,9 +58,6 @@ export default async function LabDetailPage({
         <div className="flex flex-wrap items-center gap-2 mt-3">
           <DomainBadge domain={lab.domain} />
           <DifficultyBadge difficulty={lab.difficulty} />
-          <span className="text-text-secondary text-xs py-0.5">
-            Assigned: {lab.dateAssigned}
-          </span>
         </div>
       </div>
 

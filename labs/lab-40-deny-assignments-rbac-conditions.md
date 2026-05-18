@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Advanced  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -65,9 +64,3 @@ case "$CTXT" in *public-data*) echo "[PASS] Task 4: condition references public-
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

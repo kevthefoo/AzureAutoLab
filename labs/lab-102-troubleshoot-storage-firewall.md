@@ -2,7 +2,6 @@
 
 **Domain:** Storage
 **Difficulty:** Intermediate
-**Date Assigned:** 2026-05-15
 
 ---
 
@@ -90,9 +89,3 @@ if [ -n "$ids" ]; then
   echo "$ids" | xargs -r -n1 az resource delete --ids
 fi
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

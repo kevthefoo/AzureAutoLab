@@ -2,7 +2,6 @@
 
 **Domain:** Monitoring & Backup  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -50,9 +49,3 @@ else echo "[FAIL] Task 3: no activity log alerts in $RG"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-03
-- **Notes:** All 3 tasks verified via CLI. Workspace in East US, action group with email notification, activity log alert rule enabled.

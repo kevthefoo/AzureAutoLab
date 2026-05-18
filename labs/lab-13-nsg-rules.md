@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -51,9 +50,3 @@ else echo "[FAIL] Task 3: Deny-All-Inbound rule not found"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-11
-- **Notes:** ASG-WebServers created in East US. Allow-HTTPS (priority 200, port 443) and Deny-All-Inbound (priority 4000) rules added to NSG-Web.

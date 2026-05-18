@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -58,9 +57,3 @@ else echo "[FAIL] Task 4: no action group linked to budget"; FAIL=$((FAIL+1)); f
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

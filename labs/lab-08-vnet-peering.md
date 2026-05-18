@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-04
 
 ---
 
@@ -50,9 +49,3 @@ else echo "[FAIL] Task 3: VNet-Staging peering state is '$S2'"; FAIL=$((FAIL+1))
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-04
-- **Notes:** All 3 tasks verified. VNet-Staging created with correct address space. Bidirectional peering established, both sides Connected. Portal created both peering links in one step.

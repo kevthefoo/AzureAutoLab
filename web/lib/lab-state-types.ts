@@ -8,6 +8,12 @@ export type LabPhase =
   | "CLEANING_UP"
   | "CLEANED_UP";
 
+export interface LabResult {
+  status: string;
+  dateCompleted: string;
+  notes: string[];
+}
+
 export interface LabState {
   labId: string;
   phase: LabPhase;
@@ -15,6 +21,7 @@ export interface LabState {
   startedAt: string | null;
   lastVerifiedAt: string | null;
   lastError: string | null;
+  result: LabResult | null;
 }
 
 export const TRANSIENT_PHASES: LabPhase[] = [

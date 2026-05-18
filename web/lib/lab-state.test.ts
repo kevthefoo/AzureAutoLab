@@ -56,6 +56,7 @@ describe("writeLabState", () => {
       startedAt: "2026-05-13T10:00:00Z",
       lastVerifiedAt: null,
       lastError: null,
+      result: null,
     });
     const raw = JSON.parse(
       fs.readFileSync(path.join(tmp, "lab-101.json"), "utf-8"),

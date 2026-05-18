@@ -2,7 +2,6 @@
 
 **Domain:** Storage  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -59,9 +58,3 @@ else echo "[FAIL] Task 4: archive@90d/delete@365d rule missing"; FAIL=$((FAIL+1)
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

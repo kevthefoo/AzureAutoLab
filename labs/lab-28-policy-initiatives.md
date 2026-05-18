@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -50,12 +49,3 @@ else echo "[FAIL] Task 3: no policy assignment on $RG"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-25
-- **Notes:**
-  - ✅ Task 1: Resource group `RG-PolicyInit-Lab` exists in East US (provisioningState: Succeeded)
-  - ✅ Task 2: Custom initiative `Initiative-RequiredTags` exists (policyType: Custom, id: `46b66f527c814436ac965ac2`)
-  - ✅ Task 3: Initiative assigned to `RG-PolicyInit-Lab` scope (assignment id: `c782331812404747955acc31`, policyDefinitionId references the correct initiative)

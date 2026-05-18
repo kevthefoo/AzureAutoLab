@@ -2,7 +2,6 @@
 
 **Domain:** Storage  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-06
 
 ---
 
@@ -58,9 +57,3 @@ fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-09
-- **Notes:** All 3 tasks verified via CLI. Container with private access, blob set to Cool tier, SAS token generated (shared key access enabled).

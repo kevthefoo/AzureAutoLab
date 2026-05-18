@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-04
 
 ---
 
@@ -60,9 +59,3 @@ else echo "[FAIL] Task 4: Rule-HTTP wrong (fp=$FP bp=$BPort)"; FAIL=$((FAIL+1));
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-06
-- **Notes:** All 4 tasks verified via CLI. Standard SKU LB with backend pool, TCP health probe on port 80, and HTTP load balancing rule.

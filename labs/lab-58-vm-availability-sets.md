@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -57,9 +56,3 @@ case "$A2" in *avset-frontend*) echo "[PASS] Task 4: vm-web-02 in avset-frontend
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

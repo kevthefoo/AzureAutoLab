@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -51,12 +50,3 @@ else echo "[FAIL] Task 3: container state is '$STATE'"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-16
-- **Notes:**
-  - ✅ Task 1: Container `aci-hello-world` exists in RG-Dev-Lab using image `mcr.microsoft.com/azuredocs/aci-helloworld`, with 1 CPU and 1 GB memory
-  - ✅ Task 2: Public IP `4.255.89.87` assigned, DNS label `aci-devlab-104` configured, port 80 exposed (FQDN: `aci-devlab-104.hadtbpapgmeeg9fj.eastus.azurecontainer.io`)
-  - ✅ Task 3: Container state is **Running** and accessible via public FQDN

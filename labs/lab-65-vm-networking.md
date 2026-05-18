@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Advanced  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -59,9 +58,3 @@ else echo "[FAIL] Task 4: secondary IP 10.50.1.100 not configured"; FAIL=$((FAIL
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

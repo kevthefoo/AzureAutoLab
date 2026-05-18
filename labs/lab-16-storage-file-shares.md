@@ -2,7 +2,6 @@
 
 **Domain:** Storage  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -57,12 +56,3 @@ fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-14
-- **Notes:**
-  - ✅ Task 1: File share `team-share` exists with 5 GB quota on storage account `stdevlab104`
-  - ✅ Task 2: Directory `docs` exists inside `team-share`
-  - ✅ Task 3: File `rg-hcl-prod.png` found in the `docs` directory

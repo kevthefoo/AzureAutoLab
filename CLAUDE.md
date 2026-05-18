@@ -2,31 +2,35 @@
 
 ## Project Overview
 
-AZ-104 exam preparation through hands-on Azure labs. The user completes tasks in the Azure portal, then Claude verifies the results.
+AZ-104 exam preparation through hands-on Azure labs. The user completes tasks in the Azure portal, then a deterministic bash `## Verify` block checks the result via Azure CLI.
 
 ## Lab Workflow
 
-1. Check `lab-tracker.md` to avoid assigning duplicate labs
-2. Create a new lab file in `labs/` following the format of existing labs (scenario, tasks, skills tested, verification criteria, result)
-3. Add the lab to `lab-tracker.md`
-4. After the user completes the lab, verify using Azure CLI (`az` commands)
-5. Update the lab file result section and tracker status
+1. Pick a topic not already covered in `LAB.md`
+2. Create a new lab file in `labs/lab-{NN}-{slug}.md` with the sections listed below
+3. Author the `## Verify` bash block to emit `[PASS] Task N: ...` / `[FAIL] Task N: ...` per task
+4. The user runs the lab, clicks Verify in the web app, and the bash block runs
 
 ## Verification
 
-- Always use Azure CLI for verification, not browser automation
-- Each lab must include a verification criteria table with the specific `az` commands to run
-- Azure subscription ID: `YOUR_SUBSCRIPTION_ID`
+- Verification is deterministic bash (no LLM, no agent)
+- Each lab must include a `## Verify` section with a fenced ```bash``` block
+- Every check prints either `[PASS] Task N: <description>` or `[FAIL] Task N: <description>`; the verify route parses those lines and writes Result data into `labs/.state/lab-NN.json`
+- Lab results are user-specific and live in the gitignored `labs/.state/` sidecar — do NOT add a `## Result` section to the markdown
+- Azure CLI commands assume `az login` is already done
 
 ## Lab File Format
 
 Each lab file must include:
 
+- **Domain** and **Difficulty** front-matter (no `Date Assigned` — this is open source, the original author's date is irrelevant)
 - **Scenario** — realistic business context
 - **Tasks** — checkbox list of what to do
 - **Skills Tested** — AZ-104 skills covered
-- **Verification Criteria** — table mapping each task to an `az` CLI command
-- **Result** — status, date, and notes (updated after verification)
+- **Verification Criteria** — table mapping each task to an `az` CLI command (human-readable documentation)
+- **Verify** — fenced ```bash``` block that emits `[PASS]`/`[FAIL]` lines per task (the executable counterpart of the criteria table)
+
+Do NOT include a `## Result` section in the markdown — result data lives in `labs/.state/lab-NN.json` (gitignored).
 
 ## Troubleshooting Lab Format
 

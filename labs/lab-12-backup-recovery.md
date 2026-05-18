@@ -2,7 +2,6 @@
 
 **Domain:** Monitoring & Backup  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -50,9 +49,3 @@ else echo "[FAIL] Task 3: no protected backup items in vault"; FAIL=$((FAIL+1));
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-09
-- **Notes:** All 3 tasks verified. Created RSV-Dev-Lab (East US) and RSV-Dev-Lab-2 (Australia East) since VM was in AU. Policy-Daily created, VM Howdy protected with daily backup.

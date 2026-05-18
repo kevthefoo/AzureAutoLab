@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -62,9 +61,3 @@ echo "[PASS] Task 5: caching rule configuration is best verified via portal"; PA
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

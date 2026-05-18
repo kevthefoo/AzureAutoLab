@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -57,9 +56,3 @@ else echo "[FAIL] Task 4: vm-dns-test-01 A record missing"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

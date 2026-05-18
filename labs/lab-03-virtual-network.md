@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -57,13 +56,3 @@ case "$NSGID" in *NSG-Web*) echo "[PASS] Task 4: NSG-Web associated with web-sub
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-03
-- **Notes:**
-  - VNet-Lab exists in East US with address space 10.0.0.0/16
-  - web-subnet exists with 10.0.1.0/24
-  - db-subnet exists with 10.0.2.0/24
-  - NSG-Web associated with web-subnet

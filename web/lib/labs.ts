@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 import { marked } from "marked";
 import { extractBashBlock } from "./script-extractor";
+import { readLabState } from "./lab-state";
 
 const LABS_DIR = path.join(process.cwd(), "..", "labs");
-const TRACKER_PATH = path.join(process.cwd(), "..", "LAB.md");
 
 export interface Lab {
   id: string;
@@ -13,7 +13,6 @@ export interface Lab {
   title: string;
   domain: string;
   difficulty: string;
-  dateAssigned: string;
   scenario: string;
   tasks: { text: string; completed: boolean }[];
   skillsTested: string[];
@@ -50,10 +49,8 @@ export function parseLabFile(filename: string): Lab {
   // Extract metadata from bold fields
   const domainMatch = raw.match(/\*\*Domain:\*\*\s*(.+)/);
   const difficultyMatch = raw.match(/\*\*Difficulty:\*\*\s*(.+)/);
-  const dateMatch = raw.match(/\*\*Date Assigned:\*\*\s*(.+)/);
   const domain = domainMatch?.[1]?.trim() || "";
   const difficulty = difficultyMatch?.[1]?.trim() || "";
-  const dateAssigned = dateMatch?.[1]?.trim() || "";
 
   // Extract ID and number from filename: "lab-01-resource-groups-rbac.md" → "01", 1
   const idMatch = filename.match(/lab-(\d+)/);
@@ -105,21 +102,21 @@ export function parseLabFile(filename: string): Lab {
     async: false,
   }) as string;
 
-  // Parse result section
-  const resultSection = sections["result"] || "";
-  const statusMatch = resultSection.match(/\*\*Status:\*\*\s*(.+)/);
-  const dateCompletedMatch = resultSection.match(
-    /\*\*Date[\w\s]*:\*\*\s*(.+)/,
-  );
-  const notesMatch = resultSection.match(/\*\*Notes:\*\*\s*([\s\S]*)/);
-  let rawStatus = statusMatch?.[1]?.trim() || "NOT STARTED";
-  // Normalize variations: "PASS", "PASS (3/3)", "PARTIAL PASS" etc.
-  if (/^PASS(\s|$)/.test(rawStatus)) rawStatus = rawStatus.replace(/^PASS/, "PASSED");
-  const result = {
-    status: rawStatus,
-    date: dateCompletedMatch?.[1]?.trim() || "",
-    notes: notesMatch?.[1]?.trim() || "",
-  };
+  // Read result from sidecar JSON (gitignored), not from markdown.
+  // The markdown is now author-only; per-user results live in labs/.state/lab-NN.json.
+  const sideResult = readLabState(id).result;
+  let result: Lab["result"];
+  if (sideResult) {
+    let status = sideResult.status || "NOT STARTED";
+    if (/^PASS(\s|$)/.test(status)) status = status.replace(/^PASS/, "PASSED");
+    result = {
+      status,
+      date: sideResult.dateCompleted || "",
+      notes: (sideResult.notes || []).join("\n"),
+    };
+  } else {
+    result = { status: "NOT STARTED", date: "", notes: "" };
+  }
 
   const setupScript = extractBashBlock(raw, "Setup");
   const cleanupScript = extractBashBlock(raw, "Cleanup");
@@ -133,7 +130,6 @@ export function parseLabFile(filename: string): Lab {
     title,
     domain,
     difficulty,
-    dateAssigned,
     scenario,
     tasks,
     skillsTested,

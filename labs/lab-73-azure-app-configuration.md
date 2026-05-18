@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -63,9 +62,3 @@ else echo "[FAIL] Task 5: production-labeled Theme is '$PROD'"; FAIL=$((FAIL+1))
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

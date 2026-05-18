@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -53,9 +52,3 @@ else echo "[FAIL] Task 3: no CanNotDelete lock in $RG"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-04
-- **Notes:** All 3 tasks verified via CLI. Policy "TagForce" enforces CostCenter=Dev-001 tag. ReadOnly lock on LAW-Dev-Lab, Delete lock on RG-Dev-Lab.

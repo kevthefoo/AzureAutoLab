@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -50,9 +49,3 @@ else echo "[FAIL] Task 3: tag Role is '$TAG' (expected WebTier)"; FAIL=$((FAIL+1
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED
-- **Date:** 2026-04-11
-- **Notes:** VMSS-Web created with 2 instances in East US. Autoscale configured: max 4 at 75% CPU, min 2 at 25% CPU. Tag Role=WebTier applied. Used Standard_L2aos_v4 SKU (B1s unavailable).

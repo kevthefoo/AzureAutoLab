@@ -18,7 +18,6 @@ Every lab file must include these sections:
 
 **Domain:** (one of: Identity & Governance, Storage, Compute, Networking, Monitoring & Backup)
 **Difficulty:** Beginner | Intermediate | Advanced
-**Date Assigned:** YYYY-MM-DD
 
 ---
 
@@ -42,12 +41,21 @@ A realistic business context explaining why this task is needed.
 | --- | ------------- | ----------- |
 | 1   | ...           | `az ...`    |
 
-## Result
+## Verify
 
-- **Status:** NOT STARTED
-- **Date:**
-- **Notes:**
+\`\`\`bash
+set -uo pipefail
+PASS=0; FAIL=0
+# Task 1
+V=$(az ... 2>/dev/null)
+if [ "$V" = "expected" ]; then echo "[PASS] Task 1: ..."; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: ..."; FAIL=$((FAIL+1)); fi
+echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
+\`\`\`
 ```
+
+**No `## Result` section** — result data is written per-user to the gitignored `labs/.state/lab-NN.json`.
+**No `Date Assigned` line** — this is an open-source project; the original author's date is noise for other users.
 
 ## Troubleshooting Lab Format
 

@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -51,12 +50,3 @@ else echo "[FAIL] Task 3: no Reader role assignment on RG-Dev-Lab"; FAIL=$((FAIL
 echo; echo "Summary: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-14
-- **Notes:**
-  - ✅ Task 1: `RG-Dev-Lab` exists in `eastus`, provisioningState = Succeeded
-  - ✅ Task 2: Tag `Environment = Development` confirmed present
-  - ✅ Task 3: Reader role assigned to `kevthebug_gmail.com#EXT#@kevthebuggmail.onmicrosoft.com` (type: User)

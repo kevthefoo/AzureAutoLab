@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -63,13 +62,3 @@ else echo "[FAIL] Task 4: tag Purpose is '$TAG'"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-03
-- **Notes:**
-  - VM-Test-01 exists in West US 2 with Standard_B2ps_v2, Ubuntu 24.04 LTS
-  - NIC placed in subnet (resource group: VM-Test-01_group)
-  - Public IP: 20.57.185.220
-  - Tag Purpose = Testing confirmed

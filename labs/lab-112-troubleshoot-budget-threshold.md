@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance
 **Difficulty:** Beginner
-**Date Assigned:** 2026-05-15
 
 ---
 
@@ -79,9 +78,3 @@ az group delete -n RG-TS-112 --yes --no-wait || true
 ids=$(az resource list --tag AutoLabId=112 --query "[].id" -o tsv)
 if [ -n "$ids" ]; then echo "$ids" | xargs -r -n1 az resource delete --ids; fi
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

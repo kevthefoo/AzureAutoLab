@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -58,13 +57,3 @@ else echo "[FAIL] Task 4: Budget-Marketing missing"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-28
-- **Notes:**
-  - ✅ Task 1: RG-CostTags-Lab exists in East US with tags `Department=Marketing` and `Project=Campaign2026`
-  - ✅ Task 2: Built-in policy "Inherit a tag from the resource group" is assigned to the RG scope
-  - ✅ Task 3: Storage account `stcosttagslab` exists with inherited tag `Department=Marketing`
-  - ✅ Task 4: Budget `Budget-Marketing` exists at billing account scope (Kevin Hsu) with amount $50 and 80% Actual threshold alert

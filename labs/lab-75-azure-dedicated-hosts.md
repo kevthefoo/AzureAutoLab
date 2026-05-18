@@ -2,7 +2,6 @@
 
 **Domain:** Compute  
 **Difficulty:** Advanced  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -57,9 +56,3 @@ case "$VMH" in *dh-host-01*) echo "[PASS] Task 4: vm-regulated-01 on dh-host-01"
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** NOT STARTED
-- **Date Completed:** —
-- **Notes:** —

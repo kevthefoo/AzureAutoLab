@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -57,13 +56,3 @@ else echo "[FAIL] Task 4: current subscription not under MG-CorpIT-Development";
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-18
-- **Notes:**
-  - ✅ Task 1: `MG-CorpIT` exists under the Tenant Root Group
-  - ✅ Task 2: `MG-CorpIT-Production` is confirmed as a child of `MG-CorpIT`
-  - ✅ Task 3: `MG-CorpIT-Development` is confirmed as a child of `MG-CorpIT`
-  - ✅ Task 4: Subscription "Azure subscription 1" (5968a609-a57a-4abc-8360-8fa25a1b929f) is placed under `MG-CorpIT-Development`

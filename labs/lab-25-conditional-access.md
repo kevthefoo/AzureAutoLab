@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Advanced  
-**Date Assigned:** 2026-04-11
 
 ---
 
@@ -58,13 +57,3 @@ else echo "[FAIL] Task 4: no SP for app-identity-lab"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-20
-- **Notes:**
-  - ✅ Task 1: Group `SG-Security-Admins` exists with 1 member
-  - ✅ Task 2: Group `SG-Dev-Team` exists
-  - ✅ Task 3: App registration `app-identity-lab` exists with web redirect URI `https://localhost:5000/callback`
-  - ✅ Task 4: Service principal for `app-identity-lab` exists (appId `67b01c9b-8cff-40be-a8bc-ff05d773f8f6`)

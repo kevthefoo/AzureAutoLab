@@ -2,7 +2,6 @@
 
 **Domain:** Networking  
 **Difficulty:** Beginner  
-**Date Assigned:** 2026-04-03
 
 ---
 
@@ -56,13 +55,3 @@ case "$TXT" in *spf*) echo "[PASS] Task 4: TXT @ contains SPF record"; PASS=$((P
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (4/4)
-- **Date Completed:** 2026-04-03
-- **Notes:**
-  - DNS zone contoso-lab.com exists
-  - A record www → 10.0.1.10 confirmed
-  - CNAME portal → www.contoso-lab.com with TTL 3600 confirmed
-  - TXT @ with SPF value confirmed

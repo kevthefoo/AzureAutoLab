@@ -2,7 +2,6 @@
 
 **Domain:** Identity & Governance  
 **Difficulty:** Intermediate  
-**Date Assigned:** 2026-04-07
 
 ---
 
@@ -51,12 +50,3 @@ else echo "[FAIL] Task 3: secret ApiKey has no expiry"; FAIL=$((FAIL+1)); fi
 
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
-
-## Result
-
-- **Status:** PASSED (3/3)
-- **Date Completed:** 2026-04-14
-- **Notes:**
-  - ✅ Task 1: Key Vault `KV-Dev-Lab-104` found in `eastus` with RBAC authorization enabled (`enableRbacAuthorization: true`)
-  - ✅ Task 2: Secret `DbConnectionString` exists and is enabled
-  - ✅ Task 3: Secret `ApiKey` exists with expiration set to `2026-07-13` — exactly 90 days from verification date

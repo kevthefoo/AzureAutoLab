@@ -16,17 +16,18 @@ function stateFile(labId: string): string {
 
 export function readLabState(labId: string): LabState {
   const file = stateFile(labId);
-  if (!fs.existsSync(file)) {
-    return {
-      labId,
-      phase: "NOT_PROVISIONED",
-      tag: `AutoLabId=${labId}`,
-      startedAt: null,
-      lastVerifiedAt: null,
-      lastError: null,
-    };
-  }
-  return JSON.parse(fs.readFileSync(file, "utf-8")) as LabState;
+  const defaults: LabState = {
+    labId,
+    phase: "NOT_PROVISIONED",
+    tag: `AutoLabId=${labId}`,
+    startedAt: null,
+    lastVerifiedAt: null,
+    lastError: null,
+    result: null,
+  };
+  if (!fs.existsSync(file)) return defaults;
+  const parsed = JSON.parse(fs.readFileSync(file, "utf-8")) as Partial<LabState>;
+  return { ...defaults, ...parsed };
 }
 
 export function writeLabState(state: LabState): void {

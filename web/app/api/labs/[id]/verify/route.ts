@@ -1,13 +1,10 @@
 import { spawn } from "node:child_process";
-import fs from "node:fs";
-import path from "node:path";
 import { getLabById } from "@/lib/labs";
 import { readLabState, writeLabState, canTransition } from "@/lib/lab-state";
 
 export const dynamic = "force-dynamic";
 
 const TIMEOUT_MS = 5 * 60 * 1000;
-const LABS_DIR = path.join(process.cwd(), "..", "labs");
 
 export async function POST(
   _req: Request,
@@ -38,7 +35,6 @@ export async function POST(
 
   const encoder = new TextEncoder();
   const verifyScript = lab.verifyScript;
-  const labFilename = lab.filename;
 
   const stream = new ReadableStream({
     start(controller) {
@@ -78,22 +74,37 @@ export async function POST(
         clearTimeout(timer);
         const summary = parseVerifyOutput(stdoutBuf);
         const allPassed = summary.fail === 0 && summary.pass > 0;
+        const total = summary.pass + summary.fail;
 
-        if (useState) {
-          const state = readLabState(paddedId);
-          writeLabState({
-            ...state,
-            phase: allPassed ? "VERIFIED" : "FAILED",
-            lastVerifiedAt: new Date().toISOString(),
-            lastError: allPassed ? null : (stderrTail || "Verification reported failures"),
-          });
+        let status: string;
+        if (total === 0) {
+          status = `FAILED (script emitted no [PASS]/[FAIL] lines, exit ${code ?? -1})`;
+        } else if (allPassed) {
+          status = `PASSED (${summary.pass}/${total})`;
+        } else if (summary.pass > 0) {
+          status = `PARTIAL PASS (${summary.pass}/${total})`;
+        } else {
+          status = "FAILED";
         }
 
-        try {
-          writeResultSection(labFilename, summary, allPassed, code ?? -1);
-        } catch (err) {
-          send("error", `Failed to update Result section: ${err instanceof Error ? err.message : String(err)}`);
-        }
+        const result = {
+          status,
+          dateCompleted: new Date().toISOString().slice(0, 10),
+          notes: summary.lines.map((l) => `${l.pass ? "✅" : "❌"} ${l.text}`),
+        };
+
+        const state = readLabState(paddedId);
+        writeLabState({
+          ...state,
+          ...(useState
+            ? {
+                phase: allPassed ? "VERIFIED" : "FAILED",
+                lastError: allPassed ? null : (stderrTail || "Verification reported failures"),
+              }
+            : {}),
+          lastVerifiedAt: new Date().toISOString(),
+          result,
+        });
 
         send("done", `${summary.pass} passed, ${summary.fail} failed`);
         controller.enqueue(encoder.encode("data: [DONE]\n\n"));
@@ -147,50 +158,3 @@ function parseVerifyOutput(stdout: string): VerifySummary {
   };
 }
 
-function writeResultSection(
-  filename: string,
-  summary: VerifySummary,
-  allPassed: boolean,
-  exitCode: number,
-): void {
-  const filepath = path.join(LABS_DIR, filename);
-  const md = fs.readFileSync(filepath, "utf-8");
-
-  const total = summary.pass + summary.fail;
-  let status: string;
-  if (total === 0) {
-    status = `FAILED (script emitted no [PASS]/[FAIL] lines, exit ${exitCode})`;
-  } else if (allPassed) {
-    status = `PASSED (${summary.pass}/${total})`;
-  } else if (summary.pass > 0) {
-    status = `PARTIAL PASS (${summary.pass}/${total})`;
-  } else {
-    status = "FAILED";
-  }
-
-  const date = new Date().toISOString().slice(0, 10);
-  const notes = summary.lines
-    .map((l) => `  - ${l.pass ? "✅" : "❌"} ${l.text}`)
-    .join("\n");
-
-  const newResult = [
-    "## Result",
-    "",
-    `- **Status:** ${status}`,
-    `- **Date Completed:** ${date}`,
-    "- **Notes:**",
-    notes || "  - (no per-task lines were emitted)",
-    "",
-  ].join("\n");
-
-  // Replace existing ## Result section (everything from "## Result" to EOF or next ## heading)
-  const resultRe = /## Result[\s\S]*$/m;
-  let updated: string;
-  if (resultRe.test(md)) {
-    updated = md.replace(resultRe, newResult);
-  } else {
-    updated = md.replace(/\s*$/, "\n\n" + newResult);
-  }
-
-  fs.writeFileSync(filepath, updated);
-}
