@@ -42,7 +42,7 @@ Once steps 1–3 are green, click **Continue to the app** and pick a lab.
 
 ## How a lab works
 
-### Build lab (labs 1–100)
+### Build lab
 
 1. Read the **Scenario** and **Tasks**
 2. Go to the Azure portal and create the requested resources
@@ -50,7 +50,7 @@ Once steps 1–3 are green, click **Continue to the app** and pick a lab.
 4. The dashboard shows `[PASS] Task 1: …` / `[FAIL] Task N: …` per task, and saves the result locally
 5. Clean up the resource group yourself when done
 
-### Troubleshoot lab (labs 101–154)
+### Troubleshoot lab
 
 1. Click **Start** — the app provisions a deliberately misconfigured Azure environment (everything tagged `AutoLabId=<NN>` for traceability)
 2. Read the scenario, find the misconfiguration, fix it in the portal
