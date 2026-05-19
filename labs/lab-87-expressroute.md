@@ -38,7 +38,7 @@ Contoso is planning a hybrid connectivity strategy and needs to understand Expre
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-ExpRoute-Lab
-GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-er-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-er-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$GS" = "10.120.255.0/27" ]; then echo "[PASS] Task 1: GatewaySubnet exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: GatewaySubnet missing"; FAIL=$((FAIL+1)); fi
 

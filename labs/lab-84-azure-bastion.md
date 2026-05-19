@@ -45,7 +45,7 @@ VS=$(az network vnet subnet show -n snet-vms --vnet-name vnet-bastion-01 -g "$RG
 if [ "$BS" = "AzureBastionSubnet" ] && [ "$VS" = "snet-vms" ]; then echo "[PASS] Task 1: both subnets exist"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: subnets missing"; FAIL=$((FAIL+1)); fi
 
-BP=$(az network vnet subnet show -n AzureBastionSubnet --vnet-name vnet-bastion-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+BP=$(az network vnet subnet show -n AzureBastionSubnet --vnet-name vnet-bastion-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$BP" = "10.90.1.0/26" ]; then echo "[PASS] Task 2: AzureBastionSubnet 10.90.1.0/26"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: AzureBastionSubnet prefix is '$BP'"; FAIL=$((FAIL+1)); fi
 

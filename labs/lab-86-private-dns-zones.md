@@ -38,7 +38,7 @@ Woodgrove Bank is deploying multiple VMs in Azure and needs an internal DNS solu
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-PrivDNS-Lab
-P=$(az network vnet subnet show -n snet-servers --vnet-name vnet-privdns-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+P=$(az network vnet subnet show -n snet-servers --vnet-name vnet-privdns-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$P" = "10.110.1.0/24" ]; then echo "[PASS] Task 1: snet-servers 10.110.1.0/24"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: subnet missing or wrong"; FAIL=$((FAIL+1)); fi
 

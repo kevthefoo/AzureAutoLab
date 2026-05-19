@@ -40,11 +40,11 @@ Adventure Works has workloads in two Azure regions (East US and West US) that ne
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-V2VVPN-Lab
-E=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-east-vpn -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+E=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-east-vpn -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$E" = "10.130.255.0/27" ]; then echo "[PASS] Task 1: east GatewaySubnet exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: east GatewaySubnet missing"; FAIL=$((FAIL+1)); fi
 
-W=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-west-vpn -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+W=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-west-vpn -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$W" = "10.140.255.0/27" ]; then echo "[PASS] Task 2: west GatewaySubnet exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: west GatewaySubnet missing"; FAIL=$((FAIL+1)); fi
 

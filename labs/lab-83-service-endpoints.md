@@ -38,7 +38,7 @@ Northwind Traders wants to restrict access to their Azure Storage account so tha
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-SvcEP-Lab
-P=$(az network vnet subnet show -n snet-app-tier --vnet-name vnet-svcep-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+P=$(az network vnet subnet show -n snet-app-tier --vnet-name vnet-svcep-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$P" = "10.80.1.0/24" ]; then echo "[PASS] Task 1: snet-app-tier 10.80.1.0/24"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: subnet missing or wrong ($P)"; FAIL=$((FAIL+1)); fi
 

@@ -42,11 +42,11 @@ PREF=$(az network vnet show -n VNet-Lab -g "$RG" --query "addressSpace.addressPr
 if [ "$LOC" = "eastus" ] && [ "$PREF" = "10.0.0.0/16" ]; then echo "[PASS] Task 1: VNet-Lab in eastus, 10.0.0.0/16"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: VNet-Lab missing or wrong (loc=$LOC prefix=$PREF)"; FAIL=$((FAIL+1)); fi
 
-W=$(az network vnet subnet show -n web-subnet --vnet-name VNet-Lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+W=$(az network vnet subnet show -n web-subnet --vnet-name VNet-Lab -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$W" = "10.0.1.0/24" ]; then echo "[PASS] Task 2: web-subnet is 10.0.1.0/24"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: web-subnet prefix is '$W'"; FAIL=$((FAIL+1)); fi
 
-D=$(az network vnet subnet show -n db-subnet --vnet-name VNet-Lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+D=$(az network vnet subnet show -n db-subnet --vnet-name VNet-Lab -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$D" = "10.0.2.0/24" ]; then echo "[PASS] Task 3: db-subnet is 10.0.2.0/24"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: db-subnet prefix is '$D'"; FAIL=$((FAIL+1)); fi
 

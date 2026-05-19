@@ -44,8 +44,8 @@ LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
 if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
 
-F=$(az network vnet subnet show -n snet-appgw-frontend --vnet-name vnet-appgw-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
-B=$(az network vnet subnet show -n snet-appgw-backend --vnet-name vnet-appgw-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+F=$(az network vnet subnet show -n snet-appgw-frontend --vnet-name vnet-appgw-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
+B=$(az network vnet subnet show -n snet-appgw-backend --vnet-name vnet-appgw-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$F" = "10.40.1.0/24" ] && [ "$B" = "10.40.2.0/24" ]; then echo "[PASS] Task 2: both subnets exist"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: subnets wrong (frontend=$F backend=$B)"; FAIL=$((FAIL+1)); fi
 

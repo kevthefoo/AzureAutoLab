@@ -38,7 +38,7 @@ Tailwind Traders needs to enable remote employees to securely connect to Azure r
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-VPN-Lab
-GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-vpn-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+GS=$(az network vnet subnet show -n GatewaySubnet --vnet-name vnet-vpn-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$GS" = "10.60.255.0/27" ]; then echo "[PASS] Task 1: GatewaySubnet exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: GatewaySubnet wrong ($GS)"; FAIL=$((FAIL+1)); fi
 

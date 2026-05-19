@@ -38,8 +38,8 @@ A database server requires network isolation with separate NICs for management a
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-VMNet-Lab
-M=$(az network vnet subnet show -n snet-mgmt --vnet-name vnet-vmnet-lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
-D=$(az network vnet subnet show -n snet-data --vnet-name vnet-vmnet-lab -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+M=$(az network vnet subnet show -n snet-mgmt --vnet-name vnet-vmnet-lab -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
+D=$(az network vnet subnet show -n snet-data --vnet-name vnet-vmnet-lab -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$M" = "10.50.1.0/24" ] && [ "$D" = "10.50.2.0/24" ]; then echo "[PASS] Task 1: both subnets exist with correct ranges"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: subnets wrong (mgmt=$M data=$D)"; FAIL=$((FAIL+1)); fi
 

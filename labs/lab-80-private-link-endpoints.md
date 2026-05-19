@@ -40,7 +40,7 @@ Fabrikam's security team requires that all access to Azure Storage accounts occu
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-PrivLink-Lab
-P=$(az network vnet subnet show -n snet-endpoints --vnet-name vnet-privlink-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+P=$(az network vnet subnet show -n snet-endpoints --vnet-name vnet-privlink-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$P" = "10.70.1.0/24" ]; then echo "[PASS] Task 1: snet-endpoints exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: snet-endpoints wrong"; FAIL=$((FAIL+1)); fi
 

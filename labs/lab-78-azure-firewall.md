@@ -40,7 +40,7 @@ Woodgrove Bank requires centralized network security for its hub-spoke architect
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-Firewall-Lab
-P=$(az network vnet subnet show -n AzureFirewallSubnet --vnet-name vnet-hub-fw-01 -g "$RG" --query addressPrefix -o tsv 2>/dev/null)
+P=$(az network vnet subnet show -n AzureFirewallSubnet --vnet-name vnet-hub-fw-01 -g "$RG" --query "addressPrefix || addressPrefixes[0]" -o tsv 2>/dev/null)
 if [ "$P" = "10.50.1.0/26" ]; then echo "[PASS] Task 1: AzureFirewallSubnet exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: AzureFirewallSubnet wrong ($P)"; FAIL=$((FAIL+1)); fi
 
