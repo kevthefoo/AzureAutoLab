@@ -40,6 +40,8 @@ Once steps 1–3 are green, click **Continue to the app** and pick a lab.
 
 **Requires:** Node.js 20+, [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli), and an Azure subscription where you can create and delete resources.
 
+**Recommended:** A [Microsoft Entra ID P1 or P2](https://learn.microsoft.com/entra/fundamentals/licensing) license on your tenant. A handful of identity labs (Conditional Access, group-based licensing, PIM, B2B guest collaboration) need features that aren't on the free tier. Most labs work fine on a free tenant — Entra ID P1/P2 unlocks the rest.
+
 ## How a lab works
 
 ### Build lab
