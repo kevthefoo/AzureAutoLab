@@ -45,7 +45,7 @@ else echo "[FAIL] Task 1: App-GraphReader-Lab not registered"; FAIL=$((FAIL+1));
 GRAPH_ID="00000003-0000-0000-c000-000000000000"
 PERM_COUNT=0
 if [ -n "$APPID" ]; then
-  PERM_COUNT=$(az ad app show --id "$APPID" --query "requiredResourceAccess[?resourceAppId=='$GRAPH_ID'].resourceAccess[?id=='df021288-bdef-4463-88db-98f22de89214'] | [] | length(@)" -o tsv 2>/dev/null)
+  PERM_COUNT=$(az ad app show --id "$APPID" --query "requiredResourceAccess[?resourceAppId=='$GRAPH_ID'] | [].resourceAccess[?id=='df021288-bdef-4463-88db-98f22de89214'] | [] | length(@)" -o tsv 2>/dev/null)
 fi
 if [ "${PERM_COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: User.Read.All permission configured"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: User.Read.All permission not configured"; FAIL=$((FAIL+1)); fi
