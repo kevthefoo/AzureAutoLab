@@ -52,7 +52,7 @@ else echo "[FAIL] Task 3: subscription diagnostic setting missing"; FAIL=$((FAIL
 
 WID=$(az monitor log-analytics workspace show -g "$RG" -n law-sub-diagnostics --query customerId -o tsv 2>/dev/null)
 ROWS=0
-if [ -n "$WID" ]; then ROWS=$(az monitor log-analytics query --workspace "$WID" --analytics-query "AzureActivity | take 1" --query "length(tables[0].rows)" -o tsv 2>/dev/null); fi
+if [ -n "$WID" ]; then ROWS=$(az monitor log-analytics query --workspace "$WID" --analytics-query "AzureActivity | take 1" --query "length(@)" -o tsv 2>/dev/null); fi
 if [ "${ROWS:-0}" -gt 0 ]; then echo "[PASS] Task 4: AzureActivity has ingested events"; PASS=$((PASS+1));
 else echo "[FAIL] Task 4: AzureActivity returned no rows (may need time to ingest)"; FAIL=$((FAIL+1)); fi
 

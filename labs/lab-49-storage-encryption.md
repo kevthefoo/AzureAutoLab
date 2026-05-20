@@ -11,8 +11,8 @@ Your organization handles regulated financial data and requires encryption with 
 
 ## Tasks
 
-- [ ] **Task 1:** Create a resource group `RG-Encryption-Lab` in East US and a storage account `stlabencrypt49`
-- [ ] **Task 2:** Create a Key Vault `kv-labencrypt49` with soft delete and purge protection enabled
+- [ ] **Task 1:** Create a resource group `RG-Encryption-Lab` in East US and a storage account in it (Standard_LRS, StorageV2). Storage account names are globally unique — pick e.g. `stlabencrypt<your-suffix>`.
+- [ ] **Task 2:** Create a Key Vault in `RG-Encryption-Lab` with **soft delete** and **purge protection** enabled. Key Vault names are globally unique — pick e.g. `kv-labencrypt-<your-suffix>`.
 - [ ] **Task 3:** Generate an RSA key named `storage-cmk` in the Key Vault
 - [ ] **Task 4:** Assign a system-assigned managed identity to the storage account and grant it Key Vault Crypto Service Encryption User role on the Key Vault
 - [ ] **Task 5:** Configure the storage account to use the customer-managed key `storage-cmk` from the Key Vault
@@ -39,28 +39,34 @@ Your organization handles regulated financial data and requires encryption with 
 ```bash
 set -uo pipefail
 PASS=0; FAIL=0
-RG=RG-Encryption-Lab; SA=stlabencrypt49
-N=$(az storage account show -n "$SA" -g "$RG" --query name -o tsv 2>/dev/null)
-if [ "$N" = "$SA" ]; then echo "[PASS] Task 1: $SA exists"; PASS=$((PASS+1));
-else echo "[FAIL] Task 1: $SA missing"; FAIL=$((FAIL+1)); fi
+RG=RG-Encryption-Lab
+SA=$(az storage account list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+KV=$(az keyvault list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+if [ -n "$SA" ]; then echo "[PASS] Task 1: storage account $SA exists in $RG"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no storage account in $RG"; FAIL=$((FAIL+1)); fi
 
-SD=$(az keyvault show -n kv-labencrypt49 --query "properties.enableSoftDelete" -o tsv 2>/dev/null)
-PP=$(az keyvault show -n kv-labencrypt49 --query "properties.enablePurgeProtection" -o tsv 2>/dev/null)
-if [ "$SD" = "true" ] && [ "$PP" = "true" ]; then echo "[PASS] Task 2: Key Vault has soft-delete + purge protection"; PASS=$((PASS+1));
-else echo "[FAIL] Task 2: KV missing or protection off (soft=$SD purge=$PP)"; FAIL=$((FAIL+1)); fi
+SD=""; PP=""
+[ -n "$KV" ] && SD=$(az keyvault show -n "$KV" --query "properties.enableSoftDelete" -o tsv 2>/dev/null)
+[ -n "$KV" ] && PP=$(az keyvault show -n "$KV" --query "properties.enablePurgeProtection" -o tsv 2>/dev/null)
+if [ "$SD" = "true" ] && [ "$PP" = "true" ]; then echo "[PASS] Task 2: Key Vault $KV has soft-delete + purge protection"; PASS=$((PASS+1));
+else echo "[FAIL] Task 2: KV missing or protection off (kv=$KV soft=$SD purge=$PP)"; FAIL=$((FAIL+1)); fi
 
-KT=$(az keyvault key show --vault-name kv-labencrypt49 -n storage-cmk --query "key.kty" -o tsv 2>/dev/null)
-if [ "$KT" = "RSA" ]; then echo "[PASS] Task 3: storage-cmk RSA key exists"; PASS=$((PASS+1));
+KT=""
+[ -n "$KV" ] && KT=$(az keyvault key show --vault-name "$KV" -n storage-cmk --query "key.kty" -o tsv 2>/dev/null)
+if [ "$KT" = "RSA" ]; then echo "[PASS] Task 3: storage-cmk RSA key exists in $KV"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: storage-cmk missing or wrong type ($KT)"; FAIL=$((FAIL+1)); fi
 
-PID=$(az storage account show -n "$SA" -g "$RG" --query "identity.principalId" -o tsv 2>/dev/null)
-KVID=$(az keyvault show -n kv-labencrypt49 --query id -o tsv 2>/dev/null)
+PID=""
+[ -n "$SA" ] && PID=$(az storage account show -n "$SA" -g "$RG" --query "identity.principalId" -o tsv 2>/dev/null)
+KVID=""
+[ -n "$KV" ] && KVID=$(az keyvault show -n "$KV" --query id -o tsv 2>/dev/null)
 ROLE=0
 if [ -n "$PID" ] && [ -n "$KVID" ]; then ROLE=$(az role assignment list --assignee "$PID" --scope "$KVID" --query "[?contains(roleDefinitionName, 'Crypto Service Encryption')] | length(@)" -o tsv 2>/dev/null); fi
 if [ "${ROLE:-0}" -gt 0 ]; then echo "[PASS] Task 4: MI has Crypto Service Encryption role on KV"; PASS=$((PASS+1));
 else echo "[FAIL] Task 4: role assignment missing"; FAIL=$((FAIL+1)); fi
 
-KS=$(az storage account show -n "$SA" -g "$RG" --query "encryption.keySource" -o tsv 2>/dev/null)
+KS=""
+[ -n "$SA" ] && KS=$(az storage account show -n "$SA" -g "$RG" --query "encryption.keySource" -o tsv 2>/dev/null)
 if [ "$KS" = "Microsoft.Keyvault" ]; then echo "[PASS] Task 5: storage uses customer-managed key"; PASS=$((PASS+1));
 else echo "[FAIL] Task 5: encryption.keySource is '$KS'"; FAIL=$((FAIL+1)); fi
 
