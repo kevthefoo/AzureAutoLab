@@ -13,7 +13,7 @@ Your legal department requires that certain financial records be stored in a tam
 
 - [ ] **Task 1:** Create a resource group `RG-Immutable-Lab` in East US, a storage account `stlabimmutable55`, and a blob container `compliance-records`
 - [ ] **Task 2:** Upload a file `financial-report-2025.pdf` to the `compliance-records` container
-- [ ] **Task 3:** Apply a legal hold with tag `SEC-Investigation-2026` to the `compliance-records` container
+- [ ] **Task 3:** Apply a legal hold with tag `secinvestigation2026` to the `compliance-records` container
 - [ ] **Task 4:** Create a time-based retention policy on the `compliance-records` container with a retention interval of 365 days (do not lock the policy)
 - [ ] **Task 5:** Attempt to delete `financial-report-2025.pdf` and verify the deletion is blocked by the immutability policy
 
@@ -30,7 +30,7 @@ Your legal department requires that certain financial records be stored in a tam
 | --- | ----------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | 1   | Storage account and container exist | Storage accounts > `stlabimmutable55` > Containers                       | `compliance-records` container is listed                         |
 | 2   | File uploaded                       | Containers > `compliance-records`                                        | `financial-report-2025.pdf` is listed                            |
-| 3   | Legal hold applied                  | Containers > `compliance-records` > Access policy > Legal hold           | Legal hold tag `SEC-Investigation-2026` is active                |
+| 3   | Legal hold applied                  | Containers > `compliance-records` > Access policy > Legal hold           | Legal hold tag `secinvestigation2026` is active                |
 | 4   | Time-based retention policy set     | Containers > `compliance-records` > Access policy > Time-based retention | Retention period shows 365 days, policy is unlocked              |
 | 5   | Deletion blocked                    | Containers > `compliance-records` > attempt delete on blob               | Error message indicates blob is protected by immutability policy |
 
@@ -51,11 +51,11 @@ else
   if [ "$B" = "true" ]; then echo "[PASS] Task 2: financial-report-2025.pdf exists"; PASS=$((PASS+1));
   else echo "[FAIL] Task 2: financial-report-2025.pdf missing"; FAIL=$((FAIL+1)); fi
 
-  LH=$(az storage container legal-hold show --container-name compliance-records --account-name "$SA" --account-key "$KEY" --query "tags" -o tsv 2>/dev/null)
-  case "$LH" in *SEC-Investigation-2026*) echo "[PASS] Task 3: legal hold tag SEC-Investigation-2026 present"; PASS=$((PASS+1));;
+  LH=$(az storage container legal-hold show --container-name compliance-records --account-name "$SA" -g "$RG" --query "tags[].tag || tags" -o tsv 2>/dev/null)
+  case "$LH" in *secinvestigation2026*) echo "[PASS] Task 3: legal hold tag secinvestigation2026 present"; PASS=$((PASS+1));;
     *) echo "[FAIL] Task 3: legal hold tag missing (got: $LH)"; FAIL=$((FAIL+1));; esac
 
-  RP=$(az storage container immutability-policy show --container-name compliance-records --account-name "$SA" --account-key "$KEY" --query "immutabilityPeriodSinceCreationInDays" -o tsv 2>/dev/null)
+  RP=$(az storage container immutability-policy show --container-name compliance-records --account-name "$SA" -g "$RG" --query "immutabilityPeriodSinceCreationInDays" -o tsv 2>/dev/null)
   if [ "$RP" = "365" ]; then echo "[PASS] Task 4: retention policy 365 days"; PASS=$((PASS+1));
   else echo "[FAIL] Task 4: retention is '$RP'"; FAIL=$((FAIL+1)); fi
 

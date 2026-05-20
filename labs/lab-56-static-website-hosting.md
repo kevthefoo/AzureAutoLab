@@ -46,7 +46,7 @@ else echo "[FAIL] Task 1: $SA missing or wrong kind ($KIND)"; FAIL=$((FAIL+1)); 
 
 EN=$(az storage blob service-properties show --account-name "$SA" --query "staticWebsite.enabled" -o tsv 2>/dev/null)
 IDX=$(az storage blob service-properties show --account-name "$SA" --query "staticWebsite.indexDocument" -o tsv 2>/dev/null)
-ERR=$(az storage blob service-properties show --account-name "$SA" --query "staticWebsite.errorDocument404Path" -o tsv 2>/dev/null)
+ERR=$(az storage blob service-properties show --account-name "$SA" --query "staticWebsite.errorDocument_404Path || staticWebsite.errorDocument404Path" -o tsv 2>/dev/null)
 if [ "$EN" = "true" ] && [ "$IDX" = "index.html" ] && [ "$ERR" = "404.html" ]; then echo "[PASS] Task 2: static website enabled with correct docs"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: static website wrong (enabled=$EN idx=$IDX err=$ERR)"; FAIL=$((FAIL+1)); fi
 
