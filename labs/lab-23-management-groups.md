@@ -41,11 +41,11 @@ MG=$(az account management-group show -n MG-CorpIT --query name -o tsv 2>/dev/nu
 if [ "$MG" = "MG-CorpIT" ]; then echo "[PASS] Task 1: MG-CorpIT exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: MG-CorpIT missing"; FAIL=$((FAIL+1)); fi
 
-PARENT_P=$(az account management-group show -n MG-CorpIT-Production --query "properties.details.parent.name" -o tsv 2>/dev/null)
+PARENT_P=$(az account management-group show -n MG-CorpIT-Production --query "details.parent.name" -o tsv 2>/dev/null)
 if [ "$PARENT_P" = "MG-CorpIT" ]; then echo "[PASS] Task 2: MG-CorpIT-Production parent is MG-CorpIT"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: MG-CorpIT-Production parent is '$PARENT_P'"; FAIL=$((FAIL+1)); fi
 
-PARENT_D=$(az account management-group show -n MG-CorpIT-Development --query "properties.details.parent.name" -o tsv 2>/dev/null)
+PARENT_D=$(az account management-group show -n MG-CorpIT-Development --query "details.parent.name" -o tsv 2>/dev/null)
 if [ "$PARENT_D" = "MG-CorpIT" ]; then echo "[PASS] Task 3: MG-CorpIT-Development parent is MG-CorpIT"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: MG-CorpIT-Development parent is '$PARENT_D'"; FAIL=$((FAIL+1)); fi
 

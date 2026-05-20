@@ -38,12 +38,12 @@ GID=$(az ad group show --group SG-Developers --query id -o tsv 2>/dev/null)
 if [ -n "$GID" ]; then echo "[PASS] Task 1: SG-Developers group exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: SG-Developers group missing"; FAIL=$((FAIL+1)); fi
 
-UID=$(az ad user list --filter "startsWith(mailNickname,'dev-user-01')" --query "[0].id" -o tsv 2>/dev/null)
-if [ -n "$UID" ]; then echo "[PASS] Task 2: user dev-user-01 exists"; PASS=$((PASS+1));
+USERID=$(az ad user list --filter "startsWith(mailNickname,'dev-user-01')" --query "[0].id" -o tsv 2>/dev/null)
+if [ -n "$USERID" ]; then echo "[PASS] Task 2: user dev-user-01 exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: user dev-user-01 missing"; FAIL=$((FAIL+1)); fi
 
-if [ -n "$GID" ] && [ -n "$UID" ]; then
-  IS_MEMBER=$(az ad group member check --group SG-Developers --member-id "$UID" --query value -o tsv 2>/dev/null)
+if [ -n "$GID" ] && [ -n "$USERID" ]; then
+  IS_MEMBER=$(az ad group member check --group SG-Developers --member-id "$USERID" --query value -o tsv 2>/dev/null)
   if [ "$IS_MEMBER" = "true" ]; then echo "[PASS] Task 3: dev-user-01 is a member of SG-Developers"; PASS=$((PASS+1));
   else echo "[FAIL] Task 3: dev-user-01 is not a member of SG-Developers"; FAIL=$((FAIL+1)); fi
 else

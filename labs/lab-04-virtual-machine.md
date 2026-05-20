@@ -11,12 +11,12 @@ Your team needs a Linux virtual machine for testing a new application. You must 
 
 ## Tasks
 
-- [ ] **Task 1:** Create a Virtual Machine named `VM-Test-01` in the **West US** region inside resource group `RG-Dev-Lab`
+- [ ] **Task 1:** Create a Virtual Machine named `VM-Test-01` in the **East US** region inside resource group `RG-Dev-Lab`
   - **Image:** Ubuntu Server 24.04 LTS (or any Ubuntu)
-  - **Size:** Standard_B2ps_v2
+  - **Size:** Standard_B2s
   - **Authentication:** Password
   - **Username:** `azureadmin`
-- [ ] **Task 2:** Place the VM's NIC in a new or existing subnet (VNet must be in **West US**)
+- [ ] **Task 2:** Place the VM's NIC in a new or existing subnet (VNet must be in **East US**)
 - [ ] **Task 3:** Ensure the VM has a **Public IP address** assigned
 - [ ] **Task 4:** Add a tag to the VM: `Purpose = Testing`
 
@@ -44,8 +44,8 @@ PASS=0; FAIL=0
 RG=RG-Dev-Lab
 SIZE=$(az vm show -n VM-Test-01 -g "$RG" --query hardwareProfile.vmSize -o tsv 2>/dev/null)
 LOC=$(az vm show -n VM-Test-01 -g "$RG" --query location -o tsv 2>/dev/null)
-case "$LOC" in westus*) LOC_OK=1;; *) LOC_OK=0;; esac
-if [ "$SIZE" = "Standard_B2ps_v2" ] && [ "$LOC_OK" = "1" ]; then echo "[PASS] Task 1: VM-Test-01 size=$SIZE loc=$LOC"; PASS=$((PASS+1));
+case "$LOC" in eastus*) LOC_OK=1;; *) LOC_OK=0;; esac
+if [ "$SIZE" = "Standard_B2s" ] && [ "$LOC_OK" = "1" ]; then echo "[PASS] Task 1: VM-Test-01 size=$SIZE loc=$LOC"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: VM-Test-01 missing or wrong (size=$SIZE loc=$LOC)"; FAIL=$((FAIL+1)); fi
 
 NIC_COUNT=$(az vm nic list --vm-name VM-Test-01 -g "$RG" --query "length(@)" -o tsv 2>/dev/null)

@@ -12,7 +12,7 @@ Your dev team wants to quickly test a containerized application without managing
 ## Tasks
 
 - [ ] **Task 1:** Create an **Azure Container Instance** named `aci-hello-world` in **East US** inside resource group `RG-Dev-Lab` using the image `mcr.microsoft.com/azuredocs/aci-helloworld` with **1 CPU** and **1 GB memory**
-- [ ] **Task 2:** Expose the container on **port 80** with a public IP and DNS label `aci-devlab-104`
+- [ ] **Task 2:** Expose the container on **port 80** with a public IP and a DNS label starting with `aci-devlab-` (e.g., `aci-devlab-<your-initials>` — DNS labels are globally unique per region).
 - [ ] **Task 3:** Verify the container is **running** and accessible via its public FQDN
 
 ## Skills Tested
@@ -41,8 +41,8 @@ case "$IMG" in *aci-helloworld*) echo "[PASS] Task 1: aci-hello-world uses aci-h
   *) echo "[FAIL] Task 1: aci-hello-world missing or wrong image ($IMG)"; FAIL=$((FAIL+1));; esac
 
 FQDN=$(az container show -n aci-hello-world -g "$RG" --query "ipAddress.fqdn" -o tsv 2>/dev/null)
-case "$FQDN" in *aci-devlab-104*) echo "[PASS] Task 2: DNS label aci-devlab-104 ($FQDN)"; PASS=$((PASS+1));;
-  *) echo "[FAIL] Task 2: DNS label aci-devlab-104 not configured ($FQDN)"; FAIL=$((FAIL+1));; esac
+case "$FQDN" in aci-devlab-*) echo "[PASS] Task 2: DNS label starts with aci-devlab- ($FQDN)"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: DNS label does not start with aci-devlab- ($FQDN)"; FAIL=$((FAIL+1));; esac
 
 STATE=$(az container show -n aci-hello-world -g "$RG" --query "instanceView.state" -o tsv 2>/dev/null)
 if [ "$STATE" = "Running" ]; then echo "[PASS] Task 3: container is Running"; PASS=$((PASS+1));

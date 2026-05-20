@@ -51,7 +51,7 @@ INH_C=$(az role assignment list --resource-group "$RG" --include-inherited --que
 if [ "${INH_C:-0}" -gt 0 ]; then echo "[PASS] Task 3: Contributor visible at RG via inheritance"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: Contributor not visible at RG"; FAIL=$((FAIL+1)); fi
 
-DIR_C=$(az role assignment list --resource-group "$RG" --query "[?roleDefinitionName=='Contributor' && scope=='/subscriptions/$SUB'] | length(@)" -o tsv 2>/dev/null)
+DIR_C=$(az role assignment list --resource-group "$RG" --include-inherited --query "[?roleDefinitionName=='Contributor' && scope=='/subscriptions/$SUB'] | length(@)" -o tsv 2>/dev/null)
 if [ "${DIR_C:-0}" -gt 0 ]; then echo "[PASS] Task 4: Contributor scope is subscription (Inherited)"; PASS=$((PASS+1));
 else echo "[FAIL] Task 4: Contributor not scoped at subscription level"; FAIL=$((FAIL+1)); fi
 

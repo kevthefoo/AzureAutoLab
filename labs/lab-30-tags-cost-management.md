@@ -13,7 +13,7 @@ Finance needs to track cloud spending by department. You must apply a tag inheri
 
 - [ ] **Task 1:** Create a resource group named `RG-CostTags-Lab` in **East US** with tags `Department = Marketing` and `Project = Campaign2026`
 - [ ] **Task 2:** Assign the built-in policy "Inherit a tag from the resource group" for the tag `Department` to the `RG-CostTags-Lab` resource group
-- [ ] **Task 3:** Create a storage account named `stcosttagslab` inside `RG-CostTags-Lab` and verify the `Department` tag is inherited
+- [ ] **Task 3:** Create a storage account inside `RG-CostTags-Lab` (Standard_LRS, StorageV2) — names are globally unique, so pick e.g. `stcosttags<your-suffix>`. Verify the `Department` tag is inherited.
 - [ ] **Task 4:** Navigate to Cost Management and create a budget named `Budget-Marketing` for $50 with an alert at 80% threshold
 
 ## Skills Tested
@@ -47,9 +47,11 @@ PCNT=$(az policy assignment list -g "$RG" --query "[?contains(displayName, 'Inhe
 if [ "${PCNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: tag inheritance policy assigned to $RG"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: no tag inheritance policy on $RG"; FAIL=$((FAIL+1)); fi
 
-SD=$(az storage account show -n stcosttagslab -g "$RG" --query "tags.Department" -o tsv 2>/dev/null)
-if [ "$SD" = "Marketing" ]; then echo "[PASS] Task 3: stcosttagslab inherited Department=Marketing"; PASS=$((PASS+1));
-else echo "[FAIL] Task 3: stcosttagslab Department tag is '$SD'"; FAIL=$((FAIL+1)); fi
+SA_NAME=$(az storage account list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+SD=""
+[ -n "$SA_NAME" ] && SD=$(az storage account show -n "$SA_NAME" -g "$RG" --query "tags.Department" -o tsv 2>/dev/null)
+if [ "$SD" = "Marketing" ]; then echo "[PASS] Task 3: $SA_NAME inherited Department=Marketing"; PASS=$((PASS+1));
+else echo "[FAIL] Task 3: storage Department tag is '$SD' (sa=$SA_NAME)"; FAIL=$((FAIL+1)); fi
 
 BNAME=$(az consumption budget list --query "[?name=='Budget-Marketing'].name | [0]" -o tsv 2>/dev/null)
 if [ "$BNAME" = "Budget-Marketing" ]; then echo "[PASS] Task 4: Budget-Marketing exists"; PASS=$((PASS+1));

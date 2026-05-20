@@ -41,15 +41,15 @@ EXISTS=$(az network dns zone show -n "$Z" -g "$RG" --query name -o tsv 2>/dev/nu
 if [ "$EXISTS" = "$Z" ]; then echo "[PASS] Task 1: DNS zone $Z exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: DNS zone $Z missing"; FAIL=$((FAIL+1)); fi
 
-A_IP=$(az network dns record-set a show -n www -z "$Z" -g "$RG" --query "aRecords[0].ipv4Address" -o tsv 2>/dev/null)
+A_IP=$(az network dns record-set a show -n www -z "$Z" -g "$RG" --query "(ARecords || aRecords)[0].ipv4Address" -o tsv 2>/dev/null)
 if [ "$A_IP" = "10.0.1.10" ]; then echo "[PASS] Task 2: A www -> 10.0.1.10"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: A www points to '$A_IP'"; FAIL=$((FAIL+1)); fi
 
-CN=$(az network dns record-set cname show -n portal -z "$Z" -g "$RG" --query "cnameRecord.cname" -o tsv 2>/dev/null)
+CN=$(az network dns record-set cname show -n portal -z "$Z" -g "$RG" --query "(CNAMERecord || cnameRecord).cname" -o tsv 2>/dev/null)
 if [ "$CN" = "www.contoso-lab.com" ]; then echo "[PASS] Task 3: CNAME portal -> $CN"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: CNAME portal -> '$CN'"; FAIL=$((FAIL+1)); fi
 
-TXT=$(az network dns record-set txt show -n "@" -z "$Z" -g "$RG" --query "txtRecords[0].value[0]" -o tsv 2>/dev/null)
+TXT=$(az network dns record-set txt show -n "@" -z "$Z" -g "$RG" --query "(TXTRecords || txtRecords)[0].value[0]" -o tsv 2>/dev/null)
 case "$TXT" in *spf*) echo "[PASS] Task 4: TXT @ contains SPF record"; PASS=$((PASS+1));;
   *) echo "[FAIL] Task 4: TXT @ value is '$TXT'"; FAIL=$((FAIL+1));; esac
 

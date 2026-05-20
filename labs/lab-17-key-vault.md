@@ -11,7 +11,7 @@ Your application needs to securely store database connection strings and API key
 
 ## Tasks
 
-- [ ] **Task 1:** Create a **Key Vault** named `KV-Dev-Lab-104` in **East US** inside resource group `RG-Dev-Lab` (use RBAC for access control)
+- [ ] **Task 1:** Create a **Key Vault** in **East US** inside resource group `RG-Dev-Lab` (use RBAC for access control). Name it `kv-devlab-<your-initials-or-suffix>` — Key Vault names are globally unique.
 - [ ] **Task 2:** Add a **secret** named `DbConnectionString` with value `Server=myserver;Database=mydb;` to the vault
 - [ ] **Task 3:** Add a second **secret** named `ApiKey` with value `sk-test-12345` and set an **expiration date** 90 days from now
 
@@ -34,11 +34,12 @@ Your application needs to securely store database connection strings and API key
 ```bash
 set -uo pipefail
 PASS=0; FAIL=0
-KV=KV-Dev-Lab-104
+RG=RG-Dev-Lab
+KV=$(az keyvault list -g "$RG" --query "[?properties.enableRbacAuthorization==\`true\` && location=='eastus'] | [0].name" -o tsv 2>/dev/null)
 LOC=$(az keyvault show -n "$KV" --query location -o tsv 2>/dev/null)
 RBAC=$(az keyvault show -n "$KV" --query "properties.enableRbacAuthorization" -o tsv 2>/dev/null)
-if [ "$LOC" = "eastus" ] && [ "$RBAC" = "true" ]; then echo "[PASS] Task 1: $KV in eastus with RBAC"; PASS=$((PASS+1));
-else echo "[FAIL] Task 1: $KV missing or wrong (loc=$LOC rbac=$RBAC)"; FAIL=$((FAIL+1)); fi
+if [ -n "$KV" ] && [ "$LOC" = "eastus" ] && [ "$RBAC" = "true" ]; then echo "[PASS] Task 1: $KV in eastus with RBAC"; PASS=$((PASS+1));
+else echo "[FAIL] Task 1: no eastus RBAC-enabled KV in $RG (loc=$LOC rbac=$RBAC)"; FAIL=$((FAIL+1)); fi
 
 S1=$(az keyvault secret show --vault-name "$KV" -n DbConnectionString --query "attributes.enabled" -o tsv 2>/dev/null)
 if [ "$S1" = "true" ]; then echo "[PASS] Task 2: secret DbConnectionString exists and enabled"; PASS=$((PASS+1));

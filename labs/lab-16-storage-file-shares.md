@@ -34,10 +34,12 @@ Your team needs a shared file system accessible from multiple VMs. You must crea
 ```bash
 set -uo pipefail
 PASS=0; FAIL=0
-SA=stdevlab104
-KEY=$(az storage account keys list -n "$SA" --query "[0].value" -o tsv 2>/dev/null)
+RG=RG-Dev-Lab
+SA=$(az storage account list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
+KEY=""
+[ -n "$SA" ] && KEY=$(az storage account keys list -n "$SA" -g "$RG" --query "[0].value" -o tsv 2>/dev/null)
 if [ -z "$KEY" ]; then
-  echo "[FAIL] Task 1: storage account $SA missing"; FAIL=$((FAIL+1))
+  echo "[FAIL] Task 1: no storage account in $RG"; FAIL=$((FAIL+1))
   echo "[FAIL] Task 2: cannot check directory"; FAIL=$((FAIL+1))
   echo "[FAIL] Task 3: cannot check file"; FAIL=$((FAIL+1))
 else
