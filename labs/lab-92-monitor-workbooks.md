@@ -44,7 +44,7 @@ LA=$(az monitor log-analytics workspace show -g "$RG" -n law-workbooks-01 --quer
 if [ "$LA" = "law-workbooks-01" ]; then echo "[PASS] Task 1: workspace exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: workspace missing"; FAIL=$((FAIL+1)); fi
 
-WB=$(az monitor app-insights workbook list -g "$RG" --query "[?displayName=='Workbook-Infra-Overview'] | length(@)" -o tsv 2>/dev/null)
+WB=$(az monitor app-insights workbook list -g "$RG" --category workbook --query "[?displayName=='Workbook-Infra-Overview'] | length(@)" -o tsv 2>/dev/null)
 if [ "${WB:-0}" -gt 0 ]; then echo "[PASS] Task 2: workbook exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: workbook missing"; FAIL=$((FAIL+1)); fi
 

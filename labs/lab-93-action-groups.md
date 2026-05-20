@@ -13,7 +13,7 @@ Your company is rolling out a new alerting strategy and needs action groups conf
 
 - [ ] **Task 1:** Create a resource group named `RG-ActionGroups-Lab` in East US
 - [ ] **Task 2:** Create an action group named `ag-oncall-team` (short name: `oncall`) in `RG-ActionGroups-Lab` with an email notification to `oncall@contoso.com` and an SMS notification to a valid phone number
-- [ ] **Task 3:** Create a second action group named `ag-devops-webhook` (short name: `devops`) in `RG-ActionGroups-Lab` with a webhook action pointing to `https://hooks.contoso.com/alert-handler`
+- [ ] **Task 3:** Create a second action group named `ag-devops-webhook` (short name: `devops`) in `RG-ActionGroups-Lab` with a webhook action pointing to any **reachable** HTTPS URL (e.g. `https://webhook.site/<your-uuid>` or `https://httpbin.org/post`) — Azure now validates webhook URLs and rejects non-resolvable hostnames.
 - [ ] **Task 4:** Test the `ag-oncall-team` action group using the "Test" feature in the portal
 - [ ] **Task 5:** Create a simple activity log alert named `alert-rg-delete` that fires when any resource group is deleted, using `ag-oncall-team` as the action group
 
