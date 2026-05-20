@@ -42,7 +42,7 @@ LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
 if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
 
-ENV=$(az containerapp env show -n cae-lab-env -g "$RG" --query "provisioningState" -o tsv 2>/dev/null)
+ENV=$(az containerapp env show -n cae-lab-env -g "$RG" --query "properties.provisioningState || provisioningState" -o tsv 2>/dev/null)
 if [ "$ENV" = "Succeeded" ]; then echo "[PASS] Task 2: cae-lab-env (Succeeded)"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: cae-lab-env state '$ENV'"; FAIL=$((FAIL+1)); fi
 

@@ -12,7 +12,7 @@ The platform engineering team wants to centralize application settings and featu
 ## Tasks
 
 - [ ] **Task 1:** Create a resource group named `RG-AppConfig-Lab` in the `East US` region
-- [ ] **Task 2:** Create an App Configuration store named `appconfig-lab2026` (Free tier) in `RG-AppConfig-Lab`
+- [ ] **Task 2:** Create an App Configuration store in `RG-AppConfig-Lab` with the **Free** tier. The store name is globally unique — pick e.g. `appconfig-lab-<your-suffix>`.
 - [ ] **Task 3:** Add the following key-value pairs: `App:Settings:Theme` = `dark`, `App:Settings:MaxItems` = `50`, `App:Settings:Region` = `eastus`
 - [ ] **Task 4:** Create a feature flag named `BetaDashboard` with the enabled state set to Off
 - [ ] **Task 5:** Add a label `production` to the key `App:Settings:Theme` with value `light`
@@ -40,23 +40,24 @@ The platform engineering team wants to centralize application settings and featu
 set -uo pipefail
 PASS=0; FAIL=0
 RG=RG-AppConfig-Lab
+ACN=$(az appconfig list -g "$RG" --query "[0].name" -o tsv 2>/dev/null)
 LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
 if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
 
-SKU=$(az appconfig show -n appconfig-lab2026 -g "$RG" --query sku.name -o tsv 2>/dev/null)
-if [ "$SKU" = "Free" ]; then echo "[PASS] Task 2: appconfig-lab2026 (Free)"; PASS=$((PASS+1));
-else echo "[FAIL] Task 2: appconfig sku is '$SKU'"; FAIL=$((FAIL+1)); fi
+SKU=$(az appconfig show -n "$ACN" -g "$RG" --query sku.name -o tsv 2>/dev/null)
+case "$SKU" in Free|free|FREE) echo "[PASS] Task 2: appconfig-lab2026 (Free)"; PASS=$((PASS+1));;
+  *) echo "[FAIL] Task 2: appconfig sku is '$SKU'"; FAIL=$((FAIL+1));; esac
 
-CNT=$(az appconfig kv list -n appconfig-lab2026 --query "[?starts_with(key, 'App:Settings:')] | length(@)" -o tsv 2>/dev/null)
+CNT=$(az appconfig kv list -n "$ACN" --query "[?starts_with(key, 'App:Settings:')] | length(@)" -o tsv 2>/dev/null)
 if [ "${CNT:-0}" -ge 3 ]; then echo "[PASS] Task 3: $CNT App:Settings:* key(s) present"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: only $CNT App:Settings:* key(s)"; FAIL=$((FAIL+1)); fi
 
-FF=$(az appconfig feature list -n appconfig-lab2026 --query "[?name=='BetaDashboard'] | length(@)" -o tsv 2>/dev/null)
+FF=$(az appconfig feature list -n "$ACN" --query "[?name=='BetaDashboard'] | length(@)" -o tsv 2>/dev/null)
 if [ "${FF:-0}" -gt 0 ]; then echo "[PASS] Task 4: BetaDashboard feature flag exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 4: BetaDashboard missing"; FAIL=$((FAIL+1)); fi
 
-PROD=$(az appconfig kv list -n appconfig-lab2026 --label production --query "[?key=='App:Settings:Theme'].value | [0]" -o tsv 2>/dev/null)
+PROD=$(az appconfig kv list -n "$ACN" --label production --query "[?key=='App:Settings:Theme'].value | [0]" -o tsv 2>/dev/null)
 if [ "$PROD" = "light" ]; then echo "[PASS] Task 5: production-labeled Theme=light"; PASS=$((PASS+1));
 else echo "[FAIL] Task 5: production-labeled Theme is '$PROD'"; FAIL=$((FAIL+1)); fi
 

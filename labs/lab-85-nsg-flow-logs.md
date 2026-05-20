@@ -14,7 +14,7 @@ Fabrikam's compliance team needs visibility into network traffic flowing through
 - [ ] **Task 1:** Create a resource group `RG-NSGAdv-Lab` in the East US region, a VNet `vnet-nsgadv-01` (`10.100.0.0/16`) with subnet `snet-web` (`10.100.1.0/24`), and an NSG `nsg-web-tier` associated with the subnet
 - [ ] **Task 2:** Create a storage account `stnsgflowlogs2026` (Standard LRS) for storing flow logs
 - [ ] **Task 3:** Create a Log Analytics workspace `law-nsgadv-01` in the same resource group
-- [ ] **Task 4:** Enable NSG flow logs (Version 2) on `nsg-web-tier`, sending logs to `stnsgflowlogs2026` with a retention of 7 days and traffic analytics enabled using `law-nsgadv-01`
+- [ ] **Task 4:** Enable a **VNet Flow Log** on `vnet-nsgadv-01` (NSG flow logs are retired by Microsoft as of June 30, 2025 — use VNet flow logs instead), sending logs to `stnsgflowlogs2026` with a retention of 7 days and traffic analytics enabled using `law-nsgadv-01`
 - [ ] **Task 5:** Configure diagnostic settings on `nsg-web-tier` to send `NetworkSecurityGroupEvent` and `NetworkSecurityGroupRuleCounter` logs to `law-nsgadv-01`
 
 ## Skills Tested
@@ -52,13 +52,13 @@ LA=$(az monitor log-analytics workspace show -n law-nsgadv-01 -g "$RG" --query n
 if [ "$LA" = "law-nsgadv-01" ]; then echo "[PASS] Task 3: law-nsgadv-01 exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: workspace missing"; FAIL=$((FAIL+1)); fi
 
-FL=$(az network watcher flow-log list --location eastus --query "[?contains(targetResourceId, 'nsg-web-tier') && enabled==\`true\`] | length(@)" -o tsv 2>/dev/null)
-if [ "${FL:-0}" -gt 0 ]; then echo "[PASS] Task 4: NSG flow log enabled"; PASS=$((PASS+1));
-else echo "[FAIL] Task 4: no enabled NSG flow log"; FAIL=$((FAIL+1)); fi
+FL=$(az network watcher flow-log list --location eastus --query "[?(contains(targetResourceId, 'vnet-nsgadv-01') || contains(targetResourceId, 'nsg-web-tier')) && enabled==\`true\`] | length(@)" -o tsv 2>/dev/null)
+if [ "${FL:-0}" -gt 0 ]; then echo "[PASS] Task 4: flow log enabled"; PASS=$((PASS+1));
+else echo "[FAIL] Task 4: no enabled flow log"; FAIL=$((FAIL+1)); fi
 
 NSG_ID=$(az network nsg show -n nsg-web-tier -g "$RG" --query id -o tsv 2>/dev/null)
 DS=0
-if [ -n "$NSG_ID" ]; then DS=$(az monitor diagnostic-settings list --resource "$NSG_ID" --query "length(value)" -o tsv 2>/dev/null); fi
+if [ -n "$NSG_ID" ]; then DS=$(az monitor diagnostic-settings list --resource "$NSG_ID" --query "length(value || @)" -o tsv 2>/dev/null); fi
 if [ "${DS:-0}" -gt 0 ]; then echo "[PASS] Task 5: $DS diagnostic setting(s) on nsg-web-tier"; PASS=$((PASS+1));
 else echo "[FAIL] Task 5: no diagnostic settings on nsg-web-tier"; FAIL=$((FAIL+1)); fi
 
