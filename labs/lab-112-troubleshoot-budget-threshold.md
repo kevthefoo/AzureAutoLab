@@ -29,14 +29,18 @@ az group create -n "$RG" -l "$LOC" --tags "$TAG" >/dev/null
 az provider register --namespace Microsoft.Consumption --wait
 
 # Budget end date one year out (required by API)
-END=$(date -d "+12 months" +%Y-%m-01T00:00:00Z 2>/dev/null || date -v+12m +%Y-%m-01T00:00:00Z)
-START=$(date +%Y-%m-01T00:00:00Z)
+END=$(date -d "+12 months" +"%Y-%m-01 00:00:00.000000+00:00" 2>/dev/null || date -v+12m +"%Y-%m-01 00:00:00.000000+00:00")
+START=$(date +"%Y-%m-01 00:00:00.000000+00:00")
+
+cat > /tmp/ts112-period.json <<JSON
+{"start-date": "$START", "end-date": "$END"}
+JSON
 
 az consumption budget create-with-rg --resource-group "$RG" \
   --budget-name "budget-ts112" \
   --amount 50 --time-grain Monthly --category Cost \
-  --start-date "$START" --end-date "$END" \
-  --notifications '{"NotifyAt99":{"enabled":true,"operator":"GreaterThan","threshold":99,"contactEmails":["finops@contoso.local"],"thresholdType":"Actual"}}' >/dev/null \
+  --time-period @/tmp/ts112-period.json \
+  --notifications '{"NotifyAt99":{"enabled":true,"operator":"GreaterThan","threshold":99,"contactEmails":["finops@contoso.local"]}}' >/dev/null \
   || echo "(budget API can be picky; if this errored, recreate via portal — Cost Management + Billing > Budgets)"
 
 echo "Setup complete. Budget threshold is 99% (too late)."

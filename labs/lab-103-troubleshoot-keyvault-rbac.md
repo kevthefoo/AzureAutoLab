@@ -67,7 +67,11 @@ KV=$(az keyvault list --query "[?tags.AutoLabId=='103'].name | [0]" -o tsv)
 if [ -n "$KV" ]; then echo "[PASS] Task 1: Key Vault tagged AutoLabId=103 exists ($KV)"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: no Key Vault tagged AutoLabId=103 found"; FAIL=$((FAIL+1)); fi
 
-RBAC=$(az keyvault list --query "[?tags.AutoLabId=='103'].properties.enableRbacAuthorization | [0]" -o tsv)
+RBAC=$(az keyvault list --query "[?tags.AutoLabId=='103'] | [0].(properties.enableRbacAuthorization || enableRbacAuthorization)" -o tsv 2>/dev/null)
+if [ -z "$RBAC" ]; then
+  KVN=$(az keyvault list --query "[?tags.AutoLabId=='103'].name | [0]" -o tsv)
+  [ -n "$KVN" ] && RBAC=$(az keyvault show -n "$KVN" --query "properties.enableRbacAuthorization" -o tsv 2>/dev/null)
+fi
 if [ "$RBAC" = "true" ]; then echo "[PASS] Task 2: vault is still RBAC-authorization mode"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: vault is not RBAC mode (got: $RBAC)"; FAIL=$((FAIL+1)); fi
 
