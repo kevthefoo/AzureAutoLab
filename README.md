@@ -20,7 +20,7 @@ No mocks. No simulators. No LLM scoring. Just `az` against your tenant.
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/AzureAutoLab.git
+git clone https://github.com/kevthefoo/AzureAutoLab
 cd AzureAutoLab
 npm install
 npm run build
