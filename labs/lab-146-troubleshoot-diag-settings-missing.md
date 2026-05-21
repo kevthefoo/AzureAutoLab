@@ -54,7 +54,7 @@ else echo "[FAIL] Task 1: storage account not found"; FAIL=$((FAIL+1)); fi
 
 SUB=$(az account show --query id -o tsv)
 RES="/subscriptions/$SUB/resourceGroups/RG-TS-146/providers/Microsoft.Storage/storageAccounts/$SA/blobServices/default"
-COUNT=$(az monitor diagnostic-settings list --resource "$RES" --query "length(value)" -o tsv 2>/dev/null)
+COUNT=$(az monitor diagnostic-settings list --resource "$RES" --query "length(value || @)" -o tsv 2>/dev/null)
 if [ "${COUNT:-0}" -gt 0 ]; then echo "[PASS] Task 2: a diagnostic setting on the blob service exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: no diagnostic setting on the blob service"; FAIL=$((FAIL+1)); fi
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]

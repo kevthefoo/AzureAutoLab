@@ -2,9 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Hands-on AZ-104 exam prep that grades itself.** Open a lab, do the work in the Azure portal, click **Verify** — a deterministic bash script runs `az` CLI checks against your real subscription and reports `[PASS]` / `[FAIL]` per task.
-
-No mocks. No simulators. No LLM scoring. Just `az` against your tenant.
+**Hands-on AZ-104 exam prep that grades itself.** Open a lab, complete the assigned tasks, click **Verify** — a deterministic bash script runs `az` CLI checks against your real subscription and then reports `[PASS]` / `[FAIL]` per task.
 
 ---
 

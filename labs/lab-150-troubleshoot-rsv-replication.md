@@ -48,7 +48,7 @@ EXISTS=$(az backup vault show -g RG-TS-150 -n rsv-ts150 --query name -o tsv 2>/d
 if [ "$EXISTS" = "rsv-ts150" ]; then echo "[PASS] Task 1: vault rsv-ts150 exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: vault not found"; FAIL=$((FAIL+1)); fi
 
-V=$(az backup vault backup-properties show -g RG-TS-150 -n rsv-ts150 --query "storageType" -o tsv 2>/dev/null)
+V=$(az backup vault backup-properties show -g RG-TS-150 -n rsv-ts150 --query "[?contains(type, 'backupstorageconfig')].properties.storageType | [0]" -o tsv 2>/dev/null)
 if [ "$V" = "LocallyRedundant" ]; then echo "[PASS] Task 2: backupStorageRedundancy is LocallyRedundant"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: backupStorageRedundancy is '$V' (expected LocallyRedundant)"; FAIL=$((FAIL+1)); fi
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
