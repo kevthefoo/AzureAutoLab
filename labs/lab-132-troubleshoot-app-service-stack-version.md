@@ -57,8 +57,8 @@ else echo "[FAIL] Task 1: Function App not found"; FAIL=$((FAIL+1)); fi
 
 V=$(az functionapp config appsettings list -n "$F" -g RG-TS-132 --query "[?name=='WEBSITE_NODE_DEFAULT_VERSION'].value | [0]" -o tsv 2>/dev/null)
 # Accept ~20 and above (numeric compare on the major)
-MAJOR="${V#~}"; MAJOR="${MAJOR%%.*}"
-if [ -n "$MAJOR" ] && [ "$MAJOR" -ge 20 ] 2>/dev/null; then echo "[PASS] Task 2: WEBSITE_NODE_DEFAULT_VERSION is $V (>= ~20)"; PASS=$((PASS+1));
+MAJOR=$(echo "$V" | sed 's/^~//' | sed 's/\..*$//')
+if [ -n "$MAJOR" ] && expr "$MAJOR" \>= 20 >/dev/null 2>&1; then echo "[PASS] Task 2: WEBSITE_NODE_DEFAULT_VERSION is $V (>= ~20)"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: WEBSITE_NODE_DEFAULT_VERSION is '$V' (expected ~20 or newer)"; FAIL=$((FAIL+1)); fi
 echo; echo "Summary: $PASS passed, $FAIL failed"; [ "$FAIL" -eq 0 ]
 ```
