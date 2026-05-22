@@ -50,7 +50,7 @@ else echo "[FAIL] Task 3a: VM missing"; FAIL=$((FAIL+1)); fi
 
 echo "[PASS] Task 3b/4: assessment results are time-bound, best viewed in portal"; PASS=$((PASS+1))
 
-MC=$(az maintenance configuration show -n mc-weekly-patch -g "$RG" --query name -o tsv 2>/dev/null)
+MC=$(az maintenance configuration show --resource-name mc-weekly-patch -g "$RG" --query name -o tsv 2>/dev/null)
 if [ "$MC" = "mc-weekly-patch" ]; then echo "[PASS] Task 5: mc-weekly-patch exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 5: mc-weekly-patch missing"; FAIL=$((FAIL+1)); fi
 
