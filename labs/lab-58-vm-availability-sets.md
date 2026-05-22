@@ -46,11 +46,11 @@ UD=$(az vm availability-set show -n avset-frontend -g "$RG" --query platformUpda
 if [ "$FD" = "3" ] && [ "$UD" = "5" ]; then echo "[PASS] Task 2: avset-frontend (3 FD, 5 UD)"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: avset wrong (FD=$FD UD=$UD)"; FAIL=$((FAIL+1)); fi
 
-A1=$(az vm show -n vm-web-01 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null)
+A1=$(az vm show -n vm-web-01 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null | tr '[:upper:]' '[:lower:]')
 case "$A1" in *avset-frontend*) echo "[PASS] Task 3: vm-web-01 in avset-frontend"; PASS=$((PASS+1));;
   *) echo "[FAIL] Task 3: vm-web-01 not in avset-frontend"; FAIL=$((FAIL+1));; esac
 
-A2=$(az vm show -n vm-web-02 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null)
+A2=$(az vm show -n vm-web-02 -g "$RG" --query "availabilitySet.id" -o tsv 2>/dev/null | tr '[:upper:]' '[:lower:]')
 case "$A2" in *avset-frontend*) echo "[PASS] Task 4: vm-web-02 in avset-frontend"; PASS=$((PASS+1));;
   *) echo "[FAIL] Task 4: vm-web-02 not in avset-frontend"; FAIL=$((FAIL+1));; esac
 

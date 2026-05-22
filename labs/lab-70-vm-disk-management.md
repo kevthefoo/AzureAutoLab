@@ -46,12 +46,13 @@ VM=$(az vm show -n vm-filesvr-01 -g "$RG" --query name -o tsv 2>/dev/null)
 if [ "$VM" = "vm-filesvr-01" ]; then echo "[PASS] Task 2: vm-filesvr-01 exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: VM missing"; FAIL=$((FAIL+1)); fi
 
-D1=$(az disk show -n disk-data-01 -g "$RG" --query diskSizeGb -o tsv 2>/dev/null)
-D2=$(az disk show -n disk-data-02 -g "$RG" --query diskSizeGb -o tsv 2>/dev/null)
+D1=$(az disk show -n disk-data-01 -g "$RG" --query "diskSizeGB || diskSizeGb" -o tsv 2>/dev/null)
+D2=$(az disk show -n disk-data-02 -g "$RG" --query "diskSizeGB || diskSizeGb" -o tsv 2>/dev/null)
 if [ "$D1" = "32" ] && [ "$D2" = "32" ]; then echo "[PASS] Task 3: both 32 GB data disks exist"; PASS=$((PASS+1));
 else echo "[FAIL] Task 3: data disks wrong (d1=$D1 d2=$D2)"; FAIL=$((FAIL+1)); fi
 
-OS=$(az vm show -n vm-filesvr-01 -g "$RG" --query "storageProfile.osDisk.diskSizeGb" -o tsv 2>/dev/null)
+OS_DISK_ID=$(az vm show -n vm-filesvr-01 -g "$RG" --query "storageProfile.osDisk.managedDisk.id" -o tsv 2>/dev/null)
+OS=$(az disk show --ids "$OS_DISK_ID" --query "diskSizeGB || diskSizeGb" -o tsv 2>/dev/null)
 if [ "$OS" = "256" ]; then echo "[PASS] Task 4: OS disk 256 GB"; PASS=$((PASS+1));
 else echo "[FAIL] Task 4: OS disk is '$OS' GB"; FAIL=$((FAIL+1)); fi
 
