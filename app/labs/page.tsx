@@ -1,8 +1,10 @@
-import { getLabSummaries } from "@/lib/labs";
+import { getLabSummaries, normalizeLabStatus } from "@/lib/labs";
 import LabCard from "@/components/lab-card";
 import LabFilters from "./filters";
 
 export const dynamic = "force-dynamic";
+
+const STATUS_ORDER = ["PASSED", "NOT STARTED", "FAILED"] as const;
 
 export default async function LabsPage({
   searchParams,
@@ -13,21 +15,17 @@ export default async function LabsPage({
   const allLabs = getLabSummaries();
 
   const domains = [...new Set(allLabs.map((l) => l.domain))];
-  const statuses = [
-    ...new Set(
-      allLabs.map((l) => (l.status.startsWith("PASSED") ? "PASSED" : l.status)),
-    ),
-  ];
+  const present = new Set(allLabs.map((l) => normalizeLabStatus(l.status)));
+  const statuses = STATUS_ORDER.filter((s) => present.has(s));
 
   let filtered = allLabs;
   if (params.domain) {
     filtered = filtered.filter((l) => l.domain === params.domain);
   }
   if (params.status) {
-    filtered = filtered.filter((l) => {
-      const normalized = l.status.startsWith("PASSED") ? "PASSED" : l.status;
-      return normalized === params.status;
-    });
+    filtered = filtered.filter(
+      (l) => normalizeLabStatus(l.status) === params.status,
+    );
   }
 
   return (

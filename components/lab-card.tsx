@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { LabSummary } from "@/lib/labs";
+import { normalizeLabStatus, type LabSummary } from "@/lib/labs";
 import StatusBadge from "./status-badge";
 import DomainBadge from "./domain-badge";
 import DifficultyBadge from "./difficulty-badge";
@@ -17,7 +17,7 @@ export default function LabCard({ lab }: { lab: LabSummary }) {
           <DifficultyBadge difficulty={lab.difficulty} />
         </div>
       </div>
-      <StatusBadge status={lab.status} />
+      <StatusBadge status={normalizeLabStatus(lab.status)} />
     </Link>
   );
 }

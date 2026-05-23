@@ -37,6 +37,12 @@ export interface LabSummary {
   status: string;
 }
 
+export function normalizeLabStatus(status: string): "PASSED" | "NOT STARTED" | "FAILED" {
+  if (!status || status === "NOT STARTED") return "NOT STARTED";
+  if (status.startsWith("PASSED") || status === "PASS") return "PASSED";
+  return "FAILED";
+}
+
 export function parseLabFile(filename: string): Lab {
   const filepath = path.join(LABS_DIR, filename);
   const raw = fs.readFileSync(filepath, "utf-8");
