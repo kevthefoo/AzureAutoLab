@@ -12,7 +12,7 @@ Adventure Works operates web applications in multiple Azure regions and needs DN
 ## Tasks
 
 - [ ] **Task 1:** Create a resource group `RG-TrafficMgr-Lab` in the East US region
-- [ ] **Task 2:** Create two App Service plans and web apps: `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US (both Free F1 tier)
+- [ ] **Task 2:** Create two App Service plans and web apps: `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US 2 (both Free F1 tier)
 - [ ] **Task 3:** Create a Traffic Manager profile `tm-adventureworks-01` with the Priority routing method and DNS TTL of 30 seconds
 - [ ] **Task 4:** Add `app-tm-primary-2026` as an endpoint with priority 1 and `app-tm-secondary-2026` as an endpoint with priority 2
 - [ ] **Task 5:** Configure the health check to monitor path `/` over HTTP on port 80 with a probing interval of 10 seconds
@@ -29,7 +29,7 @@ Adventure Works operates web applications in multiple Azure regions and needs DN
 | #   | What to Check                     | Where in Portal                                                   | How to Verify                                                           |
 | --- | --------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | 1   | Resource group exists             | Resource groups > `RG-TrafficMgr-Lab`                             | Resource group is listed in East US                                     |
-| 2   | Both web apps deployed            | App Services                                                      | `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US |
+| 2   | Both web apps deployed            | App Services                                                      | `app-tm-primary-2026` in East US and `app-tm-secondary-2026` in West US 2 |
 | 3   | Traffic Manager profile created   | Traffic Manager profiles > `tm-adventureworks-01`                 | Routing method is Priority, DNS TTL is 30                               |
 | 4   | Endpoints with correct priorities | Traffic Manager profiles > `tm-adventureworks-01` > Endpoints     | Primary has priority 1, secondary has priority 2                        |
 | 5   | Health check configured           | Traffic Manager profiles > `tm-adventureworks-01` > Configuration | Path `/`, protocol HTTP, port 80, interval 10s                          |
@@ -44,9 +44,9 @@ LOC=$(az group show -n "$RG" --query location -o tsv 2>/dev/null)
 if [ "$LOC" = "eastus" ]; then echo "[PASS] Task 1: $RG exists"; PASS=$((PASS+1));
 else echo "[FAIL] Task 1: $RG missing"; FAIL=$((FAIL+1)); fi
 
-E=$(az webapp list --query "[?name=='app-tm-primary-2026'].location | [0]" -o tsv 2>/dev/null)
-W=$(az webapp list --query "[?name=='app-tm-secondary-2026'].location | [0]" -o tsv 2>/dev/null)
-if [ "$E" = "eastus" ] && [ "$W" = "westus" ]; then echo "[PASS] Task 2: both webapps in correct regions"; PASS=$((PASS+1));
+E=$(az webapp list --query "[?name=='app-tm-primary-2026'].location | [0]" -o tsv 2>/dev/null | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+W=$(az webapp list --query "[?name=='app-tm-secondary-2026'].location | [0]" -o tsv 2>/dev/null | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+if [ "$E" = "eastus" ] && [ "$W" = "westus2" ]; then echo "[PASS] Task 2: both webapps in correct regions"; PASS=$((PASS+1));
 else echo "[FAIL] Task 2: webapps wrong (primary=$E secondary=$W)"; FAIL=$((FAIL+1)); fi
 
 RM=$(az network traffic-manager profile show -n tm-adventureworks-01 -g "$RG" --query "trafficRoutingMethod" -o tsv 2>/dev/null)
